@@ -13,10 +13,20 @@ import WebService.Acquaintance.iPersistance;
  * @author Jeppe Enevold
  */
 public class LogicFacade implements iLogic {
+
     private static iPersistance Persistance;
-    
-    public void injectPersistance(iPersistance PersistanceLayer){
+    private MessageParser messageParser = new MessageParser();
+
+    public void injectPersistance(iPersistance PersistanceLayer) {
         Persistance = PersistanceLayer;
     }
-    
+
+    public String messageParser(String message) {
+        return messageParser.fromProtocol(message);
+    }
+
+    @Override
+    public String getCustomerInfo() {
+        return Persistance.getCustomerInfo();
+    }
 }

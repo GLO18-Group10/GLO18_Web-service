@@ -11,4 +11,5 @@ package WebService.Acquaintance;
  */
 public interface iLink {
     public void injectLogic(iLogic LogicLayer);
+    String messageParser(String message);
 }

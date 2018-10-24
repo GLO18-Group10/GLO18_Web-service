@@ -12,5 +12,12 @@ import WebService.Acquaintance.iPersistance;
  * @author Jeppe Enevold
  */
 public class PersistanceFacade implements iPersistance {
+
+    DBManager dbmanager = new DBManager();
+    
+    @Override
+    public String getCustomerInfo(String id) {
+        return dbmanager.getCustomerInfo(id);
+    }
     
 }

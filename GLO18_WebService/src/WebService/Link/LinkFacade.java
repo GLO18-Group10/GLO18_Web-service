@@ -19,5 +19,10 @@ public class LinkFacade implements iLink {
     public void injectLogic(iLogic LogicLayer){
         Logic = LogicLayer;
     }
-    
+
+    @Override
+    public String messageParser(String message) {
+        return Logic.messageParser(message);
+    }
+        
 }
