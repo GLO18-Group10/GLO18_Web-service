@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package WebService.Link;
+package WebService.Logic;
 
 /**
  *
@@ -15,7 +15,7 @@ public class MessageParser {
         String code = message.substring(0, 1); //Seperate the OPcode
         switch (code) {
             case "00":
-            case "01":
+            case "01": LogicFacade.getCustomerInfo();
             case "02":
             case "03":
             case "04":
