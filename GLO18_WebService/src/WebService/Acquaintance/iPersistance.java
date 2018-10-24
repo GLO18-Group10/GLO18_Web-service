@@ -10,5 +10,5 @@ package WebService.Acquaintance;
  * @author Jeppe Enevold
  */
 public interface iPersistance {
-    
+    public String getAccountBalance(String ID);
 }

@@ -15,8 +15,13 @@ import WebService.Acquaintance.iPersistance;
 public class LogicFacade implements iLogic {
     private static iPersistance Persistance;
     
+    @Override
     public void injectPersistance(iPersistance PersistanceLayer){
         Persistance = PersistanceLayer;
+    }
+    
+    public String getAccountBalance(String ID){
+        return Persistance.getAccountBalance(ID);
     }
     
 }

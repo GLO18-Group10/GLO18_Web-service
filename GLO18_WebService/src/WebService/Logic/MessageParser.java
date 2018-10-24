@@ -10,14 +10,17 @@ package WebService.Logic;
  * @author Peterzxcvbnm
  */
 public class MessageParser {
-
+LogicFacade logic = new LogicFacade();
+    
     public void fromProtocol(String message) {
         String code = message.substring(0, 1); //Seperate the OPcode
+        String[] Data = message.split(";");
         switch (code) {
             case "00":
-            case "01": LogicFacade.getCustomerInfo();
-            case "02":
-            case "03":
+            case "01":
+            case "02": 
+                //return logic.getAccountBalance(Data[1]);
+            case "03": 
             case "04":
             case "05":
             case "06":
