@@ -66,6 +66,7 @@ public class ClientConnection {
 class HandleConnection implements Runnable {
 
     private Socket socket; //Socket for connection
+    private LinkFacade link = new LinkFacade();
 
     public HandleConnection(Socket socket) {
         this.socket = socket;
@@ -84,7 +85,8 @@ class HandleConnection implements Runnable {
             while ((data = in.readLine()) != null) {
 //            messageParser.fromProtocol(encrypt.decrypt(data));
                 System.out.println("Client says: " + data);
-                out.println("Messaged received: " + data);
+                out.println(link.messageParser(data));
+                
             }
         } catch (Exception e) {
             System.out.println("Connection interrupted");

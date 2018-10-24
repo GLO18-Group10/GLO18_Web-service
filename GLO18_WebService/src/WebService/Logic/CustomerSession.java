@@ -3,13 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package WebService.Acquaintance;
+package WebService.Logic;
 
 /**
  *
- * @author Jeppe Enevold
+ * @author Nick
  */
-public interface iLink {
-    public void injectLogic(iLogic LogicLayer);
-    String messageParser(String message);
+public class CustomerSession extends Session{
+
+    public CustomerSession(String ID) {
+        super(ID);
+    }
+    
 }

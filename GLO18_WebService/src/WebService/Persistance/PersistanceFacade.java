@@ -12,5 +12,13 @@ import WebService.Acquaintance.iPersistance;
  * @author Jeppe Enevold
  */
 public class PersistanceFacade implements iPersistance {
+
+    @Override
+    public String login(String ID, String password) {
+        
+        return "true" +";" + "C";
+    }
+    
+    
     
 }
