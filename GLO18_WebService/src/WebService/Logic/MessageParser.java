@@ -18,9 +18,14 @@ LogicFacade logic = new LogicFacade();
         switch (code) {
             case "00":
             case "01":
+<<<<<<< HEAD
             case "02": 
                 //return logic.getAccountBalance(Data[1]);
             case "03": 
+=======
+            case "02":
+            case "03":
+>>>>>>> master
             case "04":
             case "05":
             case "06":
