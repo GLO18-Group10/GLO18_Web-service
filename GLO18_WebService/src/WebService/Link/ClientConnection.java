@@ -67,7 +67,6 @@ class HandleConnection implements Runnable {
 
     private Socket socket; //Socket for connection
     private LinkFacade link = new LinkFacade();
-    
 
     public HandleConnection(Socket socket) {
         this.socket = socket;
@@ -84,7 +83,6 @@ class HandleConnection implements Runnable {
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             while ((data = in.readLine()) != null) {
-//            messageParser.fromProtocol(encrypt.decrypt(data));
                 System.out.println("Client says: " + data);
                 out.println(link.messageParser(data));
             }

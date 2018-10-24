@@ -3,13 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package WebService.Acquaintance;
+package WebService.Logic;
 
 /**
  *
- * @author Jeppe Enevold
+ * @author Nick
  */
-public interface iPersistance {
-    String getCustomerInfo(String id);
-    String login(String ID, String password);
+public class CustomerSession extends Session{
+
+    public CustomerSession(String ID) {
+        super(ID);
+    }
+    
 }

@@ -20,4 +20,9 @@ public class PersistanceFacade implements iPersistance {
         return dbmanager.getCustomerInfo(id);
     }
     
+    @Override
+    public String login(String ID, String password) {
+        
+        return "true" +";" + "C";
+    }
 }

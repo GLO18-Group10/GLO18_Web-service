@@ -14,8 +14,17 @@ public class MessageParser {
 
     public String fromProtocol(String message) {
         String code = message.substring(0, 1); //Seperate the OPcode
+        String data[] = message.split(";");
         switch (code) {
-            case "00":
+            case "00": 
+                       String ID = data[1];
+                       String password = data[2];
+                       String test[] = logic.login(ID, password).split(";");
+                       if(test[0].equalsIgnoreCase("True")){
+                          logic.initializeSession(ID, test[1]);
+                       }
+                     
+                       return logic.login(ID, password);
             case "01": return logic.getCustomerInfo(customerSession.getid());
             case "02":
             case "03":
@@ -32,5 +41,6 @@ public class MessageParser {
             case "19":
             default:
         }
+        return "Error";
     }
 }
