@@ -58,14 +58,14 @@ public class DBManager {
     }
     
     
-    
-    public static void main(String[] args) {
-        DBManager db = new DBManager();
-        System.out.println(db.getTest());
-        db.setTest("mytest1","mytest2");
-        System.out.println(db.getTest());
-        
-    }
+    //main method for testing
+//    public static void main(String[] args) {
+//        DBManager db = new DBManager();
+//        System.out.println(db.getTest());
+//        db.setTest("mytest1","mytest2");
+//        System.out.println(db.getTest());
+//        
+//    }
     
     
     
