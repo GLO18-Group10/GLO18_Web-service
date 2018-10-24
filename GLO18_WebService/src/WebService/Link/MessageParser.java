@@ -14,7 +14,7 @@ public class MessageParser {
     public void fromProtocol(String message) {
         String code = message.substring(0, 1); //Seperate the OPcode
         switch (code) {
-            case "00":
+            case "00": 
             case "01":
             case "02":
             case "03":
