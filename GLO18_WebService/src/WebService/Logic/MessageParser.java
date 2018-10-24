@@ -25,7 +25,7 @@ public class MessageParser {
                        }
                      
                        return logic.login(ID, password);
-            case "01": return logic.getCustomerInfo(customerSession.getid());
+            case "01": return logic.getCustomerInfo(logic.sessionGetID());
             case "02":
             case "03":
             case "04":
