@@ -13,6 +13,11 @@ import WebService.Acquaintance.iPersistance;
  */
 public class PersistanceFacade implements iPersistance {
     DBManager dbmanager = new DBManager();
+
+    @Override
+    public String getAccountBalance(String accountID) {
+        return dbmanager.getAccountBalance(accountID);
+    }
     
     
     

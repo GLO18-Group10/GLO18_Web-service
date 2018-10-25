@@ -10,7 +10,10 @@ package WebService.Logic;
  * @author Peterzxcvbnm
  */
 public class MessageParser {
-LogicFacade logic = new LogicFacade();
+    LogicFacade logic;
+    public MessageParser(LogicFacade logicfacade){
+        logic = logicfacade;
+    }    
     
     public void fromProtocol(String message) {
         String code = message.substring(0, 1); //Seperate the OPcode
@@ -18,8 +21,9 @@ LogicFacade logic = new LogicFacade();
         switch (code) {
             case "00":
             case "01":
-            case "02": 
-                //return logic.getAccountBalance(Data[1]);
+            case "02":
+                //String s = Encrypter.encrypt(logic.getAccountBalance(Data[1]));
+                //return s;
             case "03": 
             case "04":
             case "05":

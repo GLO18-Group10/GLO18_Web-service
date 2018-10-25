@@ -16,8 +16,9 @@ import WebService.Acquaintance.iLogic;
 public class LinkFacade implements iLink {
     private static iLogic Logic;
     
+    @Override
     public void injectLogic(iLogic LogicLayer){
         Logic = LogicLayer;
     }
-    
+       
 }

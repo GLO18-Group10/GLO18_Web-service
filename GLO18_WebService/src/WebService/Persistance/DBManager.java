@@ -57,6 +57,23 @@ public class DBManager {
         return"getCustomerInfo method is not done";
     }
     
+    public String getAccountBalance(String accountID){
+        String testResult = "";
+        try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
+            ResultSet result = statement.executeQuery("SELECT Balance FROM BankAccount WHERE ID = '" + accountID + "'");
+            
+            StringBuilder sb = new StringBuilder();
+            while(result.next()){
+                    sb.append(result.getString("Balance") + ";");
+            }
+            testResult = sb.toString();
+        } catch (SQLException ex) {
+            System.out.println("SQL exception");
+            ex.printStackTrace();
+        }
+        return testResult;
+    }
+    
     
     //main method for testing
 //    public static void main(String[] args) {
