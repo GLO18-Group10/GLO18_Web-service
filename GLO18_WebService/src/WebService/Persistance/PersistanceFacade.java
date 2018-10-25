@@ -12,13 +12,16 @@ import WebService.Acquaintance.iPersistance;
  * @author Jeppe Enevold
  */
 public class PersistanceFacade implements iPersistance {
+DBManager dbmanager = new DBManager();
 
     @Override
     public String login(String ID, String password) {
         
         return "true" +";" + "C";
     }
+
     
+
     
     
 }
