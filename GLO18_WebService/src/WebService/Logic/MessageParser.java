@@ -24,7 +24,6 @@ public class MessageParser {
      * @return The string which is the response to the client
      */
     public String fromProtocol(String message) {
-        String code = message.substring(0, 2); //Seperate the OPcode
         String[] data = message.split(";"); //Seperate the parameters
         return logic.serverHandler(data);
     }
