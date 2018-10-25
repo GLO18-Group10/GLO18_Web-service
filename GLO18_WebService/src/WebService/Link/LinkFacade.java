@@ -32,6 +32,7 @@ public class LinkFacade implements iLink {
     @Override
     public String messageParser(String message) {
         try {
+            
             return Logic.messageParser(message); //Message from the client
         } catch (Exception e) {
             System.out.println(e.toString());

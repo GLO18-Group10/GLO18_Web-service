@@ -45,8 +45,10 @@ public class LogicFacade implements iLogic {
     }
 
     public String login(String ID, String password) {
-
-        return Persistance.login(ID, password);
+        
+        
+        String test = Persistance.login(ID, password);
+        return test;
     }
 
     ;

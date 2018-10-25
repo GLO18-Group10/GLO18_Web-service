@@ -29,14 +29,16 @@ public class MessageParser {
 
         switch (code) {
             case "00":
+               
                 String ID = data[1];
                 String password = data[2];
-                String test[] = logic.login(ID, password).split(";");
-                if (test[0].equalsIgnoreCase("True")) {
-                    logic.initializeSession(ID, test[1]);
+                String test = logic.login(ID, password);
+                if (test.equalsIgnoreCase("True")) {
+                    logic.initializeSession(ID, test);
                 }
-
-                return logic.login(ID, password);
+                
+                
+                return test;
             case "01":
                 return logic.getCustomerInfo("C1908957623");//logic.sessionGetID());
             case "02":
