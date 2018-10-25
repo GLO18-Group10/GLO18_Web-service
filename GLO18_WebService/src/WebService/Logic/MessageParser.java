@@ -13,7 +13,7 @@ public class MessageParser {
     LogicFacade logic = new LogicFacade();
     
     public String fromProtocol(String message) {
-        String code = message.substring(0, 1); //Seperate the OPcode
+        String code = message.substring(0, 2); //Seperate the OPcode
         String data[] = message.split(";");
         switch (code) {
             case "00": 

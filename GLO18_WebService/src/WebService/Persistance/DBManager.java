@@ -57,6 +57,56 @@ public class DBManager {
         return"getCustomerInfo method is not done";
     }
     
+    public String login(String ID, String password){
+        
+        String id = ID.toLowerCase();
+        String testResult = "";
+        //Query for admin login
+        if (id.startsWith("a")) {
+            
+        
+        try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
+            ResultSet result = statement.executeQuery("SELECT password FROM admin WHERE id = '"+ ID + "'");
+            
+            StringBuilder sb = new StringBuilder();
+            while(result.next()){
+                    sb.append(result.getString("password"));
+                    
+            }
+            testResult = sb.toString();
+        } catch (SQLException ex) {
+            System.out.println("SQL exception");
+            ex.printStackTrace();
+            }
+        }
+        // Query for customer login
+        else if (id.startsWith("c")) {
+            
+        
+        try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
+            ResultSet result = statement.executeQuery("SELECT password FROM customer WHERE id = '" + ID + "'");
+            
+            StringBuilder sb = new StringBuilder();
+            while(result.next()){
+                    sb.append(result.getString("password"));
+                    
+            }
+            testResult = sb.toString();
+        } catch (SQLException ex) {
+            System.out.println("SQL exception");
+            ex.printStackTrace();
+            }
+        }
+        
+        if (testResult.equals(password)){
+            return "true";
+        }
+        else {
+            return "false";
+        }
+        
+        //return testResult;
+    }
     
     //main method for testing
 //    public static void main(String[] args) {
