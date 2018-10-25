@@ -24,6 +24,9 @@ public class WebService {
         
         Logic.injectPersistance(Persistance);
         Link.injectLogic(Logic);
+        
+        //TestCode
+        Logic.executeProtocol("02;7331");
     }
     
 }

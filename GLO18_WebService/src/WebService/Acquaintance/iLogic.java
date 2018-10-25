@@ -11,4 +11,5 @@ package WebService.Acquaintance;
  */
 public interface iLogic {
     public void injectPersistance(iPersistance PersistanceLayer);
+    public void executeProtocol(String message);
 }

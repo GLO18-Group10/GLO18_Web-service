@@ -14,10 +14,16 @@ import WebService.Acquaintance.iPersistance;
  */
 public class LogicFacade implements iLogic {
     private static iPersistance Persistance;
+    private MessageParser messageparser = new MessageParser(this);
     
     @Override
     public void injectPersistance(iPersistance PersistanceLayer){
         Persistance = PersistanceLayer;
+    }
+    
+    @Override
+    public void executeProtocol(String message){
+        messageparser.fromProtocol(message);
     }
     
     public String getAccountBalance(String ID){

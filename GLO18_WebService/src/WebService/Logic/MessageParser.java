@@ -16,14 +16,18 @@ public class MessageParser {
     }    
     
     public void fromProtocol(String message) {
-        String code = message.substring(0, 1); //Seperate the OPcode
+        String code = message.substring(0, 2); //Seperate the OPcode
         String[] Data = message.split(";");
         switch (code) {
             case "00":
+                break;
             case "01":
+                break;
             case "02":
+                System.out.println(logic.getAccountBalance(Data[1]));
                 //String s = Encrypter.encrypt(logic.getAccountBalance(Data[1]));
                 //return s;
+                break;
             case "03": 
             case "04":
             case "05":

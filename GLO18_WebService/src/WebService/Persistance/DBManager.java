@@ -64,7 +64,7 @@ public class DBManager {
             
             StringBuilder sb = new StringBuilder();
             while(result.next()){
-                    sb.append(result.getString("Balance") + ";");
+                    sb.append(result.getString("Balance"));
             }
             testResult = sb.toString();
         } catch (SQLException ex) {
