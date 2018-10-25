@@ -14,7 +14,11 @@ import WebService.Acquaintance.iPersistance;
 public class PersistanceFacade implements iPersistance {
 
     DBManager dbmanager = new DBManager();
-
+/**
+ * Method to get customer info that corresponds to the given id
+ * @param id The id of the current user
+ * @return The customer information
+ */
     @Override
     public String getCustomerInfo(String id) {
         return dbmanager.getCustomerInfo(id);

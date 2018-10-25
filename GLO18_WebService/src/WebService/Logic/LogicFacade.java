@@ -33,10 +33,15 @@ public class LogicFacade implements iLogic {
     }
 
     ;
+    /**
+     * 
+     * @param ID
+     * @return 
+     */
     
       @Override
     public String getCustomerInfo(String ID) {
-        return Persistance.getCustomerInfo(ID);
+        return Persistance.getCustomerInfo(ID); //Do a query to get the info that cooreponds to the given id
     }
 
     public String login(String ID, String password) {
@@ -48,11 +53,11 @@ public class LogicFacade implements iLogic {
 
     @Override
     public String messageParser(String message) {
-        return messageparser.fromProtocol(message);
+        return messageparser.fromProtocol(message); //Parse the message from the client
     }
 
     @Override
     public String sessionGetID() {
-        return session.getID();
+        return session.getID(); //Get the id of the current user
    }
 }

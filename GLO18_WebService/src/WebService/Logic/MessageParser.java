@@ -17,9 +17,14 @@ public class MessageParser {
         this.logic = logic;
     }
 
+    /**
+    * Method to parse the message from the client and act upon it
+    @param message: The message from the protocol
+    @return The string which is the response to the client
+    */
     public String fromProtocol(String message) {
         String code = message.substring(0, 2); //Seperate the OPcode
-        String data[] = message.split(";");
+        String data[] = message.split(";"); //Seperate the parameters
         switch (code) {
             case "00":
                 String ID = data[1];

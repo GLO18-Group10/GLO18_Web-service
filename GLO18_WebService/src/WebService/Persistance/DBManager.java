@@ -53,7 +53,12 @@ public class DBManager {
         }
 
     }
-
+    
+/**
+    Method to get the customer info
+    @param customerID: the id of the customer that wants their info
+    @return a string of the data
+    */
     public String getCustomerInfo(String customerID) {
         String testResult = "";
         try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {

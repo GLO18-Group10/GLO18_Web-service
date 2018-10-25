@@ -24,19 +24,27 @@ public class LinkFacade implements iLink {
         Logic = LogicLayer;
     }
 
+    /**
+     * Parse the message to logic facade
+     * @param message Message from the client
+     * @return 
+     */
     @Override
     public String messageParser(String message) {
         try {
-            return Logic.messageParser(message);
+            return Logic.messageParser(message); //Message from the client
         } catch (Exception e) {
             System.out.println(e.toString());
         }
         return "error";
     }
-
+/**
+ * Method to initiate a connection so the web service can accept clients
+ */
     @Override
     public void startConnection() {
         String ip = "";
+        //Get the ip
         try {
             final DatagramSocket socketTest = new DatagramSocket();
             socketTest.connect(InetAddress.getByName("8.8.8.8"), 10002);
@@ -44,6 +52,7 @@ public class LinkFacade implements iLink {
         } catch (Exception e) {
             System.out.println(e.toString());
         }
+        //Create a connection with the given ip
         try {
             connection = new ClientConnection(ip);
             System.out.println("\r\nRunning Server: "
@@ -52,7 +61,8 @@ public class LinkFacade implements iLink {
         } catch (Exception e) {
             System.out.println(e.toString());
         }
-
+        
+        //Continously establish communication with clients
         try {
             while (true) {
                 connection.establishCommunication();
