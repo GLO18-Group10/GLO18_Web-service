@@ -14,15 +14,15 @@ import WebService.Acquaintance.iPersistance;
 public class PersistanceFacade implements iPersistance {
 
     DBManager dbmanager = new DBManager();
-    
+
     @Override
     public String getCustomerInfo(String id) {
         return dbmanager.getCustomerInfo(id);
     }
-  
+
     @Override
     public String login(String ID, String password) {
-        
-        return "true" +";" + "C";
+
+        return "true" + ";" + "C";
     }
 }
