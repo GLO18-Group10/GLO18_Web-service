@@ -59,5 +59,43 @@ public class LogicFacade implements iLogic {
     @Override
     public String sessionGetID() {
         return session.getID(); //Get the id of the current user
-   }
+    }
+
+    /**
+     * Method to choose the next action for the program
+     *
+     * @param data String array with the OPcode and the parameters
+     * @return String with the response to the client
+     */
+    @Override
+    public String serverHandler(String[] data) {
+        switch (data[0]) {
+            case "00":
+                String ID = data[1];
+                String password = data[2];
+                String test[] = login(ID, password).split(";");
+                if (test[0].equalsIgnoreCase("True")) {
+                    initializeSession(ID, test[1]);
+                }
+
+                return login(ID, password);
+            case "01":
+                return getCustomerInfo(sessionGetID());
+            case "02":
+            case "03":
+            case "04":
+            case "05":
+            case "06":
+            case "07":
+            case "08":
+            case "09":
+            case "10":
+            case "11":
+            case "12":
+            case "18":
+            case "19":
+            default:
+        }
+        return "Error";
+    }
 }
