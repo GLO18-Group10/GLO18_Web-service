@@ -15,7 +15,7 @@ import WebService.Acquaintance.iPersistance;
 public class LogicFacade implements iLogic {
 
     private static Session session;
-    private MessageParser messageparser = new MessageParser();
+    private MessageParser messageparser = new MessageParser(this);
 
     private static iPersistance Persistance;
 

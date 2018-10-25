@@ -33,8 +33,8 @@ public class ClientConnection {
         }
     }
 
-    private void establishCommunication() throws Exception {
-        Socket client = this.server.accept(); //Accept the a client
+    public void establishCommunication() throws Exception {
+        Socket client = this.server.accept(); //Accept a client
         Runnable thread = new HandleConnection(client);
         new Thread(thread).start();
     }
@@ -45,21 +45,6 @@ public class ClientConnection {
 
     public int getPort() {
         return this.server.getLocalPort();
-    }
-
-    public static void main(String[] args) throws Exception {
-        final DatagramSocket socketTest = new DatagramSocket();
-        socketTest.connect(InetAddress.getByName("8.8.8.8"), 10002);
-        String ip = socketTest.getLocalAddress().getHostAddress();
-        ClientConnection app = new ClientConnection(ip);
-        System.out.println("\r\nRunning Server: "
-                + "Host=" + app.getSocketAddress().getHostAddress()
-                + " Port=" + app.getPort());
-
-        while (true) {
-            app.establishCommunication();
-
-        }
     }
 }
 
@@ -84,11 +69,12 @@ class HandleConnection implements Runnable {
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             while ((data = in.readLine()) != null) {
                 System.out.println("Client says: " + data);
+                System.out.println(link.messageParser(data));
                 out.println(link.messageParser(data));
             }
-            
+
         } catch (Exception e) {
-            System.out.println("Connection interrupted");
+            System.out.println(e.toString());
         }
         System.out.println("Current users: " + (java.lang.Thread.activeCount() - 2));
     }

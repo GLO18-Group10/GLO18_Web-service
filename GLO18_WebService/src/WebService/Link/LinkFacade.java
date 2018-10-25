@@ -8,21 +8,58 @@ package WebService.Link;
 import WebService.Acquaintance.iLink;
 import WebService.Acquaintance.iLogic;
 import WebService.Logic.LogicFacade;
-
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 
 /**
  *
  * @author Jeppe Enevold
  */
 public class LinkFacade implements iLink {
+
     private static iLogic Logic;
-    
-    public void injectLogic(iLogic LogicLayer){
+    private ClientConnection connection;
+
+    public void injectLogic(iLogic LogicLayer) {
         Logic = LogicLayer;
     }
 
     @Override
     public String messageParser(String message) {
-        return Logic.messageParser(message);
+        try {
+            return Logic.messageParser(message);
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
+        return "error";
+    }
+
+    @Override
+    public void startConnection() {
+        String ip = "";
+        try {
+            final DatagramSocket socketTest = new DatagramSocket();
+            socketTest.connect(InetAddress.getByName("8.8.8.8"), 10002);
+            ip = socketTest.getLocalAddress().getHostAddress();
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
+        try {
+            connection = new ClientConnection(ip);
+            System.out.println("\r\nRunning Server: "
+                    + "Host=" + connection.getSocketAddress().getHostAddress()
+                    + " Port=" + connection.getPort());
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
+
+        try {
+            while (true) {
+                connection.establishCommunication();
+
+            }
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
     }
 }

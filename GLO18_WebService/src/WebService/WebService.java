@@ -24,6 +24,8 @@ public class WebService {
         
         Logic.injectPersistance(Persistance);
         Link.injectLogic(Logic);
+        
+        Link.startConnection();
     }
     
 }
