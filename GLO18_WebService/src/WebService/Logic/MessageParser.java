@@ -10,22 +10,35 @@ package WebService.Logic;
  * @author Peterzxcvbnm
  */
 public class MessageParser {
-    LogicFacade logic = new LogicFacade();
-    
+
+    LogicFacade logic;
+
+    public MessageParser(LogicFacade logic) {
+        this.logic = logic;
+    }
+
+    /**
+    * Method to parse the message from the client and act upon it
+    @param message: The message from the protocol
+    @return The string which is the response to the client
+    */
     public String fromProtocol(String message) {
         String code = message.substring(0, 2); //Seperate the OPcode
-        String data[] = message.split(";");
+
+        String data[] = message.split(";"); //Seperate the parameters
+
         switch (code) {
-            case "00": 
-                       String ID = data[1];
-                       String password = data[2];
-                       String test[] = logic.login(ID, password).split(";");
-                       if(test[0].equalsIgnoreCase("True")){
-                          logic.initializeSession(ID, test[1]);
-                       }
-                     
-                       return logic.login(ID, password);
-            case "01": 
+            case "00":
+                String ID = data[1];
+                String password = data[2];
+                String test[] = logic.login(ID, password).split(";");
+                if (test[0].equalsIgnoreCase("True")) {
+                    logic.initializeSession(ID, test[1]);
+                }
+
+                return logic.login(ID, password);
+            case "01":
+                return logic.getCustomerInfo("C1908957623");//logic.sessionGetID());
             case "02":
             case "03":
             case "04":

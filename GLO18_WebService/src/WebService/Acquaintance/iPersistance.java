@@ -10,5 +10,6 @@ package WebService.Acquaintance;
  * @author Jeppe Enevold
  */
 public interface iPersistance {
+    String getCustomerInfo(String id);
     String login(String ID, String password);
 }

@@ -16,4 +16,7 @@ public class Session {
         this.ID = ID;
     }
     
+    public String getID(){
+        return ID;
+    }
 }

@@ -13,32 +13,51 @@ import WebService.Acquaintance.iPersistance;
  * @author Jeppe Enevold
  */
 public class LogicFacade implements iLogic {
+
+    private static Session session;
+    private MessageParser messageparser = new MessageParser(this);
+
     private static iPersistance Persistance;
-    public static AdminSession adminsession; 
-    public static CustomerSession customerSession;
-    private MessageParser messageparser = new MessageParser();
-    
-    public void injectPersistance(iPersistance PersistanceLayer){
+
+    public void injectPersistance(iPersistance PersistanceLayer) {
         Persistance = PersistanceLayer;
     }
-    
+
     @Override
-    public void initializeSession(String ID, String identifier){
-        if (identifier.equalsIgnoreCase("A")){
-            adminsession = new AdminSession(ID);
+    public void initializeSession(String ID, String identifier) {
+        if (identifier.equalsIgnoreCase("A")) {
+            session = new AdminSession(ID);
+        } else if (identifier.equalsIgnoreCase("C")) {
+            session = new CustomerSession(ID);
         }
-        else if (identifier.equalsIgnoreCase("C")) {
-            customerSession = new CustomerSession(ID);
-        }
-        };
+    }
+
+    ;
+    /**
+     * 
+     * @param ID
+     * @return 
+     */
     
-    public String login(String ID, String password){
-        
+      @Override
+    public String getCustomerInfo(String ID) {
+        return Persistance.getCustomerInfo(ID); //Do a query to get the info that cooreponds to the given id
+    }
+
+    public String login(String ID, String password) {
+
         return Persistance.login(ID, password);
-    };
+    }
+
+    ;
 
     @Override
     public String messageParser(String message) {
-        return messageparser.fromProtocol(message);
+        return messageparser.fromProtocol(message); //Parse the message from the client
     }
+
+    @Override
+    public String sessionGetID() {
+        return session.getID(); //Get the id of the current user
+   }
 }
