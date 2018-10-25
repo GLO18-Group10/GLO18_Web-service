@@ -12,5 +12,8 @@ import WebService.Acquaintance.iPersistance;
  * @author Jeppe Enevold
  */
 public class PersistanceFacade implements iPersistance {
+    DBManager dbmanager = new DBManager();
+    
+    
     
 }
