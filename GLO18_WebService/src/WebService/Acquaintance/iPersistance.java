@@ -11,4 +11,6 @@ package WebService.Acquaintance;
  */
 public interface iPersistance {
     public String getAccountBalance(String ID);
+    String getCustomerInfo(String id);
+    String login(String ID, String password);
 }

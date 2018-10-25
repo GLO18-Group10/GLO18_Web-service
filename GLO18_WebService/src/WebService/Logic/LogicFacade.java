@@ -13,21 +13,54 @@ import WebService.Acquaintance.iPersistance;
  * @author Jeppe Enevold
  */
 public class LogicFacade implements iLogic {
-    private static iPersistance Persistance;
+
+    private static Session session;
     private MessageParser messageparser = new MessageParser(this);
-    
+    private static iPersistance Persistance;   
+
     @Override
-    public void injectPersistance(iPersistance PersistanceLayer){
+    public void injectPersistance(iPersistance PersistanceLayer) {
         Persistance = PersistanceLayer;
     }
-    
+
     @Override
-    public void executeProtocol(String message){
-        messageparser.fromProtocol(message);
+    public void initializeSession(String ID, String identifier) {
+        if (identifier.equalsIgnoreCase("A")) {
+            session = new AdminSession(ID);
+        } else if (identifier.equalsIgnoreCase("C")) {
+            session = new CustomerSession(ID);
+        }
     }
     
     public String getAccountBalance(String ID){
         return Persistance.getAccountBalance(ID);
     }
     
+    /**
+     * 
+     * @param ID
+     * @return 
+     */ 
+    @Override
+    public String getCustomerInfo(String ID) {
+        return Persistance.getCustomerInfo(ID); //Do a query to get the info that cooreponds to the given id
+    }
+
+    @Override
+    public String login(String ID, String password) {
+
+        return Persistance.login(ID, password);
+    }
+
+    ;
+
+    @Override
+    public String messageParser(String message) {
+        return messageparser.fromProtocol(message); //Parse the message from the client
+    }
+
+    @Override
+    public String sessionGetID() {
+        return session.getID(); //Get the id of the current user
+   }
 }

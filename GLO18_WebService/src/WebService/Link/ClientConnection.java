@@ -26,17 +26,23 @@ public class ClientConnection {
     //private Encrypt encrypt = new Encrypt;
 
     public ClientConnection(String ipAddress) throws Exception {
+        //Create a socket with the passed ip address
         if (ipAddress != null && !ipAddress.isEmpty()) {
             this.server = new ServerSocket(2345, 1, InetAddress.getByName(ipAddress));
-        } else {
+        } 
+        //If the method is not passed an ip address assign one automatically
+        else {
             this.server = new ServerSocket(2345, 1, InetAddress.getLocalHost());
         }
     }
-
-    private void establishCommunication() throws Exception {
-        Socket client = this.server.accept(); //Accept the a client
-        Runnable thread = new HandleConnection(client);
-        new Thread(thread).start();
+/**
+ * Method to create a connection to the client and make a thread for the client to use
+ * @throws Exception 
+ */
+    public void establishCommunication() throws Exception {
+        Socket client = this.server.accept(); //Accept a client
+        Runnable thread = new HandleConnection(client); //Create a thread to service the client
+        new Thread(thread).start(); //Start the thread
     }
 
     public InetAddress getSocketAddress() {
@@ -68,6 +74,7 @@ public class ClientConnection {
 class HandleConnection implements Runnable {
 
     private Socket socket; //Socket for connection
+    private LinkFacade link = new LinkFacade();
 
     public HandleConnection(Socket socket) {
         this.socket = socket;
@@ -75,22 +82,33 @@ class HandleConnection implements Runnable {
 
     @Override
     public void run() {
+        //Show the no. of users connected
         System.out.println("\r\nCurrent users: " + (java.lang.Thread.activeCount() - 1));
         String data = null;
+        //Get the ip of the client
         String clientAddress = socket.getInetAddress().getHostAddress();
+        //Print the ip of the client
         System.out.println("New connection from " + clientAddress);
-
+        
+        //Communicate with the client
         try {
+            //PrintWriter to create a response to the client
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+            //Get the message from the client
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             while ((data = in.readLine()) != null) {
-//            messageParser.fromProtocol(encrypt.decrypt(data));
+                //Print the message from the client
                 System.out.println("Client says: " + data);
-                out.println("Messaged received: " + data);
+                //Print the response to the client
+                System.out.println(link.messageParser(data));
+                //Send the response to the client
+                out.println(link.messageParser(data));
             }
+
         } catch (Exception e) {
-            System.out.println("Connection interrupted");
+            System.out.println(e.toString());
         }
+        //When the client disconnects print the decremented no. of users
         System.out.println("Current users: " + (java.lang.Thread.activeCount() - 2));
     }
 }

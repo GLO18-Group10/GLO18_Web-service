@@ -15,19 +15,29 @@ public class MessageParser {
         logic = logicfacade;
     }    
     
-    public void fromProtocol(String message) {
+    /**
+    * Method to parse the message from the client and act upon it
+    @param message: The message from the protocol
+    @return The string which is the response to the client
+    */
+    public String fromProtocol(String message) {
         String code = message.substring(0, 2); //Seperate the OPcode
-        String[] Data = message.split(";");
+        String data[] = message.split(";"); //Seperate the parameters
         switch (code) {
             case "00":
-                break;
+                String ID = data[1];
+                String password = data[2];
+                String test[] = logic.login(ID, password).split(";");
+                if (test[0].equalsIgnoreCase("True")) {
+                    logic.initializeSession(ID, test[1]);
+                }
+                return logic.login(ID, password);
             case "01":
-                break;
+                return logic.getCustomerInfo("C1908957623");//logic.sessionGetID());
             case "02":
-                System.out.println(logic.getAccountBalance(Data[1]));
+                return logic.getAccountBalance(data[1]);
                 //String s = Encrypter.encrypt(logic.getAccountBalance(Data[1]));
                 //return s;
-                break;
             case "03": 
             case "04":
             case "05":
@@ -42,5 +52,6 @@ public class MessageParser {
             case "19":
             default:
         }
+        return "Error";
     }
 }

@@ -25,8 +25,10 @@ public class WebService {
         Logic.injectPersistance(Persistance);
         Link.injectLogic(Logic);
         
+        Link.startConnection();
+        
         //TestCode
-        Logic.executeProtocol("02;7331");
+        System.out.println(Logic.messageParser("02;7331"));
     }
     
 }
