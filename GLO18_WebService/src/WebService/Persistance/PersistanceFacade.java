@@ -14,7 +14,11 @@ import WebService.Acquaintance.iPersistance;
 public class PersistanceFacade implements iPersistance {
 
     DBManager dbmanager = new DBManager();
-    
+
+    @Override
+    public String getAccountBalance(String accountID) {
+        return dbmanager.getAccountBalance(accountID);
+    }    
     
     @Override
     public String login(String ID, String password) {
@@ -37,5 +41,4 @@ public class PersistanceFacade implements iPersistance {
         return dbmanager.createCustomer(ID, name, birthday, phonenumber, address, email, password);
     }
 
-   
 }

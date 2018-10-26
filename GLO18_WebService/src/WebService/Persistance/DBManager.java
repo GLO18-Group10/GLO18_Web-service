@@ -79,6 +79,23 @@ public class DBManager {
         }
         return testResult;
     }
+    
+    public String getAccountBalance(String accountID){
+        String Balance = "";
+        try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
+            ResultSet result = statement.executeQuery("SELECT Balance FROM BankAccount WHERE ID = '" + accountID + "'");
+            
+            StringBuilder sb = new StringBuilder();
+            while(result.next()){
+                    sb.append(result.getString("Balance"));
+            }
+            Balance = sb.toString();
+        } catch (SQLException ex) {
+            System.out.println("SQL exception");
+            ex.printStackTrace();
+        }
+        return Balance;
+    }
 
     
     public String login(String ID, String password){
@@ -87,51 +104,44 @@ public class DBManager {
         String testResult = "";
         //Query for admin login
         if (id.startsWith("a")) {
-            
         
-        try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
-            ResultSet result = statement.executeQuery("SELECT password FROM admin WHERE id = '"+ ID + "'");
-            
-            StringBuilder sb = new StringBuilder();
-            while(result.next()){
+            try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
+                ResultSet result = statement.executeQuery("SELECT password FROM admin WHERE id = '"+ ID + "'");
+
+                StringBuilder sb = new StringBuilder();
+                while(result.next()){
                     sb.append(result.getString("password"));
-                    
-            }
-            testResult = sb.toString();
-        } catch (SQLException ex) {
-            System.out.println("SQL exception");
-            ex.printStackTrace();
+                }
+                testResult = sb.toString();
+            } catch (SQLException ex) {
+                System.out.println("SQL exception");
+                ex.printStackTrace();
             }
         }
         // Query for customer login
         else if (id.startsWith("c")) {
-            
         
-        try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
-            ResultSet result = statement.executeQuery("SELECT password FROM customer WHERE id = '" + ID + "'");
-            
-            StringBuilder sb = new StringBuilder();
-            while(result.next()){
+            try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
+                ResultSet result = statement.executeQuery("SELECT password FROM customer WHERE id = '" + ID + "'");
+
+                StringBuilder sb = new StringBuilder();
+                while(result.next()){
                     sb.append(result.getString("password"));
-                    
-            }
-            testResult = sb.toString();
-        } catch (SQLException ex) {
-            System.out.println("SQL exception");
-            ex.printStackTrace();
+                }
+                testResult = sb.toString();
+            } catch (SQLException ex) {
+                System.out.println("SQL exception");
+                ex.printStackTrace();
             }
         }
-        
         if (testResult.equals(password)){
             return "true";
         }
         else {
             return "false";
         }
-        
-        //return testResult;
     }
-    
+
     public String createCustomer(String ID, String name, String birthday, String phonenumber, String address, String email, String password) {
         try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
             String s = "INSERT INTO customer (id, name, birthday, phonenumber, address, email, password) VALUES ('" + ID + "','" + name + "','" + birthday + "','" + phonenumber + "','" + address + "','" + email + "','" + password + "')";
@@ -145,10 +155,8 @@ public class DBManager {
         return "true";
 
     }
-    
-    
 
-    //main method for testing
+//main method for testing
 //    public static void main(String[] args) {
 //        DBManager db = new DBManager();
 //        System.out.println(db.getTest());

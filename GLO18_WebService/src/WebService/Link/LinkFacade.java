@@ -18,11 +18,13 @@ import java.net.InetAddress;
 public class LinkFacade implements iLink {
 
     private static iLogic Logic;
-    private ClientConnection connection;
-
-    public void injectLogic(iLogic LogicLayer) {
+    
+    @Override
+    public void injectLogic(iLogic LogicLayer){
         Logic = LogicLayer;
     }
+       
+    private ClientConnection connection;
 
     /**
      * Parse the message to logic facade
@@ -32,7 +34,6 @@ public class LinkFacade implements iLink {
     @Override
     public String messageParser(String message) {
         try {
-            
             return Logic.messageParser(message); //Message from the client
         } catch (Exception e) {
             System.out.println(e.toString());

@@ -16,9 +16,9 @@ public class LogicFacade implements iLogic {
 
     private static Session session;
     private MessageParser messageparser = new MessageParser(this);
+    private static iPersistance Persistance;   
 
-    private static iPersistance Persistance;
-
+    @Override
     public void injectPersistance(iPersistance PersistanceLayer) {
         Persistance = PersistanceLayer;
     }
@@ -32,49 +32,35 @@ public class LogicFacade implements iLogic {
         }
     }
 
-    ;
-    /**
-     * 
-     * @param ID
-     * @return 
-     */
-    
-      @Override
-    public String getCustomerInfo(String ID) {
-        return Persistance.getCustomerInfo(ID); //Do a query to get the info that cooreponds to the given id
-    }
-
-    public String login(String ID, String password) {
-        
-        
-        String test = Persistance.login(ID, password);
-        return test;
-    }
-
-    ;
-
     @Override
     public String messageParser(String message) {
         return messageparser.fromProtocol(message); //Parse the message from the client
     }
 
-    @Override
+        public String login(String ID, String password) {
+        String test = Persistance.login(ID, password);
+        return test;
+    }
+    
+    /**
+     * 
+     * @param ID
+     * @return CostumerInfo
+     */ 
+    public String getCustomerInfo(String ID) {
+        return Persistance.getCustomerInfo(ID); //Do a query to get the info that cooreponds to the given id
+    }    
+    
+    public String getAccountBalance(String ID){
+        return Persistance.getAccountBalance(ID);
+    }
+    
     public String sessionGetID() {
         return session.getID(); //Get the id of the current user
-    }
+   }
 
-    @Override
     public String createCustomer(String ID, String name, String birthday, String phonenumber, String address, String email, String password) {
         return Persistance.createCustomer(ID, name, birthday, phonenumber, address, email, password);
     }
-    
-    
-    /**
-     * Method to choose the next action for the program
-     *
-     * @param data String array with the OPcode and the parameters
-     * @return String with the response to the client
-     */
-    
-    
 }
+

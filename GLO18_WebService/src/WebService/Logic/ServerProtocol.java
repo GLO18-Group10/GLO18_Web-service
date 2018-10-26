@@ -26,12 +26,11 @@ public class ServerProtocol {
                 if (test.equalsIgnoreCase("True")) {
                     logic.initializeSession(ID);
                 }
-                
-                
                 return test;
             case "01":
                 return logic.getCustomerInfo(logic.sessionGetID());
             case "02":
+                return logic.getAccountBalance(data[1]);
             case "03":
             case "04":
             case "05":

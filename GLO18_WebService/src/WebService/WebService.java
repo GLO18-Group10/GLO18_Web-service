@@ -25,6 +25,12 @@ public class WebService {
         Logic.injectPersistance(Persistance);
         Link.injectLogic(Logic);
         
+        // <editor-fold desc="TestCode">
+        System.out.println(Logic.messageParser("00;C1234567;kode"));
+        System.out.println(Logic.messageParser("01;"));
+        System.out.println(Logic.messageParser("02;7331"));
+        // </editor-fold>
+        
         Link.startConnection();
     }
     
