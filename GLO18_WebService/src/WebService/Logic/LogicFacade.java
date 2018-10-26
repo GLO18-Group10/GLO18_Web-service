@@ -24,10 +24,10 @@ public class LogicFacade implements iLogic {
     }
 
     @Override
-    public void initializeSession(String ID, String identifier) {
-        if (identifier.equalsIgnoreCase("A")) {
+    public void initializeSession(String ID) {
+        if (ID.startsWith("A")) {
             session = new AdminSession(ID);
-        } else if (identifier.equalsIgnoreCase("C")) {
+        } else if (ID.startsWith("C")) {
             session = new CustomerSession(ID);
         }
     }
@@ -48,8 +48,8 @@ public class LogicFacade implements iLogic {
 
     @Override
     public String login(String ID, String password) {
-
-        return Persistance.login(ID, password);
+        String test = Persistance.login(ID, password);
+        return test;
     }
 
     ;
@@ -63,5 +63,6 @@ public class LogicFacade implements iLogic {
     public String sessionGetID() {
         return session.getID(); //Get the id of the current user
    }
-    
+
 }
+
