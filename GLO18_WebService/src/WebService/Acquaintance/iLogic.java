@@ -17,5 +17,5 @@ public interface iLogic {
     String login(String ID, String message);
     String messageParser(String message);
     String sessionGetID();
-    String serverHandler(String[] data);
+    
 }

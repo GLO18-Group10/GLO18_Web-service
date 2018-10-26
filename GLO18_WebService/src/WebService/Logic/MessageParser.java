@@ -12,9 +12,10 @@ package WebService.Logic;
 public class MessageParser {
 
     LogicFacade logic;
-
+    ServerProtocol serverProtocol;
     public MessageParser(LogicFacade logic) {
         this.logic = logic;
+        this.serverProtocol = new ServerProtocol(logic);
     }
 
     /**
@@ -27,7 +28,7 @@ public class MessageParser {
 
       
         String[] data = message.split(";"); //Seperate the parameters
-        return logic.serverHandler(data);
+        return serverProtocol.serverHandler(data);
 
     }
 }
