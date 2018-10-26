@@ -37,6 +37,15 @@ public class ServerProtocol {
             case "05":
             case "06":
             case "07":
+                        String ID1 = data[1];
+                        String name = data[2];
+                        String birthday = data[3];
+                        String phonenumber = data[4];
+                        String address = data[5];
+                        String email = data[6];
+                        String password1 = data[7];
+                        return logic.createCustomer(ID1, name, birthday, phonenumber, address, email, password1);
+                            
             case "08":
             case "09":
             case "10":

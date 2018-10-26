@@ -63,6 +63,12 @@ public class LogicFacade implements iLogic {
         return session.getID(); //Get the id of the current user
     }
 
+    @Override
+    public String createCustomer(String ID, String name, String birthday, String phonenumber, String address, String email, String password) {
+        return Persistance.createCustomer(ID, name, birthday, phonenumber, address, email, password);
+    }
+    
+    
     /**
      * Method to choose the next action for the program
      *

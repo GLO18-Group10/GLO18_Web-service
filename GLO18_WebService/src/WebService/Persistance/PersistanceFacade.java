@@ -32,5 +32,10 @@ public class PersistanceFacade implements iPersistance {
         return dbmanager.getCustomerInfo(id);
     }
 
+    @Override
+    public String createCustomer(String ID, String name, String birthday, String phonenumber, String address, String email, String password) {
+        return dbmanager.createCustomer(ID, name, birthday, phonenumber, address, email, password);
+    }
+
    
 }

@@ -132,6 +132,20 @@ public class DBManager {
         //return testResult;
     }
     
+    public String createCustomer(String ID, String name, String birthday, String phonenumber, String address, String email, String password) {
+        try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
+            String s = "INSERT INTO customer (id, name, birthday, phonenumber, address, email, password) VALUES ('" + ID + "','" + name + "','" + birthday + "','" + phonenumber + "','" + address + "','" + email + "','" + password + "')";
+            statement.execute(s);
+
+        } catch (SQLException ex) {
+            System.out.println("SQL exception");
+            ex.printStackTrace();
+        }
+        return "true";
+
+    }
+    
+    
 
     //main method for testing
 //    public static void main(String[] args) {
