@@ -63,4 +63,5 @@ public class LogicFacade implements iLogic {
     public String sessionGetID() {
         return session.getID(); //Get the id of the current user
    }
+    
 }
