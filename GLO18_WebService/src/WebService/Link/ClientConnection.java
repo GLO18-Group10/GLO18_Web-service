@@ -53,24 +53,6 @@ public class ClientConnection {
         return this.server.getLocalPort();
     }
 
-    /*
-    public static void main(String[] args) throws Exception {
-        final DatagramSocket socketTest = new DatagramSocket();
-        socketTest.connect(InetAddress.getByName("8.8.8.8"), 10002);
-        String ip = socketTest.getLocalAddress().getHostAddress();
-        ClientConnection app = new ClientConnection(ip);
-        System.out.println("\r\nRunning Server: "
-                + "Host=" + app.getSocketAddress().getHostAddress()
-                + " Port=" + app.getPort());
-
-        while (true) {
-            app.establishCommunication();
-
-        }
-    }
-    */
-}
-
 class HandleConnection implements Runnable {
 
     private Socket socket; //Socket for connection
