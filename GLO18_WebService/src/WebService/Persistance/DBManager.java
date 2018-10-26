@@ -140,6 +140,7 @@ public class DBManager {
         } catch (SQLException ex) {
             System.out.println("SQL exception");
             ex.printStackTrace();
+            return "false";
         }
         return "true";
 
