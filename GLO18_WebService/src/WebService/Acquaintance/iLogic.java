@@ -12,9 +12,6 @@ package WebService.Acquaintance;
 public interface iLogic {
     public void injectPersistance(iPersistance PersistanceLayer);
     public void initializeSession(String ID);
-
-    String getCustomerInfo(String ID);
-    String login(String ID, String message);
     public String messageParser(String message);
-    String sessionGetID();
+
 }

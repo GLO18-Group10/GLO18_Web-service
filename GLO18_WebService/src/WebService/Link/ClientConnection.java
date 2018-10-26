@@ -100,7 +100,7 @@ class HandleConnection implements Runnable {
                 //Print the message from the client
                 System.out.println("Client says: " + data);
                 //Print the response to the client
-                System.out.println(link.messageParser(data));
+                //System.out.println(link.messageParser(data));
                 //Send the response to the client
                 out.println(link.messageParser(data));
             }

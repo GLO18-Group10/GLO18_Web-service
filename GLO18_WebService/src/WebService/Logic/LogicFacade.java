@@ -31,38 +31,36 @@ public class LogicFacade implements iLogic {
             session = new CustomerSession(ID);
         }
     }
-    
-    public String getAccountBalance(String ID){
-        return Persistance.getAccountBalance(ID);
-    }
-    
-    /**
-     * 
-     * @param ID
-     * @return 
-     */ 
-    @Override
-    public String getCustomerInfo(String ID) {
-        return Persistance.getCustomerInfo(ID); //Do a query to get the info that cooreponds to the given id
-    }
-
-    @Override
-    public String login(String ID, String password) {
-        String test = Persistance.login(ID, password);
-        return test;
-    }
-
-    ;
 
     @Override
     public String messageParser(String message) {
         return messageparser.fromProtocol(message); //Parse the message from the client
     }
 
-    @Override
+        public String login(String ID, String password) {
+        String test = Persistance.login(ID, password);
+        return test;
+    }
+    
+    /**
+     * 
+     * @param ID
+     * @return CostumerInfo
+     */ 
+    public String getCustomerInfo(String ID) {
+        return Persistance.getCustomerInfo(ID); //Do a query to get the info that cooreponds to the given id
+    }    
+    
+    public String getAccountBalance(String ID){
+        return Persistance.getAccountBalance(ID);
+    }
+    
     public String sessionGetID() {
         return session.getID(); //Get the id of the current user
    }
 
+    public String createCustomer(String ID, String name, String birthday, String phonenumber, String address, String email, String password) {
+        return Persistance.createCustomer(ID, name, birthday, phonenumber, address, email, password);
+    }
 }
 
