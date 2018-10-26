@@ -27,6 +27,8 @@ public class WebService {
         
         // <editor-fold desc="TestCode">
         System.out.println(Logic.messageParser("02;7331"));
+        System.out.println(Logic.messageParser("00;A1234567;passwordwut?"));
+        System.out.println(Logic.messageParser("01;"));
         // </editor-fold>
         
         Link.startConnection();

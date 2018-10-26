@@ -28,6 +28,7 @@ public class ServerProtocol {
                 }
                 return test;
             case "01":
+                System.out.println(logic.sessionGetID());
                 return logic.getCustomerInfo(logic.sessionGetID());
             case "02":
                 return logic.getAccountBalance(data[1]);

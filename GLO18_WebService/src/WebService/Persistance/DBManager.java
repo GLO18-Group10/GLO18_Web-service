@@ -134,7 +134,12 @@ public class DBManager {
                 ex.printStackTrace();
             }
         }
-        return testResult;
+        if (testResult.equals(password)){
+            return "true";
+        }
+        else {
+            return "false";
+        }
     }
     
 //main method for testing
