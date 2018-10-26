@@ -52,6 +52,7 @@ public class ClientConnection {
     public int getPort() {
         return this.server.getLocalPort();
     }
+}
 
 class HandleConnection implements Runnable {
 
