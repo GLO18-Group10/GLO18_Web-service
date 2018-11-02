@@ -17,11 +17,11 @@ import java.net.InetAddress;
  */
 public class LinkFacade implements iLink {
 
-    private static iLogic Logic;
+    private static iLogic logic;
     
     @Override
     public void injectLogic(iLogic LogicLayer){
-        Logic = LogicLayer;
+        logic = LogicLayer;
     }
        
     private ClientConnection connection;
@@ -34,7 +34,7 @@ public class LinkFacade implements iLink {
     @Override
     public String messageParser(String message) {
         try {
-            return Logic.messageParser(message); //Message from the client
+            return logic.messageParser(message); //Message from the client
         } catch (Exception e) {
             System.out.println(e.toString());
         }

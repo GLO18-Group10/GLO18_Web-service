@@ -16,11 +16,11 @@ public class LogicFacade implements iLogic {
 
     private static Session session;
     private MessageParser messageparser = new MessageParser(this);
-    private static iPersistance Persistance;   
+    private static iPersistance persistance;   
 
     @Override
     public void injectPersistance(iPersistance PersistanceLayer) {
-        Persistance = PersistanceLayer;
+        persistance = PersistanceLayer;
     }
 
     @Override
@@ -38,7 +38,7 @@ public class LogicFacade implements iLogic {
     }
 
         public String login(String ID, String password) {
-        String test = Persistance.login(ID, password);
+        String test = persistance.login(ID, password);
         return test;
     }
     
@@ -48,11 +48,11 @@ public class LogicFacade implements iLogic {
      * @return CostumerInfo
      */ 
     public String getCustomerInfo(String ID) {
-        return Persistance.getCustomerInfo(ID); //Do a query to get the info that cooreponds to the given id
+        return persistance.getCustomerInfo(ID); //Do a query to get the info that cooreponds to the given id
     }    
     
     public String getAccountBalance(String ID){
-        return Persistance.getAccountBalance(ID);
+        return persistance.getAccountBalance(ID);
     }
     
     public String sessionGetID() {
@@ -60,7 +60,7 @@ public class LogicFacade implements iLogic {
    }
 
     public String createCustomer(String ID, String name, String birthday, String phonenumber, String address, String email, String password) {
-        return Persistance.createCustomer(ID, name, birthday, phonenumber, address, email, password);
+        return persistance.createCustomer(ID, name, birthday, phonenumber, address, email, password);
     }
 }
 

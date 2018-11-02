@@ -60,7 +60,7 @@ public class DBManager {
     @return a string of the data
     */
     public String getCustomerInfo(String customerID) {
-        String testResult = "";
+        String customerInfo = "";
         try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
             ResultSet result = statement.executeQuery("SELECT name, birthday, phonenumber, address, email FROM customer WHERE id = '" + customerID + "'");
 
@@ -72,12 +72,12 @@ public class DBManager {
                 sb.append(result.getString("address") + ";");
                 sb.append(result.getString("email") + ";");
             }
-            testResult = sb.toString();
+            customerInfo = sb.toString();
         } catch (SQLException ex) {
             System.out.println("SQL exception");
             ex.printStackTrace();
         }
-        return testResult;
+        return customerInfo;
     }
     
     public String getAccountBalance(String accountID){
@@ -101,7 +101,7 @@ public class DBManager {
     public String login(String ID, String password){
         
         String id = ID.toLowerCase();
-        String testResult = "";
+        String loginResult = "";
         //Query for admin login
         if (id.startsWith("a")) {
         
@@ -112,7 +112,7 @@ public class DBManager {
                 while(result.next()){
                     sb.append(result.getString("password"));
                 }
-                testResult = sb.toString();
+                loginResult = sb.toString();
             } catch (SQLException ex) {
                 System.out.println("SQL exception");
                 ex.printStackTrace();
@@ -128,13 +128,13 @@ public class DBManager {
                 while(result.next()){
                     sb.append(result.getString("password"));
                 }
-                testResult = sb.toString();
+                loginResult = sb.toString();
             } catch (SQLException ex) {
                 System.out.println("SQL exception");
                 ex.printStackTrace();
             }
         }
-        if (testResult.equals(password)){
+        if (loginResult.equals(password)){
             return "true";
         }
         else {
