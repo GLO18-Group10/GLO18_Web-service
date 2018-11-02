@@ -24,11 +24,11 @@ public class LogicFacade implements iLogic {
     }
 
     @Override
-    public void initializeSession(String ID) {
+    public void initializeSession(String ID, CustomerSession customerSession) {
         if (ID.startsWith("A")) {
             session = new AdminSession(ID);
         } else if (ID.startsWith("C")) {
-            session = new CustomerSession(ID);
+            session = customerSession;
         }
     }
 
