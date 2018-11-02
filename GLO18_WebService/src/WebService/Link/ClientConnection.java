@@ -22,26 +22,30 @@ import java.net.Socket;
 public class ClientConnection {
 
     private ServerSocket server;
+    LinkFacade link;
     //private MessageParser messageParser = new MessageParser;
     //private Encrypt encrypt = new Encrypt;
 
-    public ClientConnection(String ipAddress) throws Exception {
+    public ClientConnection(String ipAddress, LinkFacade link) throws Exception {
         //Create a socket with the passed ip address
         if (ipAddress != null && !ipAddress.isEmpty()) {
             this.server = new ServerSocket(2345, 1, InetAddress.getByName(ipAddress));
-        } 
-        //If the method is not passed an ip address assign one automatically
+        } //If the method is not passed an ip address assign one automatically
         else {
             this.server = new ServerSocket(2345, 1, InetAddress.getLocalHost());
         }
+        this.link = link;
     }
-/**
- * Method to create a connection to the client and make a thread for the client to use
- * @throws Exception 
- */
+
+    /**
+     * Method to create a connection to the client and make a thread for the
+     * client to use
+     *
+     * @throws Exception
+     */
     public void establishCommunication() throws Exception {
         Socket client = this.server.accept(); //Accept a client
-        Runnable thread = new HandleConnection(client); //Create a thread to service the client
+        Runnable thread = new HandleConnection(client, link); //Create a thread to service the client
         new Thread(thread).start(); //Start the thread
     }
 
@@ -57,10 +61,11 @@ public class ClientConnection {
 class HandleConnection implements Runnable {
 
     private Socket socket; //Socket for connection
-    private LinkFacade link = new LinkFacade();
+    private LinkFacade link;
 
-    public HandleConnection(Socket socket) {
+    public HandleConnection(Socket socket, LinkFacade link) {
         this.socket = socket;
+        this.link = link;
     }
 
     @Override
@@ -72,7 +77,7 @@ class HandleConnection implements Runnable {
         String clientAddress = socket.getInetAddress().getHostAddress();
         //Print the ip of the client
         System.out.println("New connection from " + clientAddress);
-        
+
         //Communicate with the client
         try {
             //PrintWriter to create a response to the client
@@ -82,8 +87,6 @@ class HandleConnection implements Runnable {
             while ((data = in.readLine()) != null) {
                 //Print the message from the client
                 System.out.println("Client says: " + data);
-                //Print the response to the client
-                //System.out.println(link.messageParser(data));
                 //Send the response to the client
                 out.println(link.messageParser(data));
             }

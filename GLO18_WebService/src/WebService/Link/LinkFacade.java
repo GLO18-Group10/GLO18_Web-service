@@ -56,7 +56,7 @@ public class LinkFacade implements iLink {
         }
         //Create a connection with the given ip
         try {
-            connection = new ClientConnection(ip);
+            connection = new ClientConnection(ip, this);
             System.out.println("\r\nRunning Server: "
                     + "Host=" + connection.getSocketAddress().getHostAddress()
                     + " Port=" + connection.getPort());
