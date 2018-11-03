@@ -18,19 +18,20 @@ public class PersistanceFacade implements iPersistance {
     @Override
     public String getAccountBalance(String accountID) {
         return dbmanager.getAccountBalance(accountID);
-    }    
-    
+    }
+
     @Override
     public String login(String ID, String password) {
-        
+
         return dbmanager.login(ID, password);
     }
 
-/**
- * Method to get customer info that corresponds to the given id
- * @param id The id of the current user
- * @return The customer information
- */
+    /**
+     * Method to get customer info that corresponds to the given id
+     *
+     * @param id The id of the current user
+     * @return The customer information
+     */
     @Override
     public String getCustomerInfo(String id) {
         return dbmanager.getCustomerInfo(id);
@@ -39,6 +40,16 @@ public class PersistanceFacade implements iPersistance {
     @Override
     public String createCustomer(String ID, String name, String birthday, String phonenumber, String address, String email, String password) {
         return dbmanager.createCustomer(ID, name, birthday, phonenumber, address, email, password);
+    }
+
+    @Override
+    public boolean doesAccountExist(String accountID) {
+        return dbmanager.doesAccountExist(accountID);
+    }
+
+    @Override
+    public void updateAccountBalance(String accountID, int amount) {
+        dbmanager.updateAccountBalance(accountID, amount);
     }
 
 }

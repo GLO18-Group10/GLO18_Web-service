@@ -36,16 +36,15 @@ public class ServerProtocol {
             case "03":
             case "04":
             case "05":
-                String fromAccount = data[1];
-                String amount = data[2];
-                String toAccount = data[3];
-                String text = data[4];
-                //Check if the account exists and the user owns it and if there is enough money in the account
-                if(session.isAccount(fromAccount) && (Integer.parseInt(logic.getAccountBalance(fromAccount)) >= Integer.parseInt(amount))){
-                    logic.transfer(data);
+                String response05;
+                Transfer transfer = new Transfer(data[1], data[2], data[3], data[4], logic);
+                response05 = transfer.validate(session);
+                //Send back the error if the transfer could not be completed
+                if (!response05.equals("valid")){
+                    return response05;
                 }
-                else{
-                    return "Error: Not enough money in account";
+                else{ //Otherwise complete the transfer
+                    return transfer.completeTransfer();
                 }
             case "06":
             case "07":

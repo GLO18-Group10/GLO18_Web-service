@@ -12,8 +12,10 @@ import WebService.Logic.CustomerSession;
  * @author Jeppe Enevold
  */
 public interface iLogic {
-    public void injectPersistance(iPersistance PersistanceLayer);
-    public void initializeSession(String ID, CustomerSession customerSession);
-    public String messageParser(String message);
 
+    public void injectPersistance(iPersistance PersistanceLayer);
+
+    public void initializeSession(String ID, CustomerSession customerSession);
+
+    public String messageParser(String message);
 }

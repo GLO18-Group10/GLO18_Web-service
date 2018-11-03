@@ -14,4 +14,6 @@ public interface iPersistance {
     String getCustomerInfo(String id);
     String login(String ID, String password);
     String createCustomer(String ID, String name, String birthday, String phonenumber, String address, String email, String password);
+    boolean doesAccountExist(String accountID);
+    void updateAccountBalance(String accountID, int amount);
 }

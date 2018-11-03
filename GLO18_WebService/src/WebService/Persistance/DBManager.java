@@ -53,12 +53,13 @@ public class DBManager {
         }
 
     }
-    
-/**
-    Method to get the customer info
-    @param customerID: the id of the customer that wants their info
-    @return a string of the data
-    */
+
+    /**
+     * Method to get the customer info
+     *
+     * @param customerID: the id of the customer that wants their info
+     * @return a string of the data
+     */
     public String getCustomerInfo(String customerID) {
         String customerInfo = "";
         try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
@@ -79,15 +80,15 @@ public class DBManager {
         }
         return customerInfo;
     }
-    
-    public String getAccountBalance(String accountID){
+
+    public String getAccountBalance(String accountID) {
         String Balance = "";
         try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
             ResultSet result = statement.executeQuery("SELECT Balance FROM BankAccount WHERE ID = '" + accountID + "'");
-            
+
             StringBuilder sb = new StringBuilder();
-            while(result.next()){
-                    sb.append(result.getString("Balance"));
+            while (result.next()) {
+                sb.append(result.getString("Balance"));
             }
             Balance = sb.toString();
         } catch (SQLException ex) {
@@ -97,19 +98,38 @@ public class DBManager {
         return Balance;
     }
 
-    
-    public String login(String ID, String password){
-        
+    public boolean doesAccountExist(String accountID) {
+        int count = 0;
+        try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
+            ResultSet result = statement.executeQuery("SELECT count(*) FROM BankAccount WHERE ID = '" + accountID + "'");
+            count = result.getInt(accountID);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return count == 1;
+    }
+
+    public void updateAccountBalance(String accountID, int amount) {
+        try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
+            statement.executeQuery("UPDATE BankAccount SET Balance = '" + amount + "' WHERE ID = '" + accountID + "'");
+        } catch (SQLException ex) {
+            System.out.println("SQL exception");
+            ex.printStackTrace();
+        }
+    }
+
+    public String login(String ID, String password) {
+
         String id = ID.toLowerCase();
         String loginResult = "";
         //Query for admin login
         if (id.startsWith("a")) {
-        
+
             try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
-                ResultSet result = statement.executeQuery("SELECT password FROM admin WHERE id = '"+ ID + "'");
+                ResultSet result = statement.executeQuery("SELECT password FROM admin WHERE id = '" + ID + "'");
 
                 StringBuilder sb = new StringBuilder();
-                while(result.next()){
+                while (result.next()) {
                     sb.append(result.getString("password"));
                 }
                 loginResult = sb.toString();
@@ -117,15 +137,14 @@ public class DBManager {
                 System.out.println("SQL exception");
                 ex.printStackTrace();
             }
-        }
-        // Query for customer login
+        } // Query for customer login
         else if (id.startsWith("c")) {
-        
+
             try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
                 ResultSet result = statement.executeQuery("SELECT password FROM customer WHERE id = '" + ID + "'");
 
                 StringBuilder sb = new StringBuilder();
-                while(result.next()){
+                while (result.next()) {
                     sb.append(result.getString("password"));
                 }
                 loginResult = sb.toString();
@@ -134,10 +153,9 @@ public class DBManager {
                 ex.printStackTrace();
             }
         }
-        if (loginResult.equals(password)){
+        if (loginResult.equals(password)) {
             return "true";
-        }
-        else {
+        } else {
             return "false";
         }
     }
