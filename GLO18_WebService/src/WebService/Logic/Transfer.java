@@ -26,7 +26,9 @@ public class Transfer {
     }
 
     /**
-     * Check if everything is in order with the transfer through a serious of checks
+     * Check if everything is in order with the transfer through a serious of
+     * checks
+     *
      * @param session The current session to compare certain checks to
      * @return An error or valid
      */
@@ -46,6 +48,7 @@ public class Transfer {
 
     /**
      * Figure out the new balances and update both accounts
+     *
      * @return An error or complete
      */
     public String completeTransfer() {
@@ -66,8 +69,8 @@ public class Transfer {
         //saveTransfer;
         return "complete";
     }
-    
-    private void saveTransfer(){
+
+    private void saveTransfer() {
         //TO be implemented
     }
 

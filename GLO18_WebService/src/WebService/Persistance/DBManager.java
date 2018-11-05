@@ -99,19 +99,20 @@ public class DBManager {
     }
 
     public boolean doesAccountExist(String accountID) {
-        int count = 0;
+        String count = "0";
         try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
             ResultSet result = statement.executeQuery("SELECT count(*) FROM BankAccount WHERE ID = '" + accountID + "'");
-            count = result.getInt(accountID);
+            result.next();
+            count = result.getString(1);
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        return count == 1;
+        return count.equals("1");
     }
 
     public void updateAccountBalance(String accountID, int amount) {
         try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
-            statement.executeQuery("UPDATE BankAccount SET Balance = '" + amount + "' WHERE ID = '" + accountID + "'");
+            statement.execute("UPDATE BankAccount SET Balance = '" + amount + "' WHERE ID = '" + accountID + "'");
         } catch (SQLException ex) {
             System.out.println("SQL exception");
             ex.printStackTrace();
