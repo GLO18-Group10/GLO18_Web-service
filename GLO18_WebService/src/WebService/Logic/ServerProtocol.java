@@ -51,6 +51,7 @@ public class ServerProtocol {
             case "11":
             case "12":
             case "18":
+                return logic.logout();
             case "19":
             default:
         }

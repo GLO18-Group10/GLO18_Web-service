@@ -13,5 +13,6 @@ public interface iLogic {
     public void injectPersistance(iPersistance PersistanceLayer);
     public void initializeSession(String ID);
     public String messageParser(String message);
+    public String logout();
 
 }
