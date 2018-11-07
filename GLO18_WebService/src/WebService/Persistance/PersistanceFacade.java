@@ -6,6 +6,7 @@
 package WebService.Persistance;
 
 import WebService.Acquaintance.iPersistance;
+import java.time.LocalDateTime;
 
 /**
  *
@@ -50,6 +51,11 @@ public class PersistanceFacade implements iPersistance {
     @Override
     public void updateAccountBalance(String accountID, int amount) {
         dbmanager.updateAccountBalance(accountID, amount);
+    }
+
+    @Override
+    public String saveTransfer(String fromAccount, String toAccount, int amount, String text, LocalDateTime date) {
+        return dbmanager.saveTransfer(fromAccount, toAccount, amount, text, date);
     }
 
 }

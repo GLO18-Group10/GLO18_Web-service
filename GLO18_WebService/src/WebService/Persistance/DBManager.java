@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
 
 /**
  *
@@ -166,6 +167,20 @@ public class DBManager {
             String s = "INSERT INTO customer (id, name, birthday, phonenumber, address, email, password) VALUES ('" + ID + "','" + name + "','" + birthday + "','" + phonenumber + "','" + address + "','" + email + "','" + password + "')";
             statement.execute(s);
 
+        } catch (SQLException ex) {
+            System.out.println("SQL exception");
+            ex.printStackTrace();
+            return "false";
+        }
+        return "true";
+
+    }
+    
+    public String saveTransfer(String fromAccount, String toAccount, int amount, String text, LocalDateTime date) {
+        try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
+            String s = "INSERT INTO transaction (message, amount, senderbankaccountid, receiverbankaccountid, date)"
+                    + " VALUES ('" + text + "','" + amount + "','" + fromAccount + "','" + toAccount + "','" + date + "')";
+            statement.execute(s);
         } catch (SQLException ex) {
             System.out.println("SQL exception");
             ex.printStackTrace();

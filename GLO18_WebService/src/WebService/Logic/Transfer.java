@@ -5,6 +5,8 @@
  */
 package WebService.Logic;
 
+import java.time.LocalDateTime;
+
 /**
  *
  * @author Peter
@@ -16,6 +18,7 @@ public class Transfer {
     private final String toAccount;
     private final int amount;
     private final String text;
+    private final LocalDateTime date = LocalDateTime.now();
 
     public Transfer(String fromAccount, String amount, String toAccount, String text, LogicFacade logic) {
         this.fromAccount = fromAccount;
@@ -66,12 +69,19 @@ public class Transfer {
         } catch (Exception e) {
             return "Error; transaction couldn't be completed.";
         }
-        //saveTransfer;
+        saveTransfer();
         return "complete";
     }
 
+    /**
+     * Save the transaction. If it fails print out the input for review later
+     */
     private void saveTransfer() {
-        //TO be implemented
+        if (logic.saveTransfer(fromAccount, toAccount, amount, text, date).equals("false")) {
+            System.out.println("Transaction from " + fromAccount
+                    + " to " + toAccount + " could not be saved. Date: "
+                    + date + " amount: " + amount + " message: " + text);
+        }
     }
 
 }

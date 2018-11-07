@@ -7,6 +7,7 @@ package WebService.Logic;
 
 import WebService.Acquaintance.iLogic;
 import WebService.Acquaintance.iPersistance;
+import java.time.LocalDateTime;
 
 /**
  *
@@ -69,5 +70,9 @@ public class LogicFacade implements iLogic {
     
     public void updateAccountBalance(String accountID, int amount) {
         persistance.updateAccountBalance(accountID, amount);
+    }
+    
+    public String saveTransfer(String fromAccount, String toAccount, int amount, String text, LocalDateTime date){
+        return persistance.saveTransfer(fromAccount, toAccount, amount, text, date);
     }
 }
