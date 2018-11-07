@@ -82,6 +82,24 @@ public class DBManager {
         return customerInfo;
     }
 
+    public String getAccountNos(String customerID) {
+        String accountNos = "";
+        try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
+            ResultSet result = statement.executeQuery("SELECT bankaccountid FROM hasbankaccount WHERE id = '" + customerID + "'");
+
+            StringBuilder sb = new StringBuilder();
+            while (result.next()) {
+                sb.append(result.getString("bankaccountid") + ";");
+            }
+            accountNos = sb.toString();
+        } catch (SQLException ex) {
+            System.out.println("SQL exception");
+            ex.printStackTrace();
+        }
+        accountNos = accountNos.replace(" ", "");
+        return accountNos;
+    }
+
     public String getAccountBalance(String accountID) {
         String Balance = "";
         try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
@@ -175,7 +193,7 @@ public class DBManager {
         return "true";
 
     }
-    
+
     public String saveTransfer(String fromAccount, String toAccount, int amount, String text, LocalDateTime date) {
         try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
             String s = "INSERT INTO transaction (message, amount, senderbankaccountid, receiverbankaccountid, date)"

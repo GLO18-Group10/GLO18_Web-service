@@ -58,4 +58,9 @@ public class PersistanceFacade implements iPersistance {
         return dbmanager.saveTransfer(fromAccount, toAccount, amount, text, date);
     }
 
+    @Override
+    public String getAccountNos(String customerID) {
+        return dbmanager.getAccountNos(customerID);
+    }
+
 }

@@ -25,7 +25,7 @@ public class ServerProtocol {
                 String password = data[2];
                 String test = logic.login(ID, password);
                 if (test.equalsIgnoreCase("True")) {
-                    session = new CustomerSession(ID);
+                    session = new CustomerSession(ID, logic);
                     logic.initializeSession(ID, session);
                 }
                 return test;
@@ -40,10 +40,9 @@ public class ServerProtocol {
                 Transfer transfer = new Transfer(data[1], data[2], data[3], data[4], logic);
                 response05 = transfer.validate(session);
                 //Send back the error if the transfer could not be completed
-                if (!response05.equals("valid")){
+                if (!response05.equals("valid")) {
                     return response05;
-                }
-                else{ //Otherwise complete the transfer
+                } else { //Otherwise complete the transfer
                     return transfer.completeTransfer();
                 }
             case "06":
@@ -57,6 +56,14 @@ public class ServerProtocol {
                 String password1 = data[7];
                 return logic.createCustomer(ID1, name, birthday, phonenumber, address, email, password1);
             case "08":
+                String answer = "";
+                String[] accountNos = session.getAccountNos();
+                for (String no : accountNos) {
+                    if (no != null) {
+                        answer += no;
+                    }
+                }
+                return answer;
             case "09":
             case "10":
             case "11":

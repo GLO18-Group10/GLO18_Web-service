@@ -11,9 +11,11 @@ package WebService.Logic;
  */
 public class Session {
     String ID;
+    LogicFacade logic;
 
-    public Session(String ID) {
+    public Session(String ID, LogicFacade logic) {
         this.ID = ID;
+        this.logic = logic;
     }
     
     public String getID(){

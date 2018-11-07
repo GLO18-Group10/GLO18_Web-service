@@ -18,4 +18,5 @@ public interface iLogic {
     public void initializeSession(String ID, CustomerSession customerSession);
 
     public String messageParser(String message);
+    
 }
