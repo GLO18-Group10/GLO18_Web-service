@@ -34,6 +34,7 @@ public class ServerProtocol {
             case "02":
                 return logic.getAccountBalance(data[1]);
             case "03":
+                
             case "04":
             case "05":
                 String response05;
