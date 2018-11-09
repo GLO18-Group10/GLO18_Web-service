@@ -90,4 +90,12 @@ public class LogicFacade implements iLogic {
     public String getAccountNos(String customerID) {
         return persistence.getAccountNos(customerID);
     }
+    
+    public void openAccount(String ID){
+        persistence.openAccount(ID);
+    }
+    
+    public void closeAccount(String ID){
+        persistence.closeAccount(ID);
+    }
 }
