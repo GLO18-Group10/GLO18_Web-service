@@ -63,4 +63,14 @@ public class PersistenceFacade implements iPersistence {
         return dbmanager.getAccountNos(customerID);
     }
 
+    @Override
+    public void openAccount(String ID) {
+        dbmanager.openAccount(ID);
+    }
+
+    @Override
+    public void closeAccount(String ID) {
+        dbmanager.closeAccount(ID);
+    }
+
 }
