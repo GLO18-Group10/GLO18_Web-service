@@ -13,7 +13,7 @@ import WebService.Logic.CustomerSession;
  */
 public interface iLogic {
 
-    public void injectPersistance(iPersistance PersistanceLayer);
+    public void injectPersistance(iPersistence PersistenceLayer);
 
     public void initializeSession(String ID, CustomerSession customerSession);
 

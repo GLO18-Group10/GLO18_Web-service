@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
  *
  * @author Jeppe Enevold
  */
-public interface iPersistance {
+public interface iPersistence {
     public String getAccountBalance(String ID);
     String getCustomerInfo(String id);
     String login(String ID, String password);
