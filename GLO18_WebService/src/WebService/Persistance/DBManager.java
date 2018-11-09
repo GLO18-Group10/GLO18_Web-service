@@ -207,6 +207,26 @@ public class DBManager {
         return "true";
 
     }
+    
+    public String getTransactionHistory(String accountID) {
+        String testResult = "";
+        try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
+            ResultSet result = statement.executeQuery("SELECT message, amount, receiverbankaccountid, date FROM transaction WHERE senderbankaccountid = '" + accountID + "'");
+
+            StringBuilder sb = new StringBuilder();
+            while (result.next()) {
+                sb.append(result.getString("message") + ":");
+                sb.append(result.getString("amount") + ":");
+                sb.append(result.getString("receiverbankaccountid") + ":");
+                sb.append(result.getString("date") + ";");
+            }
+            testResult = sb.toString();
+        } catch (SQLException ex) {
+            System.out.println("SQL exception");
+            ex.printStackTrace();
+        }
+        return testResult;
+    }
 
 //main method for testing
 //    public static void main(String[] args) {

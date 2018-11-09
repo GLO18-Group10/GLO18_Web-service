@@ -63,4 +63,11 @@ public class PersistenceFacade implements iPersistence {
         return dbmanager.getAccountNos(customerID);
     }
 
+    @Override
+    public String getTransactionHistory(String accountID) {
+        return dbmanager.getTransactionHistory(accountID);
+    }
+    
+    
+
 }

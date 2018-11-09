@@ -46,6 +46,8 @@ public class ServerProtocol {
                     return transfer.completeTransfer();
                 }
             case "06":
+                String ID2 = data[1];
+                return logic.getTransactionHistory(ID2);
             case "07":
                 String ID1 = data[1];
                 String name = data[2];

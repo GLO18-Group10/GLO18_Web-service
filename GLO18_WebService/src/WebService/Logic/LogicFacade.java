@@ -79,4 +79,10 @@ public class LogicFacade implements iLogic {
     public String getAccountNos(String customerID) {
         return persistence.getAccountNos(customerID);
     }
+    
+    public String getTransactionHistory(String accountID){
+        return persistence.getTransactionHistory(accountID);
+    
+    }
+    
 }
