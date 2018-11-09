@@ -65,6 +65,19 @@ public class ServerProtocol {
                 }
                 return answer;
             case "09":
+                try{
+                if(data[2].equals("1")){
+                    logic.openAccount(data[1]);
+                }
+                else if (data[2].equals("0")){
+                    System.out.println(data[2]);
+                    logic.closeAccount(data[1]);
+                }
+                return "complete";
+                }
+                catch(Exception e){
+                return e.getMessage();
+                }
             case "10":
             case "11":
             case "12":
