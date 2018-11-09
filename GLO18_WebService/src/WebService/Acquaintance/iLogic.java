@@ -5,7 +5,7 @@
  */
 package WebService.Acquaintance;
 
-import WebService.Logic.CustomerSession;
+import WebService.Logic.Session;
 
 /**
  *
@@ -15,7 +15,7 @@ public interface iLogic {
 
     public void injectPersistance(iPersistence PersistenceLayer);
 
-    public void initializeSession(String ID, CustomerSession customerSession);
+    public Session initializeSession(String ID);
 
     public String messageParser(String message);
     
