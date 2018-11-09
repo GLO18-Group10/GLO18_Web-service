@@ -12,7 +12,7 @@ package WebService.Logic;
 public class ServerProtocol {
 
     LogicFacade logic;
-    CustomerSession customerSession;
+    Session session;
 
     public ServerProtocol(LogicFacade logic) {
         this.logic = logic;
@@ -26,7 +26,7 @@ public class ServerProtocol {
                 String test = logic.login(ID, password);
                 if (test.equalsIgnoreCase("True")) {
                     //session = new CustomerSession(ID, logic);
-                    customerSession = (CustomerSession) logic.initializeSession(ID);
+                    session = logic.initializeSession(ID);
                 }
                 return test;
             case "01":
@@ -38,7 +38,7 @@ public class ServerProtocol {
             case "05":
                 String response05;
                 Transfer transfer = new Transfer(data[1], data[2], data[3], data[4], logic);
-                response05 = transfer.validate(customerSession);
+                response05 = transfer.validate((CustomerSession)session);
                 //Send back the error if the transfer could not be completed
                 if (!response05.equals("valid")) {
                     return response05;
@@ -57,7 +57,7 @@ public class ServerProtocol {
                 return logic.createCustomer(ID1, name, birthday, phonenumber, address, email, password1);
             case "08":
                 String answer = "";
-                String[] accountNos = customerSession.getAccountNos();
+                String[] accountNos =  ((CustomerSession)session).getAccountNos();
                 for (String no : accountNos) {
                     if (no != null) {
                         answer += no;
