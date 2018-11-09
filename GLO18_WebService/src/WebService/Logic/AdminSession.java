@@ -11,8 +11,8 @@ package WebService.Logic;
  */
 public class AdminSession extends Session{
     //private static AdminSession adminsession;
-    public AdminSession(String ID) {
-        super(ID);
+    public AdminSession(String ID, LogicFacade logic) {
+        super(ID, logic);
         //adminsession = new AdminSession(ID);
     }
     

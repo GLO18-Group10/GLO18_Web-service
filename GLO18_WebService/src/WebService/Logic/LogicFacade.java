@@ -6,7 +6,8 @@
 package WebService.Logic;
 
 import WebService.Acquaintance.iLogic;
-import WebService.Acquaintance.iPersistance;
+import java.time.LocalDateTime;
+import WebService.Acquaintance.iPersistence;
 
 /**
  *
@@ -16,19 +17,19 @@ public class LogicFacade implements iLogic {
 
     private static Session session;
     private MessageParser messageparser = new MessageParser(this);
-    private static iPersistance persistance;
+    private static iPersistence persistence;
 
     @Override
-    public void injectPersistance(iPersistance PersistanceLayer) {
-        persistance = PersistanceLayer;
+    public void injectPersistance(iPersistence PersistanceLayer) {
+        persistence = PersistanceLayer;
     }
 
     @Override
-    public void initializeSession(String ID) {
+    public void initializeSession(String ID, CustomerSession customerSession) {
         if (ID.startsWith("A")) {
-            session = new AdminSession(ID);
+            session = new AdminSession(ID, this);
         } else if (ID.startsWith("C")) {
-            session = new CustomerSession(ID);
+            session = customerSession;
         }
     }
 
@@ -38,7 +39,7 @@ public class LogicFacade implements iLogic {
     }
 
     public String login(String ID, String password) {
-        String test = persistance.login(ID, password);
+        String test = persistence.login(ID, password);
         return test;
     }
 
@@ -58,11 +59,11 @@ public class LogicFacade implements iLogic {
      * @return CostumerInfo
      */
     public String getCustomerInfo(String ID) {
-        return persistance.getCustomerInfo(ID); //Do a query to get the info that cooreponds to the given id
+        return persistence.getCustomerInfo(ID); //Do a query to get the info that cooreponds to the given id
     }
 
     public String getAccountBalance(String ID) {
-        return persistance.getAccountBalance(ID);
+        return persistence.getAccountBalance(ID);
     }
 
     public String sessionGetID() {
@@ -70,6 +71,22 @@ public class LogicFacade implements iLogic {
     }
 
     public String createCustomer(String ID, String name, String birthday, String phonenumber, String address, String email, String password) {
-        return persistance.createCustomer(ID, name, birthday, phonenumber, address, email, password);
+        return persistence.createCustomer(ID, name, birthday, phonenumber, address, email, password);
+    }
+
+    public boolean doesAccountExist(String accountID) {
+        return persistence.doesAccountExist(accountID);
+    }
+
+    public void updateAccountBalance(String accountID, int amount) {
+        persistence.updateAccountBalance(accountID, amount);
+    }
+
+    public String saveTransfer(String fromAccount, String toAccount, int amount, String text, LocalDateTime date) {
+        return persistence.saveTransfer(fromAccount, toAccount, amount, text, date);
+    }
+
+    public String getAccountNos(String customerID) {
+        return persistence.getAccountNos(customerID);
     }
 }
