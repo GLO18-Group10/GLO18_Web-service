@@ -137,13 +137,15 @@ public class DBManager {
             ex.printStackTrace();
         }
     }
-public void storeCustomerInfo(String ID, String name, String phoneNo, String address, String email) {
+public String storeCustomerInfo(String ID, String name, String phoneNo, String address, String email) {
         try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
-            statement.execute("UPDATE Customer SET name = '" + name + "," +  "' WHERE ID = '" + ID + "'");
+            statement.execute("UPDATE Customer SET name = '" + name + "', " + "phonenumber = '" + phoneNo + "', address = '"+address + "', email = '" + email + "' WHERE ID = '" + ID + "'");
         } catch (SQLException ex) {
             System.out.println("SQL exception");
             ex.printStackTrace();
+            return "false";
         }
+        return "true";
     }
     public String login(String ID, String password) {
 
