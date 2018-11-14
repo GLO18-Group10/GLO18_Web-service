@@ -66,6 +66,8 @@ public class ServerProtocol {
                 return answer;
             case "09":
             case "10":
+ //removes all "C" from Customer IDS              
+                return logic.getCustomerIDs().replace("C", "");
             case "11":
             case "12":
             case "18":

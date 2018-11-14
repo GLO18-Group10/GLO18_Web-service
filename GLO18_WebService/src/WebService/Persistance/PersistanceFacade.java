@@ -63,4 +63,9 @@ public class PersistanceFacade implements iPersistance {
         return dbmanager.getAccountNos(customerID);
     }
 
+    @Override
+    public String getCustomerIDs() {
+        return dbmanager.getCustomerIDs();
+    }
+
 }

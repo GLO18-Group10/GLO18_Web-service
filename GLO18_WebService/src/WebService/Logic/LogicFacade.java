@@ -79,4 +79,8 @@ public class LogicFacade implements iLogic {
     public String getAccountNos(String customerID) {
         return persistance.getAccountNos(customerID);
     }
+    
+    public String getCustomerIDs(){
+        return persistance.getCustomerIDs();
+    }
 }

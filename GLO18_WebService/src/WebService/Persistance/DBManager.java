@@ -81,6 +81,23 @@ public class DBManager {
         }
         return customerInfo;
     }
+    
+    public String getCustomerIDs() {
+        String IDs = "";
+        try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
+            ResultSet result = statement.executeQuery("SELECT id FROM customer");
+
+            StringBuilder sb = new StringBuilder();
+            while (result.next()) {
+                sb.append(result.getString("id") + ";");
+            }
+            IDs = sb.toString();
+        } catch (SQLException ex) {
+            System.out.println("SQL exception");
+            ex.printStackTrace();
+        }
+        return IDs;
+    }
 
     public String getAccountNos(String customerID) {
         String accountNos = "";
