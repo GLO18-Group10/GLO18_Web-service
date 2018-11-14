@@ -5,15 +5,17 @@
  */
 package WebService.Logic;
 
+import WebService.Acquaintance.ILogic;
+
 /**
  *
  * @author Peterzxcvbnm
  */
 public class MessageParser {
-    LogicFacade logic;
+    ILogic logic;
     ServerProtocol serverProtocol;
     
-    public MessageParser(LogicFacade logic) {
+    public MessageParser(ILogic logic) {
         this.logic = logic;
         this.serverProtocol = new ServerProtocol(logic);
     }

@@ -5,16 +5,18 @@
  */
 package WebService.Logic;
 
+import WebService.Acquaintance.ILogic;
+
 /**
  *
  * @author Nick
  */
 public class ServerProtocol {
 
-    LogicFacade logic;
+    ILogic logic;
     Session session;
 
-    public ServerProtocol(LogicFacade logic) {
+    public ServerProtocol(ILogic logic) {
         this.logic = logic;
     }
 
