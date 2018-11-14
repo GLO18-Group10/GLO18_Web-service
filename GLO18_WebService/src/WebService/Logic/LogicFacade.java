@@ -25,12 +25,13 @@ public class LogicFacade implements iLogic {
     }
 
     @Override
-    public void initializeSession(String ID, CustomerSession customerSession) {
+    public Session initializeSession(String ID) {
         if (ID.startsWith("A")) {
             session = new AdminSession(ID, this);
         } else if (ID.startsWith("C")) {
-            session = customerSession;
+            session = new CustomerSession(ID, this);
         }
+        return session;
     }
 
     @Override
@@ -43,6 +44,16 @@ public class LogicFacade implements iLogic {
         return test;
     }
 
+    public String logout() {
+        session = null;
+
+        if (session == null) {
+            return "true";
+        } else {
+            return "false";
+        }
+    }
+
     /**
      *
      * @param ID
@@ -50,6 +61,10 @@ public class LogicFacade implements iLogic {
      */
     public String getCustomerInfo(String ID) {
         return persistence.getCustomerInfo(ID); //Do a query to get the info that cooreponds to the given id
+    }
+    
+    public String storeCustomerInfo(String ID, String name, String phoneNo, String address, String email){
+        return persistence.storeCustomerInfo(ID, name, phoneNo, address, email);
     }
 
     public String getAccountBalance(String ID) {
@@ -80,9 +95,19 @@ public class LogicFacade implements iLogic {
         return persistence.getAccountNos(customerID);
     }
     
+
     public String getTransactionHistory(String accountID){
         return persistence.getTransactionHistory(accountID);
     
     }
     
+
+    public void openAccount(String ID){
+        persistence.openAccount(ID);
+    }
+    
+    public void closeAccount(String ID){
+        persistence.closeAccount(ID);
+    }
+
 }

@@ -12,7 +12,7 @@ package WebService.Logic;
 public class ServerProtocol {
 
     LogicFacade logic;
-    CustomerSession session;
+    Session session;
 
     public ServerProtocol(LogicFacade logic) {
         this.logic = logic;
@@ -25,8 +25,8 @@ public class ServerProtocol {
                 String password = data[2];
                 String test = logic.login(ID, password);
                 if (test.equalsIgnoreCase("True")) {
-                    session = new CustomerSession(ID, logic);
-                    logic.initializeSession(ID, session);
+                    //session = new CustomerSession(ID, logic);
+                    session = logic.initializeSession(ID);
                 }
                 return test;
             case "01":
@@ -34,11 +34,12 @@ public class ServerProtocol {
             case "02":
                 return logic.getAccountBalance(data[1]);
             case "03":
+                return logic.storeCustomerInfo(logic.sessionGetID(), data[1], data[2], data[3], data[4]);
             case "04":
             case "05":
                 String response05;
                 Transfer transfer = new Transfer(data[1], data[2], data[3], data[4], logic);
-                response05 = transfer.validate(session);
+                response05 = transfer.validate((CustomerSession)session);
                 //Send back the error if the transfer could not be completed
                 if (!response05.equals("valid")) {
                     return response05;
@@ -59,7 +60,7 @@ public class ServerProtocol {
                 return logic.createCustomer(ID1, name, birthday, phonenumber, address, email, password1);
             case "08":
                 String answer = "";
-                String[] accountNos = session.getAccountNos();
+                String[] accountNos =  ((CustomerSession)session).getAccountNos();
                 for (String no : accountNos) {
                     if (no != null) {
                         answer += no;
@@ -67,10 +68,21 @@ public class ServerProtocol {
                 }
                 return answer;
             case "09":
+                try {
+                    if (data[2].equals("1")) {
+                        logic.openAccount(data[1]);
+                    } else if (data[2].equals("0")) {
+                        logic.closeAccount(data[1]);
+                    }
+                    return "complete";
+                } catch (Exception e) {
+                    return e.getMessage();
+                }
             case "10":
             case "11":
             case "12":
             case "18":
+                return logic.logout();
             case "19":
             default:
         }
