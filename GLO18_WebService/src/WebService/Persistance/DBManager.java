@@ -211,15 +211,16 @@ public class DBManager {
     public String getTransactionHistory(String accountID) {
         String testResult = "";
         try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
-            ResultSet result = statement.executeQuery("SELECT message, amount, receiverbankaccountid, date FROM transaction WHERE senderbankaccountid = '" + accountID + "'");
+            ResultSet result = statement.executeQuery("SELECT * FROM transaction WHERE senderbankaccountid = '" + accountID + "'  OR receiverbankaccountid = '" + accountID + "'" );
 
             StringBuilder sb = new StringBuilder();
             while (result.next()) {
-                sb.append(result.getString("message") + "           ");
-                sb.append(result.getString("amount") + "            ");
-                sb.append(result.getString("receiverbankaccountid") + "             ");
-                sb.append(result.getString("date") + ";");
-            }
+                sb.append(result.getString("receiverbankaccountid") + "     ");
+                sb.append(result.getString("senderbankaccountid") + "         ");
+                sb.append(result.getString("date") + "             ");
+                sb.append(result.getString("amount") + "                          ");
+                sb.append(result.getString("message") + ";");
+                }
             testResult = sb.toString();
         } catch (SQLException ex) {
             System.out.println("SQL exception");
