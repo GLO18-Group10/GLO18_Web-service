@@ -36,7 +36,9 @@ public class ServerProtocol {
             case "02":
                 return logic.getAccountBalance(data[1]);
             case "03":
+                break;
             case "04":
+                break;
             case "05":
                 String response05;
                 Transfer transfer = new Transfer(data[1], data[2], data[3], data[4], logic);
@@ -48,6 +50,7 @@ public class ServerProtocol {
                     return transfer.completeTransfer();
                 }
             case "06":
+                break;
             case "07":
                 String ID1 = data[1];
                 String name = data[2];
@@ -78,12 +81,17 @@ public class ServerProtocol {
                     return e.getMessage();
                 }
             case "10":
+                break;
             case "11":
+                break;
             case "12":
+                break;
             case "18":
                 return logic.logout();
             case "19":
+                break;
             default:
+                break;
         }
         return "Error";
     }
