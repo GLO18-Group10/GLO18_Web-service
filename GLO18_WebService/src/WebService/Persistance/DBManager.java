@@ -215,9 +215,9 @@ public class DBManager {
 
             StringBuilder sb = new StringBuilder();
             while (result.next()) {
-                sb.append(result.getString("message") + "@");
-                sb.append(result.getString("amount") + "@");
-                sb.append(result.getString("receiverbankaccountid") + "@");
+                sb.append(result.getString("message") + "           ");
+                sb.append(result.getString("amount") + "            ");
+                sb.append(result.getString("receiverbankaccountid") + "             ");
                 sb.append(result.getString("date") + ";");
             }
             testResult = sb.toString();
