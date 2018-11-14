@@ -21,6 +21,8 @@ public interface IPersistence {
 
     String createCustomer(String ID, String name, String birthday, String phonenumber, String address, String email, String password);
 
+    String storeCustomerInfo(String ID, String name, String phoneNo, String address, String email);
+
     boolean doesAccountExist(String accountID);
 
     void updateAccountBalance(String accountID, int amount);

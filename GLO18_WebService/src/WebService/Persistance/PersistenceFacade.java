@@ -42,6 +42,11 @@ public class PersistenceFacade implements IPersistence {
     public String createCustomer(String ID, String name, String birthday, String phonenumber, String address, String email, String password) {
         return dbmanager.createCustomer(ID, name, birthday, phonenumber, address, email, password);
     }
+    
+    @Override
+    public String storeCustomerInfo(String ID, String name, String phoneNo, String address, String email){
+        return dbmanager.storeCustomerInfo(ID, name, phoneNo, address, email);
+    }
 
     @Override
     public boolean doesAccountExist(String accountID) {

@@ -43,5 +43,7 @@ public interface ILogic {
     public void openAccount(String ID);
     
     public void closeAccount(String ID);
+    
+    public String storeCustomerInfo(String ID, String name, String phoneNo, String address, String email);
 
 }
