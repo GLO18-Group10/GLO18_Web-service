@@ -6,13 +6,19 @@
 package WebService.Link;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-
+import java.security.KeyStore;
+import java.util.Arrays;
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLServerSocket;
+import javax.net.ssl.SSLServerSocketFactory;
 /**
  *
  * @author Peterzxcvbnm
@@ -20,7 +26,8 @@ import java.net.Socket;
  * @version 1.0
  */
 public class ClientConnection {
-
+    public final static int PORT = 2345;
+    public final static String algorithm = "SSL";
     private ServerSocket server;
     LinkFacade link;
     //private MessageParser messageParser = new MessageParser;
@@ -28,6 +35,36 @@ public class ClientConnection {
 
     public ClientConnection(String ipAddress, LinkFacade link) throws Exception {
         //Create a socket with the passed ip address
+        try {
+            //Vi vælger en kontekst? Google mere om det. Konteksten fortæller hvordan det sættes op?
+            SSLContext context = SSLContext.getInstance(algorithm);
+            KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
+            KeyStore ks = KeyStore.getInstance("JKS");
+            char[] password = System.console().readPassword();
+            //Den nedenunder skal laves. Det er den ikke endnu. Vi skal finde en der ikke kræver certificate.
+            ks.load(new FileInputStream("jnp4e.keys"), password);
+            kmf.init(ks, password);
+            context.init(kmf.getKeyManagers(), null, null);
+            Arrays.fill(password, '0');
+            SSLServerSocketFactory factory = context.getServerSocketFactory();
+            SSLServerSocket server = (SSLServerSocket) factory.createServerSocket(PORT);
+            //Anon non authed cipher
+            String[] supported = server.getSupportedCipherSuites();
+            String[] anonCipherSuitesSupported = new String[supported.length];
+            int numAnonCipherSuitesSupported = 0;
+            for (int i = 0; i < supported.length; i++) {
+                if (supported[i].indexOf("_anon_") > 0) {
+                    anonCipherSuitesSupported[numAnonCipherSuitesSupported++] = supported[i];
+                    }
+                }
+            //Unødvendigt? 
+            String[] oldEnabled = server.getEnabledCipherSuites();
+            String[] newEnabled = new String[oldEnabled.length + numAnonCipherSuitesSupported];
+            System.arraycopy(oldEnabled, 0, newEnabled, 0, oldEnabled.length);
+            System.arraycopy(anonCipherSuitesSupported, 0, newEnabled, oldEnabled.length, numAnonCipherSuitesSupported);
+            server.setEnabledCipherSuites(newEnabled);
+        } catch (Exception e) {
+        }
         if (ipAddress != null && !ipAddress.isEmpty()) {
             this.server = new ServerSocket(2345, 1, InetAddress.getByName(ipAddress));
         } //If the method is not passed an ip address assign one automatically
