@@ -5,22 +5,21 @@
  */
 package WebService.Link;
 
-import WebService.Acquaintance.iLink;
-import WebService.Acquaintance.iLogic;
-import WebService.Logic.LogicFacade;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import WebService.Acquaintance.ILink;
+import WebService.Acquaintance.ILogic;
 
 /**
  *
  * @author Jeppe Enevold
  */
-public class LinkFacade implements iLink {
+public class LinkFacade implements ILink {
 
-    private static iLogic logic;
+    private static ILogic logic;
     
     @Override
-    public void injectLogic(iLogic LogicLayer){
+    public void injectLogic(ILogic LogicLayer){
         logic = LogicLayer;
     }
        

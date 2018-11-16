@@ -5,10 +5,10 @@
  */
 package WebService.Link;
 
+import WebService.Acquaintance.ILink;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -22,11 +22,11 @@ import java.net.Socket;
 public class ClientConnection {
 
     private ServerSocket server;
-    LinkFacade link;
+    private ILink link;
     //private MessageParser messageParser = new MessageParser;
     //private Encrypt encrypt = new Encrypt;
 
-    public ClientConnection(String ipAddress, LinkFacade link) throws Exception {
+    public ClientConnection(String ipAddress, ILink link) throws Exception {
         //Create a socket with the passed ip address
         if (ipAddress != null && !ipAddress.isEmpty()) {
             this.server = new ServerSocket(2345, 1, InetAddress.getByName(ipAddress));
@@ -61,9 +61,9 @@ public class ClientConnection {
 class HandleConnection implements Runnable {
 
     private Socket socket; //Socket for connection
-    private LinkFacade link;
+    private ILink link;
 
-    public HandleConnection(Socket socket, LinkFacade link) {
+    public HandleConnection(Socket socket, ILink link) {
         this.socket = socket;
         this.link = link;
     }

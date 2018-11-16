@@ -5,6 +5,7 @@
  */
 package WebService.Logic;
 
+import WebService.Acquaintance.ILogic;
 import java.time.LocalDateTime;
 
 /**
@@ -13,14 +14,14 @@ import java.time.LocalDateTime;
  */
 public class Transfer {
 
-    LogicFacade logic;
+    ILogic logic;
     private final String fromAccount;
     private final String toAccount;
     private final int amount;
     private final String text;
     private final LocalDateTime date = LocalDateTime.now();
 
-    public Transfer(String fromAccount, String amount, String toAccount, String text, LogicFacade logic) {
+    public Transfer(String fromAccount, String amount, String toAccount, String text, ILogic logic) {
         this.fromAccount = fromAccount;
         this.toAccount = toAccount;
         this.amount = Integer.parseInt(amount);

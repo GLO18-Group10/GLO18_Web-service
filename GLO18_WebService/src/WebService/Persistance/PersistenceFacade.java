@@ -6,13 +6,13 @@
 package WebService.Persistance;
 
 import java.time.LocalDateTime;
-import WebService.Acquaintance.iPersistence;
+import WebService.Acquaintance.IPersistence;
 
 /**
  *
  * @author Jeppe Enevold
  */
-public class PersistenceFacade implements iPersistence {
+public class PersistenceFacade implements IPersistence {
 
     DBManager dbmanager = new DBManager();
 

@@ -5,16 +5,18 @@
  */
 package WebService.Logic;
 
+import WebService.Acquaintance.ILogic;
+
 /**
  *
  * @author Nick
  */
 public class ServerProtocol {
 
-    LogicFacade logic;
+    ILogic logic;
     Session session;
 
-    public ServerProtocol(LogicFacade logic) {
+    public ServerProtocol(ILogic logic) {
         this.logic = logic;
     }
 
@@ -36,6 +38,7 @@ public class ServerProtocol {
             case "03":
                 return logic.storeCustomerInfo(logic.sessionGetID(), data[1], data[2], data[3], data[4]);
             case "04":
+                break;
             case "05":
                 String response05;
                 Transfer transfer = new Transfer(data[1], data[2], data[3], data[4], logic);
@@ -79,12 +82,17 @@ public class ServerProtocol {
                     return e.getMessage();
                 }
             case "10":
+                break;
             case "11":
+                break;
             case "12":
+                break;
             case "18":
                 return logic.logout();
             case "19":
+                break;
             default:
+                break;
         }
         return "Error";
     }
