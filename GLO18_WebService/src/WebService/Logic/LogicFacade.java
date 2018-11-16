@@ -112,6 +112,7 @@ public class LogicFacade implements ILogic {
 
     }
     
+    @Override
     public String getCustomerIDs(){
         return persistence.getCustomerIDs();
     }
