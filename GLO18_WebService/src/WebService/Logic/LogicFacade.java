@@ -5,32 +5,33 @@
  */
 package WebService.Logic;
 
-import WebService.Acquaintance.iLogic;
-import WebService.Acquaintance.iPersistance;
 import java.time.LocalDateTime;
+import WebService.Acquaintance.ILogic;
+import WebService.Acquaintance.IPersistence;
 
 /**
  *
  * @author Jeppe Enevold
  */
-public class LogicFacade implements iLogic {
+public class LogicFacade implements ILogic {
 
-    private static Session session;
+    private Session session;
     private MessageParser messageparser = new MessageParser(this);
-    private static iPersistance persistance;
+    private static IPersistence persistence;
 
     @Override
-    public void injectPersistance(iPersistance PersistanceLayer) {
-        persistance = PersistanceLayer;
+    public void injectPersistance(IPersistence PersistanceLayer) {
+        persistence = PersistanceLayer;
     }
 
     @Override
-    public void initializeSession(String ID, CustomerSession customerSession) {
+    public Session initializeSession(String ID) {
         if (ID.startsWith("A")) {
             session = new AdminSession(ID, this);
         } else if (ID.startsWith("C")) {
-            session = customerSession;
+            session = new CustomerSession(ID, this);
         }
+        return session;
     }
 
     @Override
@@ -38,9 +39,21 @@ public class LogicFacade implements iLogic {
         return messageparser.fromProtocol(message); //Parse the message from the client
     }
 
+    @Override
     public String login(String ID, String password) {
-        String test = persistance.login(ID, password);
+        String test = persistence.login(ID, password);
         return test;
+    }
+
+    @Override
+    public String logout() {
+        session = null;
+
+        if (session == null) {
+            return "true";
+        } else {
+            return "false";
+        }
     }
 
     /**
@@ -48,39 +61,69 @@ public class LogicFacade implements iLogic {
      * @param ID
      * @return CostumerInfo
      */
+    @Override
     public String getCustomerInfo(String ID) {
-        return persistance.getCustomerInfo(ID); //Do a query to get the info that cooreponds to the given id
+        return persistence.getCustomerInfo(ID); //Do a query to get the info that cooreponds to the given id
     }
 
+    @Override
+    public String storeCustomerInfo(String ID, String name, String phoneNo, String address, String email) {
+        return persistence.storeCustomerInfo(ID, name, phoneNo, address, email);
+    }
+
+    @Override
     public String getAccountBalance(String ID) {
-        return persistance.getAccountBalance(ID);
+        return persistence.getAccountBalance(ID);
     }
 
+    @Override
     public String sessionGetID() {
         return session.getID(); //Get the id of the current user
     }
 
+    @Override
     public String createCustomer(String ID, String name, String birthday, String phonenumber, String address, String email, String password) {
-        return persistance.createCustomer(ID, name, birthday, phonenumber, address, email, password);
+        return persistence.createCustomer(ID, name, birthday, phonenumber, address, email, password);
     }
 
+    @Override
     public boolean doesAccountExist(String accountID) {
-        return persistance.doesAccountExist(accountID);
+        return persistence.doesAccountExist(accountID);
     }
 
+    @Override
     public void updateAccountBalance(String accountID, int amount) {
-        persistance.updateAccountBalance(accountID, amount);
+        persistence.updateAccountBalance(accountID, amount);
     }
 
+    @Override
     public String saveTransfer(String fromAccount, String toAccount, int amount, String text, LocalDateTime date) {
-        return persistance.saveTransfer(fromAccount, toAccount, amount, text, date);
+        return persistence.saveTransfer(fromAccount, toAccount, amount, text, date);
     }
 
+    @Override
     public String getAccountNos(String customerID) {
-        return persistance.getAccountNos(customerID);
+        return persistence.getAccountNos(customerID);
+    }
+
+    @Override
+    public String getTransactionHistory(String accountID) {
+        return persistence.getTransactionHistory(accountID);
+
     }
     
     public String getCustomerIDs(){
-        return persistance.getCustomerIDs();
+        return persistence.getCustomerIDs();
     }
+
+    @Override
+    public void openAccount(String ID) {
+        persistence.openAccount(ID);
+    }
+
+    @Override
+    public void closeAccount(String ID) {
+        persistence.closeAccount(ID);
+    }
+
 }

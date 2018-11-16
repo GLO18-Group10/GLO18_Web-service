@@ -5,15 +5,17 @@
  */
 package WebService.Logic;
 
+import WebService.Acquaintance.ILogic;
+
 /**
  *
  * @author Nick
  */
 public class Session {
     String ID;
-    LogicFacade logic;
+    ILogic logic;
 
-    public Session(String ID, LogicFacade logic) {
+    public Session(String ID, ILogic logic) {
         this.ID = ID;
         this.logic = logic;
     }

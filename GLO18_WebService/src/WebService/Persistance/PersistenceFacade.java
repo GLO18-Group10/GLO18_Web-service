@@ -5,14 +5,14 @@
  */
 package WebService.Persistance;
 
-import WebService.Acquaintance.iPersistance;
 import java.time.LocalDateTime;
+import WebService.Acquaintance.IPersistence;
 
 /**
  *
  * @author Jeppe Enevold
  */
-public class PersistanceFacade implements iPersistance {
+public class PersistenceFacade implements IPersistence {
 
     DBManager dbmanager = new DBManager();
 
@@ -44,6 +44,11 @@ public class PersistanceFacade implements iPersistance {
     }
 
     @Override
+    public String storeCustomerInfo(String ID, String name, String phoneNo, String address, String email) {
+        return dbmanager.storeCustomerInfo(ID, name, phoneNo, address, email);
+    }
+
+    @Override
     public boolean doesAccountExist(String accountID) {
         return dbmanager.doesAccountExist(accountID);
     }
@@ -66,6 +71,19 @@ public class PersistanceFacade implements iPersistance {
     @Override
     public String getCustomerIDs() {
         return dbmanager.getCustomerIDs();
+    }
+
+    public String getTransactionHistory(String accountID) {
+        return dbmanager.getTransactionHistory(accountID);
+    }
+
+    public void openAccount(String ID) {
+        dbmanager.openAccount(ID);
+    }
+
+    @Override
+    public void closeAccount(String ID) {
+        dbmanager.closeAccount(ID);
     }
 
 }

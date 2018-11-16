@@ -154,7 +154,16 @@ public class DBManager {
             ex.printStackTrace();
         }
     }
-
+public String storeCustomerInfo(String ID, String name, String phoneNo, String address, String email) {
+        try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
+            statement.execute("UPDATE Customer SET name = '" + name + "', " + "phonenumber = '" + phoneNo + "', address = '"+address + "', email = '" + email + "' WHERE ID = '" + ID + "'");
+        } catch (SQLException ex) {
+            System.out.println("SQL exception");
+            ex.printStackTrace();
+            return "false";
+        }
+        return "true";
+    }
     public String login(String ID, String password) {
 
         String id = ID.toLowerCase();
@@ -211,6 +220,28 @@ public class DBManager {
 
     }
 
+    public void openAccount(String ID) {
+        try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
+            String s = "UPDATE customer SET isactive = true WHERE id = '" + ID + "'";
+            statement.execute(s);
+
+        } catch (SQLException ex) {
+            System.out.println("SQL exception");
+            ex.printStackTrace();
+        }
+    }
+
+    public void closeAccount(String ID) {
+        try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
+            String s = "UPDATE customer SET isactive = false WHERE id = '" + ID + "'";
+            statement.execute(s);
+
+        } catch (SQLException ex) {
+            System.out.println("SQL exception");
+            ex.printStackTrace();
+        }
+    }
+
     public String saveTransfer(String fromAccount, String toAccount, int amount, String text, LocalDateTime date) {
         try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
             String s = "INSERT INTO transaction (message, amount, senderbankaccountid, receiverbankaccountid, date)"
@@ -224,6 +255,29 @@ public class DBManager {
         return "true";
 
     }
+    
+
+    public String getTransactionHistory(String accountID) {
+        String testResult = "";
+        try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
+            ResultSet result = statement.executeQuery("SELECT * FROM transaction WHERE senderbankaccountid = '" + accountID + "'  OR receiverbankaccountid = '" + accountID + "'" );
+
+            StringBuilder sb = new StringBuilder();
+            while (result.next()) {
+                sb.append(result.getString("receiverbankaccountid") + "     ");
+                sb.append(result.getString("senderbankaccountid") + "         ");
+                sb.append(result.getString("date") + "             ");
+                sb.append(result.getString("amount") + "                          ");
+                sb.append(result.getString("message") + ";");
+                }
+            testResult = sb.toString();
+        } catch (SQLException ex) {
+            System.out.println("SQL exception");
+            ex.printStackTrace();
+        }
+        return testResult;
+    }
+
 
 //main method for testing
 //    public static void main(String[] args) {

@@ -5,6 +5,8 @@
  */
 package WebService.Logic;
 
+import WebService.Acquaintance.ILogic;
+
 /**
  *
  * @author Nick
@@ -14,7 +16,7 @@ public class CustomerSession extends Session {
     private String[] accountNos = new String[10];
     private int noOfAccounts = 0;
 
-    public CustomerSession(String ID, LogicFacade logic) {
+    public CustomerSession(String ID, ILogic logic) {
         super(ID, logic);
 
     }
