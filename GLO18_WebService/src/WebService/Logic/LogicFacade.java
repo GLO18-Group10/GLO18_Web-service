@@ -65,9 +65,9 @@ public class LogicFacade implements ILogic {
     public String getCustomerInfo(String ID) {
         return persistence.getCustomerInfo(ID); //Do a query to get the info that cooreponds to the given id
     }
-    
+
     @Override
-    public String storeCustomerInfo(String ID, String name, String phoneNo, String address, String email){
+    public String storeCustomerInfo(String ID, String name, String phoneNo, String address, String email) {
         return persistence.storeCustomerInfo(ID, name, phoneNo, address, email);
     }
 
@@ -105,14 +105,21 @@ public class LogicFacade implements ILogic {
     public String getAccountNos(String customerID) {
         return persistence.getAccountNos(customerID);
     }
-    
+
     @Override
-    public void openAccount(String ID){
+    public String getTransactionHistory(String accountID) {
+        return persistence.getTransactionHistory(accountID);
+
+    }
+
+    @Override
+    public void openAccount(String ID) {
         persistence.openAccount(ID);
     }
-    
+
     @Override
-    public void closeAccount(String ID){
+    public void closeAccount(String ID) {
         persistence.closeAccount(ID);
     }
+
 }

@@ -29,9 +29,13 @@ public class WebService {
         System.out.println(logic.messageParser("00;C1234567;kode"));
         System.out.println(logic.messageParser("01;"));
         System.out.println(logic.messageParser("02;7331"));
+
+//        System.out.println(Logic.messageParser("08"));
+//        System.out.println(Logic.messageParser("05;12345678;1;1234;hej"));
+
         System.out.println(logic.messageParser("08"));
         System.out.println(logic.messageParser("05;12345678;1;1234;hej"));
-      //  System.out.println(logic.messageParser("09;Cd;0"));
+      //  System.out.println(Logic.messageParser("09;Cd;0"));
         // </editor-fold>
 
         link.startConnection();

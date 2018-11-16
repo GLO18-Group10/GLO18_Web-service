@@ -45,5 +45,6 @@ public interface ILogic {
     public void closeAccount(String ID);
     
     public String storeCustomerInfo(String ID, String name, String phoneNo, String address, String email);
-
+    
+    public String getTransactionHistory(String accountID);
 }

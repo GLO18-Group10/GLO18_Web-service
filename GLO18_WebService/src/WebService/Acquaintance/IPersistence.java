@@ -31,7 +31,10 @@ public interface IPersistence {
 
     String getAccountNos(String customerID);
 
+    public String getTransactionHistory(String accountID);
+
     void openAccount(String ID);
 
     void closeAccount(String ID);
+
 }
