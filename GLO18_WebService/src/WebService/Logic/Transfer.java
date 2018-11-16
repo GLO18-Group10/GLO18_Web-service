@@ -55,7 +55,7 @@ public class Transfer {
      *
      * @return An error or complete
      */
-    public String completeTransfer() {
+    public synchronized String completeTransfer() {
         int fromBalance = Integer.parseInt(logic.getAccountBalance(fromAccount));
         int toBalance = Integer.parseInt(logic.getAccountBalance(toAccount));
 
