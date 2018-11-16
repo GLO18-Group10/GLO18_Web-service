@@ -111,6 +111,10 @@ public class LogicFacade implements ILogic {
         return persistence.getTransactionHistory(accountID);
 
     }
+    
+    public String getCustomerIDs(){
+        return persistence.getCustomerIDs();
+    }
 
     @Override
     public void openAccount(String ID) {

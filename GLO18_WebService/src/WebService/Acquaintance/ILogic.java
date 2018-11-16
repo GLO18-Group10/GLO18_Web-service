@@ -47,4 +47,6 @@ public interface ILogic {
     public String storeCustomerInfo(String ID, String name, String phoneNo, String address, String email);
     
     public String getTransactionHistory(String accountID);
+    
+    public String getCustomerIDs();
 }

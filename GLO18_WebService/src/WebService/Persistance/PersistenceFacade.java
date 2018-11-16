@@ -42,9 +42,9 @@ public class PersistenceFacade implements IPersistence {
     public String createCustomer(String ID, String name, String birthday, String phonenumber, String address, String email, String password) {
         return dbmanager.createCustomer(ID, name, birthday, phonenumber, address, email, password);
     }
-    
+
     @Override
-    public String storeCustomerInfo(String ID, String name, String phoneNo, String address, String email){
+    public String storeCustomerInfo(String ID, String name, String phoneNo, String address, String email) {
         return dbmanager.storeCustomerInfo(ID, name, phoneNo, address, email);
     }
 
@@ -69,6 +69,9 @@ public class PersistenceFacade implements IPersistence {
     }
 
     @Override
+    public String getCustomerIDs() {
+        return dbmanager.getCustomerIDs();
+    }
 
     public String getTransactionHistory(String accountID) {
         return dbmanager.getTransactionHistory(accountID);
@@ -82,6 +85,5 @@ public class PersistenceFacade implements IPersistence {
     public void closeAccount(String ID) {
         dbmanager.closeAccount(ID);
     }
-
 
 }

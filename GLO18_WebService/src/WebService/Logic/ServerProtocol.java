@@ -42,7 +42,7 @@ public class ServerProtocol {
             case "05":
                 String response05;
                 Transfer transfer = new Transfer(data[1], data[2], data[3], data[4], logic);
-                response05 = transfer.validate((CustomerSession)session);
+                response05 = transfer.validate((CustomerSession) session);
                 //Send back the error if the transfer could not be completed
                 if (!response05.equals("valid")) {
                     return response05;
@@ -63,7 +63,7 @@ public class ServerProtocol {
                 return logic.createCustomer(ID1, name, birthday, phonenumber, address, email, password1);
             case "08":
                 String answer = "";
-                String[] accountNos =  ((CustomerSession)session).getAccountNos();
+                String[] accountNos = ((CustomerSession) session).getAccountNos();
                 for (String no : accountNos) {
                     if (no != null) {
                         answer += no;
@@ -82,7 +82,9 @@ public class ServerProtocol {
                     return e.getMessage();
                 }
             case "10":
-                break;
+                //removes all "C" from Customer IDS              
+                return logic.getCustomerIDs().replace("C", "");
+
             case "11":
                 break;
             case "12":
