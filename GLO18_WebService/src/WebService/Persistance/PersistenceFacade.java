@@ -69,6 +69,11 @@ public class PersistenceFacade implements iPersistence {
     }
 
     @Override
+
+    public String getTransactionHistory(String accountID) {
+        return dbmanager.getTransactionHistory(accountID);
+    }
+
     public void openAccount(String ID) {
         dbmanager.openAccount(ID);
     }
@@ -77,5 +82,6 @@ public class PersistenceFacade implements iPersistence {
     public void closeAccount(String ID) {
         dbmanager.closeAccount(ID);
     }
+
 
 }

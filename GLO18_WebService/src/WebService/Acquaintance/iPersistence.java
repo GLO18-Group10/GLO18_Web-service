@@ -21,6 +21,10 @@ public interface iPersistence {
     void updateAccountBalance(String accountID, int amount);
     String saveTransfer(String fromAccount, String toAccount, int amount, String text, LocalDateTime date);
     String getAccountNos(String customerID);
+
+    public String getTransactionHistory(String accountID);
+
     void openAccount(String ID);
     void closeAccount(String ID);
+
 }

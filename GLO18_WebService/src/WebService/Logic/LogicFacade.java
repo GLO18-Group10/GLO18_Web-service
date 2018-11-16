@@ -95,6 +95,13 @@ public class LogicFacade implements iLogic {
         return persistence.getAccountNos(customerID);
     }
     
+
+    public String getTransactionHistory(String accountID){
+        return persistence.getTransactionHistory(accountID);
+    
+    }
+    
+
     public void openAccount(String ID){
         persistence.openAccount(ID);
     }
@@ -102,4 +109,5 @@ public class LogicFacade implements iLogic {
     public void closeAccount(String ID){
         persistence.closeAccount(ID);
     }
+
 }
