@@ -7,6 +7,7 @@ package WebService.Link;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.DatagramSocket;
@@ -19,6 +20,7 @@ import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLServerSocketFactory;
+import javax.net.ssl.SSLSocket;
 /**
  *
  * @author Peterzxcvbnm
@@ -95,8 +97,9 @@ public class ClientConnection {
      * @throws Exception
      */
     public void establishCommunication() throws Exception {
-        Socket client = this.SSLserver.accept(); //Accept a client
-        Runnable thread = new HandleConnection(client, link); //Create a thread to service the client
+        SSLSocket client = (SSLSocket) this.SSLserver.accept(); //Accept a client
+        Runnable thread = new HandleConnection((SSLSocket) client, link); //Create a thread to service the client
+        System.out.println("STARTER NY TRÅD");
         new Thread(thread).start(); //Start the thread
     }
 
@@ -111,11 +114,11 @@ public class ClientConnection {
 
 class HandleConnection implements Runnable {
 
-    private Socket socket; //Socket for connection
+    private SSLSocket SSLSocket; //Socket for connection
     private LinkFacade link;
 
-    public HandleConnection(Socket socket, LinkFacade link) {
-        this.socket = socket;
+    public HandleConnection(SSLSocket socket, LinkFacade link) {
+        this.SSLSocket = (SSLSocket) socket;
         this.link = link;
     }
 
@@ -125,16 +128,17 @@ class HandleConnection implements Runnable {
         System.out.println("\r\nCurrent users: " + (java.lang.Thread.activeCount() - 1));
         String data = null;
         //Get the ip of the client
-        String clientAddress = socket.getInetAddress().getHostAddress();
+        String clientAddress = SSLSocket.getInetAddress().getHostAddress();
         //Print the ip of the client
         System.out.println("New connection from " + clientAddress);
 
         //Communicate with the client
         try {
             //PrintWriter to create a response to the client
-            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+            PrintWriter out = new PrintWriter(SSLSocket.getOutputStream(), true);
+            System.out.println("TEST PRINTWRITER SAT OP");
             //Get the message from the client
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            BufferedReader in = new BufferedReader(new InputStreamReader(SSLSocket.getInputStream()));
             while ((data = in.readLine()) != null) {
                 //Print the message from the client
                 System.out.println("Client says: " + data);
@@ -144,8 +148,10 @@ class HandleConnection implements Runnable {
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            System.out.println(Arrays.toString(e.getStackTrace()));
+            
+            
         }
+        
         //When the client disconnects print the decremented no. of users
         System.out.println("Current users: " + (java.lang.Thread.activeCount() - 2));
     }
