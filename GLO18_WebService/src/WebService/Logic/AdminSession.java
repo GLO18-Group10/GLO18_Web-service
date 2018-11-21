@@ -5,13 +5,15 @@
  */
 package WebService.Logic;
 
+import WebService.Acquaintance.ILogic;
+
 /**
  *
  * @author Nick
  */
 public class AdminSession extends Session{
     //private static AdminSession adminsession;
-    public AdminSession(String ID, LogicFacade logic) {
+    public AdminSession(String ID, ILogic logic) {
         super(ID, logic);
         //adminsession = new AdminSession(ID);
     }

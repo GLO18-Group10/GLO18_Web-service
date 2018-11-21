@@ -5,12 +5,12 @@
  */
 package WebService.Link;
 
+import WebService.Acquaintance.ILink;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -32,11 +32,11 @@ public class ClientConnection {
     public final static String algorithm = "SSL";
     private ServerSocket server;
     private SSLServerSocket SSLserver;
-    LinkFacade link;
+    private ILink link;
     //private MessageParser messageParser = new MessageParser;
     //private Encrypt encrypt = new Encrypt;
 
-    public ClientConnection(String ipAddress, LinkFacade link) throws Exception {
+    public ClientConnection(String ipAddress, ILink link) throws Exception {
         //Create a socket with the passed ip address
         try {
             //Vi vælger en kontekst? Google mere om det. Konteksten fortæller hvordan det sættes op?
@@ -114,11 +114,11 @@ public class ClientConnection {
 
 class HandleConnection implements Runnable {
 
-    private SSLSocket SSLSocket; //Socket for connection
-    private LinkFacade link;
 
-    public HandleConnection(SSLSocket socket, LinkFacade link) {
-        this.SSLSocket = (SSLSocket) socket;
+    private SSLSocket SSLSocket; //Socket for connection
+    private ILink link;
+    public HandleConnection(SSLSocket socket, ILink link) {
+        this.SSLSocket = socket;
         this.link = link;
     }
 
@@ -144,6 +144,7 @@ class HandleConnection implements Runnable {
                 System.out.println("Client says: " + data);
                 //Send the response to the client
                 out.println(link.messageParser(data));
+
             }
 
         } catch (Exception e) {

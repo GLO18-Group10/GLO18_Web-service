@@ -5,16 +5,18 @@
  */
 package WebService.Logic;
 
+import WebService.Acquaintance.ILogic;
+
 /**
  *
  * @author Nick
  */
 public class ServerProtocol {
 
-    LogicFacade logic;
-    CustomerSession session;
+    ILogic logic;
+    Session session;
 
-    public ServerProtocol(LogicFacade logic) {
+    public ServerProtocol(ILogic logic) {
         this.logic = logic;
     }
 
@@ -25,8 +27,8 @@ public class ServerProtocol {
                 String password = data[2];
                 String test = logic.login(ID, password);
                 if (test.equalsIgnoreCase("True")) {
-                    session = new CustomerSession(ID, logic);
-                    logic.initializeSession(ID, session);
+                    //session = new CustomerSession(ID, logic);
+                    session = logic.initializeSession(ID);
                 }
                 return test;
             case "01":
@@ -34,11 +36,13 @@ public class ServerProtocol {
             case "02":
                 return logic.getAccountBalance(data[1]);
             case "03":
+                return logic.storeCustomerInfo(logic.sessionGetID(), data[1], data[2], data[3], data[4]);
             case "04":
+                break;
             case "05":
                 String response05;
                 Transfer transfer = new Transfer(data[1], data[2], data[3], data[4], logic);
-                response05 = transfer.validate(session);
+                response05 = transfer.validate((CustomerSession) session);
                 //Send back the error if the transfer could not be completed
                 if (!response05.equals("valid")) {
                     return response05;
@@ -46,6 +50,8 @@ public class ServerProtocol {
                     return transfer.completeTransfer();
                 }
             case "06":
+                String ID2 = data[1];
+                return logic.getTransactionHistory(ID2);
             case "07":
                 String ID1 = data[1];
                 String name = data[2];
@@ -57,7 +63,7 @@ public class ServerProtocol {
                 return logic.createCustomer(ID1, name, birthday, phonenumber, address, email, password1);
             case "08":
                 String answer = "";
-                String[] accountNos = session.getAccountNos();
+                String[] accountNos = ((CustomerSession) session).getAccountNos();
                 for (String no : accountNos) {
                     if (no != null) {
                         answer += no;
@@ -76,11 +82,19 @@ public class ServerProtocol {
                     return e.getMessage();
                 }
             case "10":
+                //removes all "C" from Customer IDS              
+                return logic.getCustomerIDs().replace("C", "");
+
             case "11":
+                break;
             case "12":
+                break;
             case "18":
+                return logic.logout();
             case "19":
+                break;
             default:
+                break;
         }
         return "Error";
     }
