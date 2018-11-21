@@ -73,10 +73,12 @@ public class PersistenceFacade implements IPersistence {
         return dbmanager.getCustomerIDs();
     }
 
+    @Override
     public String getTransactionHistory(String accountID) {
         return dbmanager.getTransactionHistory(accountID);
     }
 
+    @Override
     public void openAccount(String ID) {
         dbmanager.openAccount(ID);
     }
