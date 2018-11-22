@@ -1,11 +1,21 @@
 package WebService.Persistance;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.KeySpec;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+import javax.xml.bind.DatatypeConverter;
 
 /**
  *
@@ -168,6 +178,7 @@ public String storeCustomerInfo(String ID, String name, String phoneNo, String a
 
         String id = ID.toLowerCase();
         String loginResult = "";
+        boolean isValid = false;
         //Query for admin login
         if (id.startsWith("a")) {
 
@@ -179,6 +190,10 @@ public String storeCustomerInfo(String ID, String name, String phoneNo, String a
                     sb.append(result.getString("password"));
                 }
                 loginResult = sb.toString();
+                String[]hashAndSalt = loginResult.split(":");
+                String hashedDB = hashAndSalt[0];
+                String salt = hashAndSalt[1];
+                isValid = validatePassword(password, hashedDB, salt);
             } catch (SQLException ex) {
                 System.out.println("SQL exception");
                 ex.printStackTrace();
@@ -194,12 +209,16 @@ public String storeCustomerInfo(String ID, String name, String phoneNo, String a
                     sb.append(result.getString("password"));
                 }
                 loginResult = sb.toString();
+                String[]hashAndSalt = loginResult.split(":");
+                String hashedDB = hashAndSalt[0];
+                String salt = hashAndSalt[1];
+                isValid = validatePassword(password, hashedDB, salt);
             } catch (SQLException ex) {
                 System.out.println("SQL exception");
                 ex.printStackTrace();
             }
         }
-        if (loginResult.equals(password)) {
+        if (isValid) {
             return "true";
         } else {
             return "false";
@@ -207,6 +226,7 @@ public String storeCustomerInfo(String ID, String name, String phoneNo, String a
     }
 
     public String createCustomer(String ID, String name, String birthday, String phonenumber, String address, String email, String password) {
+        password = hashPassword(password);
         try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
             String s = "INSERT INTO customer (id, name, birthday, phonenumber, address, email, password) VALUES ('" + ID + "','" + name + "','" + birthday + "','" + phonenumber + "','" + address + "','" + email + "','" + password + "')";
             statement.execute(s);
@@ -277,14 +297,60 @@ public String storeCustomerInfo(String ID, String name, String phoneNo, String a
         }
         return testResult;
     }
+    
+    public String hashPassword(String password){
+        SecureRandom random = new SecureRandom();
+        byte[] salt = new byte[16];
+        byte[] hash = null;
+        random.nextBytes(salt);
+        KeySpec spec = new PBEKeySpec(password.toCharArray(),salt,65537, 128);
+        try {
+            SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+            try {
+                hash = factory.generateSecret(spec).getEncoded();
+            } catch (InvalidKeySpecException ex) {
+                Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return DatatypeConverter.printHexBinary(hash) + ":" + DatatypeConverter.printHexBinary(salt);
+    }
 
+    public boolean validatePassword(String originalPassword, String hashedPasswordDB, String saltDB){
+        byte[] saltDBInByte = DatatypeConverter.parseHexBinary(saltDB);
+        System.out.println(saltDB);
+        byte[] hash = null;
+        KeySpec spec = new PBEKeySpec(originalPassword.toCharArray(),saltDBInByte,65537, 128);
+        try {
+            SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+            try {
+                hash = factory.generateSecret(spec).getEncoded();
+                String hex = DatatypeConverter.printHexBinary(hash);
+                if(hex.equals(hashedPasswordDB)){
+                    return true;
+                }
+            } catch (InvalidKeySpecException ex) {
+                Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
 
 //main method for testing
 //    public static void main(String[] args) {
 //        DBManager db = new DBManager();
-//        System.out.println(db.getTest());
-//        db.setTest("mytest1","mytest2");
-//        System.out.println(db.getTest());
-//        
+//        String[] hashAndSalt = db.hashPassword("HEJsa").split(":");
+//        System.out.println("HASH IN MAIN"+hashAndSalt[0]);
+//        System.out.println("HASH SALT IN MAIN" +hashAndSalt[1]);
+//        String hashedDB = hashAndSalt[0];
+//        String salt = hashAndSalt[1];
+//        db.validatePassword("HEJsa", hashedDB, salt);
+        //System.out.println(db.getTest());
+        //db.setTest("mytest1","mytest2");
+        //System.out.println(db.getTest());
+        
 //    }
 }
