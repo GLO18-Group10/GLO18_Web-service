@@ -23,7 +23,6 @@ public class PersistenceFacade implements IPersistence {
 
     @Override
     public String login(String ID, String password) {
-
         return dbmanager.login(ID, password);
     }
 

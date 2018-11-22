@@ -13,7 +13,5 @@ public interface ILink {
 
     public void injectLogic(ILogic LogicLayer);
 
-    String messageParser(String message);
-
     void startConnection();
 }

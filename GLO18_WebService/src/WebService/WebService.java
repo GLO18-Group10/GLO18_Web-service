@@ -1,6 +1,5 @@
 package WebService;
 
-
 import WebService.Logic.LogicFacade;
 import WebService.Persistance.PersistenceFacade;
 import WebService.Link.LinkFacade;
@@ -32,10 +31,9 @@ public class WebService {
 
 //        System.out.println(Logic.messageParser("08"));
 //        System.out.println(Logic.messageParser("05;12345678;1;1234;hej"));
-
         System.out.println(logic.messageParser("08"));
         System.out.println(logic.messageParser("05;12345678;1;1234;hej"));
-      //  System.out.println(Logic.messageParser("09;Cd;0"));
+        //  System.out.println(Logic.messageParser("09;Cd;0"));
         // </editor-fold>
 
         link.startConnection();

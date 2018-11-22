@@ -36,7 +36,12 @@ public class LogicFacade implements ILogic {
 
     @Override
     public String messageParser(String message) {
-        return messageparser.fromProtocol(message); //Parse the message from the client
+        try {
+            return messageparser.fromProtocol(message); //Parse the message from the client
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
+        return "error";
     }
 
     @Override
@@ -111,9 +116,9 @@ public class LogicFacade implements ILogic {
         return persistence.getTransactionHistory(accountID);
 
     }
-    
+
     @Override
-    public String getCustomerIDs(){
+    public String getCustomerIDs() {
         return persistence.getCustomerIDs();
     }
 
