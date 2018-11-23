@@ -71,7 +71,6 @@ public class ClientConnection {
             SSLserver.setEnabledCipherSuites(newEnabled);
         } catch (Exception e) {
             System.out.println("Error; connection");
-            System.out.println(Arrays.toString(e.getStackTrace()));
         }
         /*try {
             if (ipAddress != null && !ipAddress.isEmpty()) {
@@ -139,8 +138,7 @@ class HandleConnection implements Runnable {
             while ((data = in.readLine()) != null) {
                 //Print the message from the client
                 LocalDateTime date = LocalDateTime.now();
-                System.out.printf("%s %-20s %s", (date.toString().replace("T", " ")), ": Client says: ", data);
-                System.out.println("");
+                System.out.printf("%s %-20s %s \n", (date.toString().replace("T", " ")), ": Client says: ", data);
                 //Send the response to the client
                 String response = link.messageParser(data);
                 LocalDateTime date1 = LocalDateTime.now();
@@ -151,8 +149,6 @@ class HandleConnection implements Runnable {
 
         } catch (Exception e) {
             System.out.println("Error; HandleConnection");
-            System.out.println(e.getMessage());
-
         }
 
         //When the client disconnects print the decremented no. of users

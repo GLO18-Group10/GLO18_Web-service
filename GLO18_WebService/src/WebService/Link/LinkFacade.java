@@ -17,31 +17,33 @@ import WebService.Acquaintance.ILogic;
 public class LinkFacade implements ILink {
 
     private static ILogic logic;
-    
+
     @Override
-    public void injectLogic(ILogic LogicLayer){
+    public void injectLogic(ILogic LogicLayer) {
         logic = LogicLayer;
     }
-       
+
     private ClientConnection connection;
 
     /**
      * Parse the message to logic facade
+     *
      * @param message Message from the client
-     * @return 
+     * @return
      */
     @Override
     public String messageParser(String message) {
         try {
             return logic.messageParser(message); //Message from the client
         } catch (Exception e) {
-            System.out.println(e.toString());
+            System.out.println("Error; messageParser; LinkFacade");
         }
         return "error";
     }
-/**
- * Method to initiate a connection so the web service can accept clients
- */
+
+    /**
+     * Method to initiate a connection so the web service can accept clients
+     */
     @Override
     public void startConnection() {
         String ip = "";
@@ -51,7 +53,7 @@ public class LinkFacade implements ILink {
             socketTest.connect(InetAddress.getByName("8.8.8.8"), 10002);
             ip = socketTest.getLocalAddress().getHostAddress();
         } catch (Exception e) {
-            System.out.println(e.toString());
+            System.out.println("Error; startConnection(get ip); LinkFacade");
         }
         //Create a connection with the given ip
         try {
@@ -60,17 +62,16 @@ public class LinkFacade implements ILink {
                     + "Host=" + connection.getSocketAddress().getHostAddress()
                     + " Port=" + connection.getPort());
         } catch (Exception e) {
-            System.out.println(e.toString());
+            System.out.println("Error; startConnection(new connection); LinkFacade");
         }
-        
+
         //Continously establish communication with clients
         try {
             while (true) {
                 connection.establishCommunication();
-
             }
         } catch (Exception e) {
-            System.out.println(e.toString());
+            System.out.println("Error; startConnection(establish); LinkFacade");
         }
     }
 }
