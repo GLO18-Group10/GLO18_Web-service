@@ -319,7 +319,6 @@ public String storeCustomerInfo(String ID, String name, String phoneNo, String a
 
     public boolean validatePassword(String originalPassword, String hashedPasswordDB, String saltDB){
         byte[] saltDBInByte = DatatypeConverter.parseHexBinary(saltDB);
-        System.out.println(saltDB);
         byte[] hash = null;
         KeySpec spec = new PBEKeySpec(originalPassword.toCharArray(),saltDBInByte,65537, 128);
         try {
