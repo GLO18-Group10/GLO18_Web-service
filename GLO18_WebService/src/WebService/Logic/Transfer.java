@@ -79,7 +79,7 @@ public class Transfer {
      */
     private void saveTransfer() {
         if (logic.saveTransfer(fromAccount, toAccount, amount, text, date).equals("false")) {
-            System.out.println("Transaction from " + fromAccount
+            System.out.println("Error; Transaction from " + fromAccount
                     + " to " + toAccount + " could not be saved. Date: "
                     + date + " amount: " + amount + " message: " + text);
         }
