@@ -35,7 +35,7 @@ public class Transfer {
     /**
      * Check if everything is in order with the transfer through a serious of
      * checks
-     * 
+     *
      * @return An error or valid
      */
     public String validate() {
@@ -51,14 +51,13 @@ public class Transfer {
         }
         return "valid";
     }
-    
+
     public boolean isAccount(String accountNo) {
         String[] accountNos = logic.getAccountNos(customerID);
-        System.out.println("accountNo er: " + accountNo + " og customerID er: " + customerID + " og accountNos er: " + Arrays.toString(accountNos));
         boolean check = false;
         for (int i = 0; i < accountNos.length; i++) {
             check = accountNo.equals(accountNos[i]);
-            if(check){
+            if (check) {
                 break;
             }
         }
