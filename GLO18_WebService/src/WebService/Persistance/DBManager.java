@@ -86,7 +86,7 @@ public class DBManager {
             }
             customerInfo = sb.toString();
         } catch (SQLException ex) {
-            System.out.println("SQL exception");
+            System.out.println("Error; getCustomerInfo; SQL exception");
             ex.printStackTrace();
         }
         return customerInfo;
@@ -103,7 +103,7 @@ public class DBManager {
             }
             IDs = sb.toString();
         } catch (SQLException ex) {
-            System.out.println("SQL exception");
+            System.out.println("Error; getCustomerIDs; SQL exception");
             ex.printStackTrace();
         }
         return IDs;
@@ -120,7 +120,7 @@ public class DBManager {
             }
             accountNos = sb.toString();
         } catch (SQLException ex) {
-            System.out.println("SQL exception");
+            System.out.println("Error; getAccountNos; SQL exception");
             ex.printStackTrace();
         }
         accountNos = accountNos.replace(" ", "");
@@ -138,7 +138,7 @@ public class DBManager {
             }
             Balance = sb.toString();
         } catch (SQLException ex) {
-            System.out.println("SQL exception");
+            System.out.println("Error; getAccountBalance; SQL exception");
             ex.printStackTrace();
         }
         return Balance;
@@ -151,6 +151,7 @@ public class DBManager {
             result.next();
             count = result.getString(1);
         } catch (SQLException ex) {
+            System.out.println("Error; doesAccountExist; SQL exception");
             ex.printStackTrace();
         }
         return count.equals("1");
@@ -160,7 +161,7 @@ public class DBManager {
         try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
             statement.execute("UPDATE BankAccount SET Balance = '" + amount + "' WHERE ID = '" + accountID + "'");
         } catch (SQLException ex) {
-            System.out.println("SQL exception");
+            System.out.println("Error; updateAccountBalance; SQL exception");
             ex.printStackTrace();
         }
     }
@@ -168,7 +169,7 @@ public String storeCustomerInfo(String ID, String name, String phoneNo, String a
         try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
             statement.execute("UPDATE Customer SET name = '" + name + "', " + "phonenumber = '" + phoneNo + "', address = '"+address + "', email = '" + email + "' WHERE ID = '" + ID + "'");
         } catch (SQLException ex) {
-            System.out.println("SQL exception");
+            System.out.println("Error; storeCustomerInfo; SQL exception");
             ex.printStackTrace();
             return "false";
         }
@@ -195,7 +196,7 @@ public String storeCustomerInfo(String ID, String name, String phoneNo, String a
                 String salt = hashAndSalt[1];
                 isValid = validatePassword(password, hashedDB, salt);
             } catch (SQLException ex) {
-                System.out.println("SQL exception");
+                System.out.println("Error; login(admin); SQL exception");
                 ex.printStackTrace();
             }
         } // Query for customer login
@@ -214,7 +215,7 @@ public String storeCustomerInfo(String ID, String name, String phoneNo, String a
                 String salt = hashAndSalt[1];
                 isValid = validatePassword(password, hashedDB, salt);
             } catch (SQLException ex) {
-                System.out.println("SQL exception");
+                System.out.println("Error; login(client); SQL exception");
                 ex.printStackTrace();
             }
         }
@@ -232,7 +233,7 @@ public String storeCustomerInfo(String ID, String name, String phoneNo, String a
             statement.execute(s);
 
         } catch (SQLException ex) {
-            System.out.println("SQL exception");
+            System.out.println("Error; createCustomer; SQL exception");
             ex.printStackTrace();
             return "false";
         }
@@ -246,7 +247,7 @@ public String storeCustomerInfo(String ID, String name, String phoneNo, String a
             statement.execute(s);
 
         } catch (SQLException ex) {
-            System.out.println("SQL exception");
+            System.out.println("Error; openAccount; SQL exception");
             ex.printStackTrace();
         }
     }
@@ -257,7 +258,7 @@ public String storeCustomerInfo(String ID, String name, String phoneNo, String a
             statement.execute(s);
 
         } catch (SQLException ex) {
-            System.out.println("SQL exception");
+            System.out.println("Error; closeAccount; SQL exception");
             ex.printStackTrace();
         }
     }
@@ -268,7 +269,7 @@ public String storeCustomerInfo(String ID, String name, String phoneNo, String a
                     + " VALUES ('" + text + "','" + amount + "','" + fromAccount + "','" + toAccount + "','" + date + "')";
             statement.execute(s);
         } catch (SQLException ex) {
-            System.out.println("SQL exception");
+            System.out.println("Error; saveTransfer; SQL exception");
             ex.printStackTrace();
             return "false";
         }
@@ -292,7 +293,7 @@ public String storeCustomerInfo(String ID, String name, String phoneNo, String a
                 }
             testResult = sb.toString();
         } catch (SQLException ex) {
-            System.out.println("SQL exception");
+            System.out.println("Error; getTransactionHistory; SQL exception");
             ex.printStackTrace();
         }
         return testResult;

@@ -24,8 +24,8 @@ public class ServerProtocol {
             case "00":
                 String ID = data[1];
                 String password = data[2];
-                String test = logic.login(ID, password);
-                return test;
+                String response00 = logic.login(ID, password);
+                return response00;
             case "01":
                 return logic.getCustomerInfo(data[1]);
             case "02":
@@ -74,7 +74,7 @@ public class ServerProtocol {
                     }
                     return "complete";
                 } catch (Exception e) {
-                    return e.getMessage();
+                    return "Error; could not open/close account";
                 }
             case "10":
                 //removes all "C" from Customer IDS              
@@ -91,6 +91,6 @@ public class ServerProtocol {
             default:
                 break;
         }
-        return "Error";
+        return "Error; Protocol number not found";
     }
 }

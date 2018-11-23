@@ -37,7 +37,7 @@ public class LinkFacade implements ILink {
             socketTest.connect(InetAddress.getByName("8.8.8.8"), 10002);
             ip = socketTest.getLocalAddress().getHostAddress();
         } catch (Exception e) {
-            System.out.println(e.toString());
+            System.out.println("Error; startConnection(get ip); LinkFacade");
         }
         //Create a connection with the given ip
         try {
@@ -46,17 +46,16 @@ public class LinkFacade implements ILink {
                     + "Host=" + connection.getSocketAddress().getHostAddress()
                     + " Port=" + connection.getPort());
         } catch (Exception e) {
-            System.out.println(e.toString());
+            System.out.println("Error; startConnection(new connection); LinkFacade");
         }
 
         //Continously establish communication with clients
         try {
             while (true) {
                 connection.establishCommunication();
-
             }
         } catch (Exception e) {
-            System.out.println(e.toString());
+            System.out.println("Error; startConnection(establish); LinkFacade");
         }
     }
 }

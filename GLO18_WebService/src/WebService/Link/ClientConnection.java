@@ -13,12 +13,14 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.security.KeyStore;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLServerSocketFactory;
 import javax.net.ssl.SSLSocket;
+
 /**
  *
  * @author Peterzxcvbnm
@@ -26,6 +28,7 @@ import javax.net.ssl.SSLSocket;
  * @version 1.0
  */
 public class ClientConnection {
+
     public final static int PORT = 2345;
     public final static String algorithm = "SSL";
     private ServerSocket server;
@@ -41,16 +44,12 @@ public class ClientConnection {
             SSLContext context = SSLContext.getInstance(algorithm);
             KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
             KeyStore ks = KeyStore.getInstance("JKS");
-            System.out.println("TEST1");
             char[] password = "password".toCharArray();
-            System.out.println("TEST1.5");
             //Den nedenunder skal laves. Det er den ikke endnu. Vi skal finde en der ikke kræver certificate.
             ks.load(new FileInputStream("keystore.jks"), password);
-            System.out.println("TEST2");
             kmf.init(ks, password);
             context.init(kmf.getKeyManagers(), null, null);
             Arrays.fill(password, '0');
-            System.out.println("TEST3");
             SSLServerSocketFactory factory = context.getServerSocketFactory();
             SSLserver = (SSLServerSocket) factory.createServerSocket(PORT);
             //Anon non authed cipher
@@ -60,19 +59,17 @@ public class ClientConnection {
             for (int i = 0; i < supported.length; i++) {
                 if (supported[i].indexOf("_anon_") > 0) {
                     anonCipherSuitesSupported[numAnonCipherSuitesSupported++] = supported[i];
-                    }
                 }
-            //Unødvendigt? 
-            System.out.println("TEST");
+            }
+            //Unnecessary? 
             String[] oldEnabled = SSLserver.getEnabledCipherSuites();
             String[] newEnabled = new String[oldEnabled.length + numAnonCipherSuitesSupported];
             System.arraycopy(oldEnabled, 0, newEnabled, 0, oldEnabled.length);
             System.arraycopy(anonCipherSuitesSupported, 0, newEnabled, oldEnabled.length, numAnonCipherSuitesSupported);
             SSLserver.setEnabledCipherSuites(newEnabled);
         } catch (Exception e) {
-            System.out.println(Arrays.toString(e.getStackTrace()));
+            System.out.println("Error; connection");
         }
-        System.out.println("TEST4 - FINAL?");
         /*try {
             if (ipAddress != null && !ipAddress.isEmpty()) {
             this.server = new ServerSocket(2345, 1, InetAddress.getByName(ipAddress));
@@ -84,7 +81,7 @@ public class ClientConnection {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        */
+         */
         this.logic = logic;
     }
 
@@ -96,8 +93,8 @@ public class ClientConnection {
      */
     public void establishCommunication() throws Exception {
         SSLSocket client = (SSLSocket) this.SSLserver.accept(); //Accept a client
+        System.out.println("Starting new thread");
         Runnable thread = new HandleConnection((SSLSocket) client, logic); //Create a thread to service the client
-        System.out.println("STARTER NY TRÅD");
         new Thread(thread).start(); //Start the thread
     }
 
@@ -111,8 +108,10 @@ public class ClientConnection {
 }
 
 class HandleConnection implements Runnable {
+
     private SSLSocket SSLSocket; //Socket for connection
     private ILogic logic;
+
     public HandleConnection(SSLSocket socket, ILogic logic) {
         this.SSLSocket = socket;
         this.logic = logic;
@@ -132,24 +131,24 @@ class HandleConnection implements Runnable {
         try {
             //PrintWriter to create a response to the client
             PrintWriter out = new PrintWriter(SSLSocket.getOutputStream(), true);
-            System.out.println("TEST PRINTWRITER SAT OP");
             //Get the message from the client
             BufferedReader in = new BufferedReader(new InputStreamReader(SSLSocket.getInputStream()));
             while ((data = in.readLine()) != null) {
                 //Print the message from the client
-                System.out.println("Client says: " + data);
+                LocalDateTime date = LocalDateTime.now();
+                System.out.printf("%s %-20s %s \n", (date.toString().replace("T", " ")), ": Client says: ", data);
                 //Send the response to the client
-                out.println(logic.messageParser(data));
-
+                String response = logic.messageParser(data);
+                LocalDateTime date1 = LocalDateTime.now();
+                System.out.printf("%s %-20s %s \n", date1.toString().replace("T", " "), ": Server response: ", response);
+                out.println(response);
             }
 
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-            
-            
+            System.out.println("Error; HandleConnection");
         }
-        
+
         //When the client disconnects print the decremented no. of users
-        System.out.println("Current users: " + (java.lang.Thread.activeCount() - 2));
+        System.out.println("Thread closed/nCurrent users: " + (java.lang.Thread.activeCount() - 2));
     }
 }
