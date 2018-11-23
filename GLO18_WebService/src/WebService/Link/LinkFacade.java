@@ -26,22 +26,6 @@ public class LinkFacade implements ILink {
     private ClientConnection connection;
 
     /**
-     * Parse the message to logic facade
-     *
-     * @param message Message from the client
-     * @return
-     */
-    @Override
-    public String messageParser(String message) {
-        try {
-            return logic.messageParser(message); //Message from the client
-        } catch (Exception e) {
-            System.out.println("Error; messageParser; LinkFacade");
-        }
-        return "error";
-    }
-
-    /**
      * Method to initiate a connection so the web service can accept clients
      */
     @Override
@@ -57,7 +41,7 @@ public class LinkFacade implements ILink {
         }
         //Create a connection with the given ip
         try {
-            connection = new ClientConnection(ip, this);
+            connection = new ClientConnection(ip, logic);
             System.out.println("\r\nRunning Server: "
                     + "Host=" + connection.getSocketAddress().getHostAddress()
                     + " Port=" + connection.getPort());

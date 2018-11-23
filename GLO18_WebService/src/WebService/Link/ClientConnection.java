@@ -5,15 +5,13 @@
  */
 package WebService.Link;
 
-import WebService.Acquaintance.ILink;
+import WebService.Acquaintance.ILogic;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.ServerSocket;
-import java.net.Socket;
 import java.security.KeyStore;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -35,11 +33,11 @@ public class ClientConnection {
     public final static String algorithm = "SSL";
     private ServerSocket server;
     private SSLServerSocket SSLserver;
-    private ILink link;
+    private ILogic logic;
     //private MessageParser messageParser = new MessageParser;
     //private Encrypt encrypt = new Encrypt;
 
-    public ClientConnection(String ipAddress, ILink link) throws Exception {
+    public ClientConnection(String ipAddress, ILogic logic) throws Exception {
         //Create a socket with the passed ip address
         try {
             //Vi vælger en kontekst? Google mere om det. Konteksten fortæller hvordan det sættes op?
@@ -84,7 +82,7 @@ public class ClientConnection {
             System.out.println(e.getMessage());
         }
          */
-        this.link = link;
+        this.logic = logic;
     }
 
     /**
@@ -95,8 +93,8 @@ public class ClientConnection {
      */
     public void establishCommunication() throws Exception {
         SSLSocket client = (SSLSocket) this.SSLserver.accept(); //Accept a client
-        Runnable thread = new HandleConnection((SSLSocket) client, link); //Create a thread to service the client
         System.out.println("Starting new thread");
+        Runnable thread = new HandleConnection((SSLSocket) client, logic); //Create a thread to service the client
         new Thread(thread).start(); //Start the thread
     }
 
@@ -112,11 +110,11 @@ public class ClientConnection {
 class HandleConnection implements Runnable {
 
     private SSLSocket SSLSocket; //Socket for connection
-    private ILink link;
+    private ILogic logic;
 
-    public HandleConnection(SSLSocket socket, ILink link) {
+    public HandleConnection(SSLSocket socket, ILogic logic) {
         this.SSLSocket = socket;
-        this.link = link;
+        this.logic = logic;
     }
 
     @Override
@@ -140,11 +138,10 @@ class HandleConnection implements Runnable {
                 LocalDateTime date = LocalDateTime.now();
                 System.out.printf("%s %-20s %s \n", (date.toString().replace("T", " ")), ": Client says: ", data);
                 //Send the response to the client
-                String response = link.messageParser(data);
+                String response = logic.messageParser(data);
                 LocalDateTime date1 = LocalDateTime.now();
                 System.out.printf("%s %-20s %s \n", date1.toString().replace("T", " "), ": Server response: ", response);
                 out.println(response);
-
             }
 
         } catch (Exception e) {

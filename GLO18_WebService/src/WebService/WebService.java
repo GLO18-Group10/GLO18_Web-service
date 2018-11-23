@@ -1,6 +1,5 @@
 package WebService;
 
-
 import WebService.Logic.LogicFacade;
 import WebService.Persistance.PersistenceFacade;
 import WebService.Link.LinkFacade;
@@ -26,15 +25,16 @@ public class WebService {
         link.injectLogic(logic);
 
         // <editor-fold desc="TestCode">
-        System.out.printf("%-40s %s \n", "Testing login: ", logic.messageParser("00;C1234567;kode"));
-        System.out.printf("%-40s %s \n", "Testing get customer info: ", logic.messageParser("01;"));
-        System.out.printf("%-40s %s \n", "Testing get account balance: ", logic.messageParser("02;7331"));
-        System.out.printf("%-40s %s \n", "Testing get account numbers: ", logic.messageParser("08"));
-        System.out.printf("%-40s %s \n", "Testing make transaction: ", logic.messageParser("05;12345678;1;1234;hej"));
+        System.out.printf("%-40s %s \n", "Testing login: ", logic.messageParser("00;C111234552;wLz/€IS67C"));
+        System.out.printf("%-40s %s \n", "Testing get customer info: ", logic.messageParser("01;C111234552"));
+        System.out.printf("%-40s %s \n", "Testing get account balance: ", logic.messageParser("02;123456789"));
+        System.out.printf("%-40s %s \n", "Testing get account numbers: ", logic.messageParser("08;C111234552"));
+        System.out.printf("%-40s %s \n", "Testing make transaction: ", logic.messageParser("05;12345678;1;1234;hej;C111234552"));
         System.out.printf("%-40s %s \n", "Testing open customer account: ", logic.messageParser("09;Cd;1"));
         System.out.printf("%-40s %s \n", "Testing close customer account: ", logic.messageParser("09;Cd;0"));
         System.out.printf("%-40s %s \n", "Testing get customer accounts: ", logic.messageParser("10"));
         // </editor-fold>
+
 
         link.startConnection();
     }

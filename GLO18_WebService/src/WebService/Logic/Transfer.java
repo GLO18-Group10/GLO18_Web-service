@@ -7,6 +7,7 @@ package WebService.Logic;
 
 import WebService.Acquaintance.ILogic;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 
 /**
  *
@@ -20,25 +21,26 @@ public class Transfer {
     private final int amount;
     private final String text;
     private final LocalDateTime date = LocalDateTime.now();
+    private final String customerID;
 
-    public Transfer(String fromAccount, String amount, String toAccount, String text, ILogic logic) {
+    public Transfer(String fromAccount, String amount, String toAccount, String text, ILogic logic, String customerID) {
         this.fromAccount = fromAccount;
         this.toAccount = toAccount;
         this.amount = Integer.parseInt(amount);
         this.text = text;
         this.logic = logic;
+        this.customerID = customerID;
     }
 
     /**
      * Check if everything is in order with the transfer through a serious of
      * checks
-     *
-     * @param session The current session to compare certain checks to
+     * 
      * @return An error or valid
      */
-    public String validate(CustomerSession session) {
+    public String validate() {
         //Check if user owns account
-        if (!session.isAccount(fromAccount)) {
+        if (!isAccount(fromAccount)) {
             return "Error; user does not own account.";
         } //Check if there is enough money in account
         else if (amount > Integer.parseInt(logic.getAccountBalance(fromAccount))) {
@@ -48,6 +50,19 @@ public class Transfer {
             return "Error; recipient not found.";
         }
         return "valid";
+    }
+    
+    public boolean isAccount(String accountNo) {
+        String[] accountNos = logic.getAccountNos(customerID);
+        System.out.println("accountNo er: " + accountNo + " og customerID er: " + customerID + " og accountNos er: " + Arrays.toString(accountNos));
+        boolean check = false;
+        for (int i = 0; i < accountNos.length; i++) {
+            check = accountNo.equals(accountNos[i]);
+            if(check){
+                break;
+            }
+        }
+        return check;
     }
 
     /**

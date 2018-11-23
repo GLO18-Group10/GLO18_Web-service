@@ -14,7 +14,6 @@ import WebService.Acquaintance.ILogic;
 public class ServerProtocol {
 
     ILogic logic;
-    Session session;
 
     public ServerProtocol(ILogic logic) {
         this.logic = logic;
@@ -25,23 +24,20 @@ public class ServerProtocol {
             case "00":
                 String ID = data[1];
                 String password = data[2];
-                String loginAnswer = logic.login(ID, password);
-                if (loginAnswer.equalsIgnoreCase("True")) {
-                    session = logic.initializeSession(ID);
-                }
-                return loginAnswer;
+                String response00 = logic.login(ID, password);
+                return response00;
             case "01":
-                return logic.getCustomerInfo(logic.sessionGetID());
+                return logic.getCustomerInfo(data[1]);
             case "02":
                 return logic.getAccountBalance(data[1]);
             case "03":
-                return logic.storeCustomerInfo(logic.sessionGetID(), data[1], data[2], data[3], data[4]);
+                return logic.storeCustomerInfo(data[5], data[1], data[2], data[3], data[4]);
             case "04":
                 break;
             case "05":
                 String response05;
-                Transfer transfer = new Transfer(data[1], data[2], data[3], data[4], logic);
-                response05 = transfer.validate((CustomerSession) session);
+                Transfer transfer = new Transfer(data[1], data[2], data[3], data[4], logic, data[5]);
+                response05 = transfer.validate();
                 //Send back the error if the transfer could not be completed
                 if (!response05.equals("valid")) {
                     return response05;
@@ -62,7 +58,7 @@ public class ServerProtocol {
                 return logic.createCustomer(ID1, name, birthday, phonenumber, address, email, password1);
             case "08":
                 String answer = "";
-                String[] accountNos = ((CustomerSession) session).getAccountNos();
+                String[] accountNos = logic.getAccountNos(data[1]);
                 for (String no : accountNos) {
                     if (no != null) {
                         answer += no;
