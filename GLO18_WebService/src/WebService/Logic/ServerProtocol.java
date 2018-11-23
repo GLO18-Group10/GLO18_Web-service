@@ -32,11 +32,11 @@ public class ServerProtocol {
                 }
                 return test;
             case "01":
-                return logic.getCustomerInfo(logic.sessionGetID());
+                return logic.getCustomerInfo(data[1]);
             case "02":
                 return logic.getAccountBalance(data[1]);
             case "03":
-                return logic.storeCustomerInfo(logic.sessionGetID(), data[1], data[2], data[3], data[4]);
+                return logic.storeCustomerInfo(data[5], data[1], data[2], data[3], data[4]);
             case "04":
                 break;
             case "05":
