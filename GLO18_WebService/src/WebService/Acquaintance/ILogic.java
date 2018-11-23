@@ -5,7 +5,6 @@
  */
 package WebService.Acquaintance;
 
-import WebService.Logic.Session;
 import java.time.LocalDateTime;
 
 /**
@@ -15,8 +14,6 @@ import java.time.LocalDateTime;
 public interface ILogic {
 
     public void injectPersistance(IPersistence PersistenceLayer);
-
-    public Session initializeSession(String ID);
 
     public String messageParser(String message);
 
@@ -28,8 +25,6 @@ public interface ILogic {
     
     public String getAccountBalance(String ID);
     
-    public String sessionGetID();
-    
     public String createCustomer(String ID, String name, String birthday, String phonenumber, String address, String email, String password);
     
     public boolean doesAccountExist(String accountID);
@@ -38,7 +33,7 @@ public interface ILogic {
     
     public String saveTransfer(String fromAccount, String toAccount, int amount, String text, LocalDateTime date);
     
-    public String getAccountNos(String customerID);
+    public String[] getAccountNos(String customerID);
     
     public void openAccount(String ID);
     

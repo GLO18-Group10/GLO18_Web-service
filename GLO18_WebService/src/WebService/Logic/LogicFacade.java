@@ -15,7 +15,6 @@ import WebService.Acquaintance.IPersistence;
  */
 public class LogicFacade implements ILogic {
 
-    private Session session;
     private MessageParser messageparser = new MessageParser(this);
     private static IPersistence persistence;
 
@@ -23,20 +22,15 @@ public class LogicFacade implements ILogic {
     public void injectPersistance(IPersistence PersistanceLayer) {
         persistence = PersistanceLayer;
     }
-
-    @Override
-    public Session initializeSession(String ID) {
-        if (ID.startsWith("A")) {
-            session = new AdminSession(ID, this);
-        } else if (ID.startsWith("C")) {
-            session = new CustomerSession(ID, this);
-        }
-        return session;
-    }
-
+    
     @Override
     public String messageParser(String message) {
-        return messageparser.fromProtocol(message); //Parse the message from the client
+        try {
+            return messageparser.fromProtocol(message); //Parse the message from the client
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
+        return "error";
     }
 
     @Override
@@ -47,13 +41,7 @@ public class LogicFacade implements ILogic {
 
     @Override
     public String logout() {
-        session = null;
-
-        if (session == null) {
-            return "true";
-        } else {
-            return "false";
-        }
+        return "true";
     }
 
     /**
@@ -77,11 +65,6 @@ public class LogicFacade implements ILogic {
     }
 
     @Override
-    public String sessionGetID() {
-        return session.getID(); //Get the id of the current user
-    }
-
-    @Override
     public String createCustomer(String ID, String name, String birthday, String phonenumber, String address, String email, String password) {
         return persistence.createCustomer(ID, name, birthday, phonenumber, address, email, password);
     }
@@ -102,18 +85,34 @@ public class LogicFacade implements ILogic {
     }
 
     @Override
-    public String getAccountNos(String customerID) {
-        return persistence.getAccountNos(customerID);
+    public String[] getAccountNos(String customerID) {
+        int noOfAccounts = 0;
+        String[] accountNos = new String[10];
+
+        if (noOfAccounts == 0) {
+            String[] accounts = persistence.getAccountNos(customerID).split(";");
+            if (!accounts[0].equals("")) {
+                noOfAccounts = accounts.length;
+                for (int i = 0; i < accounts.length; i++) {
+                    accountNos[i] = accounts[i];
+                }
+            }
+        }
+        if (noOfAccounts == 0) {
+            String[] i = {"Error; no accounts found"};
+            return i;
+        } else {
+            return accountNos;
+        }
     }
 
     @Override
     public String getTransactionHistory(String accountID) {
         return persistence.getTransactionHistory(accountID);
-
     }
-    
+
     @Override
-    public String getCustomerIDs(){
+    public String getCustomerIDs() {
         return persistence.getCustomerIDs();
     }
 

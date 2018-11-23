@@ -1,6 +1,5 @@
 package WebService;
 
-
 import WebService.Logic.LogicFacade;
 import WebService.Persistance.PersistenceFacade;
 import WebService.Link.LinkFacade;
