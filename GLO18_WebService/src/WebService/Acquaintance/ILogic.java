@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 package WebService.Acquaintance;
-
 import java.time.LocalDateTime;
 
 /**
