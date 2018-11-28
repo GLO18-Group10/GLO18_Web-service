@@ -29,7 +29,7 @@ public interface IPersistence {
 
     String saveTransfer(String fromAccount, String toAccount, int amount, String text, LocalDateTime date);
 
-    String getAccountNos(String customerID);
+    String[] getAccountNos(String customerID);
 
     String getCustomerIDs();
 

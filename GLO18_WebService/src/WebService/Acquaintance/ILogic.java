@@ -5,8 +5,6 @@
  */
 package WebService.Acquaintance;
 
-import java.time.LocalDateTime;
-
 /**
  *
  * @author Jeppe Enevold
@@ -17,31 +15,4 @@ public interface ILogic {
 
     public String messageParser(String message);
 
-    public String login(String ID, String password);
-
-    public String logout();
-    
-    public String getCustomerInfo(String ID);
-    
-    public String getAccountBalance(String ID);
-    
-    public String createCustomer(String ID, String name, String birthday, String phonenumber, String address, String email, String password);
-    
-    public boolean doesAccountExist(String accountID);
-    
-    public void updateAccountBalance(String accountID, int amount);
-    
-    public String saveTransfer(String fromAccount, String toAccount, int amount, String text, LocalDateTime date);
-    
-    public String[] getAccountNos(String customerID);
-    
-    public void openAccount(String ID);
-    
-    public void closeAccount(String ID);
-    
-    public String storeCustomerInfo(String ID, String name, String phoneNo, String address, String email);
-    
-    public String getTransactionHistory(String accountID);
-    
-    public String getCustomerIDs();
 }

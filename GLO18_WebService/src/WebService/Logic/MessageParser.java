@@ -6,18 +6,19 @@
 package WebService.Logic;
 
 import WebService.Acquaintance.ILogic;
+import WebService.Acquaintance.IPersistence;
 
 /**
  *
  * @author Peterzxcvbnm
  */
 public class MessageParser {
-    ILogic logic;
-    ServerProtocol serverProtocol;
+    private IPersistence persistence;
+    private ServerProtocol serverProtocol;
     
-    public MessageParser(ILogic logic) {
-        this.logic = logic;
-        this.serverProtocol = new ServerProtocol(logic);
+    public MessageParser(IPersistence persistence) {
+        this.persistence = persistence;
+        this.serverProtocol = new ServerProtocol(persistence);
     }
 
     /**
