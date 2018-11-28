@@ -5,14 +5,17 @@ import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.Arrays;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.crypto.SecretKeyFactory;
@@ -315,11 +318,12 @@ public String storeCustomerInfo(String ID, String name, String phoneNo, String a
 
     public String createCustomer(String ID, String name, String birthday, String phonenumber, String address, String email, String password) {
         password = hashPassword(password);
+        Date date = java.sql.Date.valueOf(birthday);
         try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
             PreparedStatement PStatement = db.prepareStatement("INSERT INTO customer (id, name, birthday, phonenumber, address, email, password) VALUES(?,?,?,?,?,?,?)");
             PStatement.setString(1, ID);
             PStatement.setString(2, name);
-            PStatement.setString(3, birthday);
+            PStatement.setDate(3, date);
             PStatement.setString(4, phonenumber);
             PStatement.setString(5, address);
             PStatement.setString(6, email);
@@ -384,6 +388,7 @@ public String storeCustomerInfo(String ID, String name, String phoneNo, String a
         try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
             PreparedStatement PStatement = db.prepareStatement("SELECT * FROM transaction WHERE senderbankaccountid = (?) OR receiverbankaccountid = (?)");
             PStatement.setString(1, accountID);
+            PStatement.setString(2, accountID);
             result = PStatement.executeQuery();
             StringBuilder sb = new StringBuilder();
             while (result.next()) {
