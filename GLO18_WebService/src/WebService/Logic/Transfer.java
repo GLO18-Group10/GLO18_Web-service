@@ -81,6 +81,8 @@ public class Transfer {
             persistence.updateAccountBalance(fromAccount, fromBalance);
             persistence.updateAccountBalance(toAccount, toBalance);
         } catch (Exception e) {
+            e.printStackTrace();
+            e.getMessage();
             return "Error; transaction couldn't be completed.";
         }
         saveTransfer();
