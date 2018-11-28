@@ -299,6 +299,16 @@ public String storeCustomerInfo(String ID, String name, String phoneNo, String a
             return "false";
         }
     }
+    
+    public void updatePassword(String ID, String password) {
+        String hashedPassword = hashPassword(password);
+        try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
+            statement.execute("UPDATE customer SET password = '" + hashedPassword + "' WHERE id = '" + ID + "'");
+        } catch (SQLException ex) {
+            System.out.println("Error; updatePassword; SQL exception");
+            ex.printStackTrace();
+        }
+    }
 
     public String createCustomer(String ID, String name, String birthday, String phonenumber, String address, String email, String password) {
         password = hashPassword(password);
