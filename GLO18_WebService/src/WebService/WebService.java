@@ -25,7 +25,7 @@ public class WebService {
         link.injectLogic(logic);
 
         // <editor-fold desc="TestCode">
-        System.out.printf("%-40s %s \n", "Testing login: ", logic.messageParser("00;C111234552;wLz/€IS67C"));
+        System.out.printf("%-40s %s \n", "Testing login: ", logic.messageParser("00;C111234552;password"));
         System.out.printf("%-40s %s \n", "Testing get customer info: ", logic.messageParser("01;C111234552"));
         System.out.printf("%-40s %s \n", "Testing get account balance: ", logic.messageParser("02;123456789"));
         System.out.printf("%-40s %s \n", "Testing get account numbers: ", logic.messageParser("08;C111234552"));

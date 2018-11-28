@@ -7,7 +7,6 @@ package WebService.Logic;
 
 import WebService.Acquaintance.ILogic;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 
 /**
  *
@@ -82,6 +81,8 @@ public class Transfer {
             logic.updateAccountBalance(fromAccount, fromBalance);
             logic.updateAccountBalance(toAccount, toBalance);
         } catch (Exception e) {
+            e.printStackTrace();
+            e.getMessage();
             return "Error; transaction couldn't be completed.";
         }
         saveTransfer();
