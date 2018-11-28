@@ -295,11 +295,14 @@ public String storeCustomerInfo(String ID, String name, String phoneNo, String a
 
             StringBuilder sb = new StringBuilder();
             while (result.next()) {
-                sb.append(result.getString("receiverbankaccountid") + "     ");
-                sb.append(result.getString("senderbankaccountid") + "         ");
-                sb.append(result.getString("date") + "             ");
-                sb.append(result.getString("amount") + "                          ");
-                sb.append(result.getString("message") + ";");
+                String history = String.format("%-22s%-28s%-34s%-25s%-20s;", result.getString("receiverbankaccountid"),
+                      result.getString("senderbankaccountid"), result.getString("date"), result.getString("amount"), result.getString("message"));
+                sb.append(history);
+//                sb.append(result.getString("receiverbankaccountid") + "     ");
+//                sb.append(result.getString("senderbankaccountid") + "         ");
+//                sb.append(result.getString("date") + "             ");
+//                sb.append(result.getString("amount") + "                          ");
+//                sb.append(result.getString("message") + ";");
                 }
             testResult = sb.toString();
         } catch (SQLException ex) {
