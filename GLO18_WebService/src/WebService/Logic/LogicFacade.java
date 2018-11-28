@@ -30,7 +30,7 @@ public class LogicFacade implements ILogic {
         } catch (Exception e) {
             System.out.println(e.toString());
         }
-        return "error";
+        return "Error; messageParser";
     }
 
     @Override
@@ -124,6 +124,11 @@ public class LogicFacade implements ILogic {
     @Override
     public void closeAccount(String ID) {
         persistence.closeAccount(ID);
+    }
+    
+    @Override
+    public void updatePassword(String ID, String password){
+        persistence.updatePassword(ID, password);
     }
 
 }

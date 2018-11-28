@@ -79,11 +79,22 @@ public class ServerProtocol {
             case "10":
                 //removes all "C" from Customer IDS              
                 return logic.getCustomerIDs().replace("C", "");
-
             case "11":
                 break;
             case "12":
                 break;
+            case "13":
+                if (logic.login(data[1], data[2]).equals("true")) {
+                    try {
+                        logic.updatePassword(data[1], data[3]);
+                        return "true";
+                    } catch (Exception e) {
+                        System.out.println("Error; serverHandler; updatePassword");
+                        return "Error; Unexpected SQL error";
+                    }
+                } else {
+                    return "Incorrect password";
+                }
             case "18":
                 return logic.logout();
             case "19":

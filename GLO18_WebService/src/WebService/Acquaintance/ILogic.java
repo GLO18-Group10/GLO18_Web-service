@@ -44,4 +44,6 @@ public interface ILogic {
     public String getTransactionHistory(String accountID);
     
     public String getCustomerIDs();
+    
+    public void updatePassword(String ID, String password);
 }
