@@ -30,6 +30,6 @@ public class LogicFacade implements ILogic {
         } catch (Exception e) {
             System.out.println(e.toString());
         }
-        return "error";
+        return "Error; messageParser";
     }
 }
