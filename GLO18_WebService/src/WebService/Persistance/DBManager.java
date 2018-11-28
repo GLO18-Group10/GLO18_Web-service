@@ -303,7 +303,10 @@ public String storeCustomerInfo(String ID, String name, String phoneNo, String a
     public void updatePassword(String ID, String password) {
         String hashedPassword = hashPassword(password);
         try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
-            statement.execute("UPDATE customer SET password = '" + hashedPassword + "' WHERE id = '" + ID + "'");
+            PreparedStatement PStatement = db.prepareStatement("UPDATE customer SET password = (?) WHERE id = (?)");
+            PStatement.setString(1, hashedPassword);
+            PStatement.setString(2, ID);
+            PStatement.executeUpdate();
         } catch (SQLException ex) {
             System.out.println("Error; updatePassword; SQL exception");
             ex.printStackTrace();
