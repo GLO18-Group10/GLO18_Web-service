@@ -5,7 +5,6 @@
  */
 package WebService.Logic;
 
-import WebService.Acquaintance.ILogic;
 import WebService.Acquaintance.IPersistence;
 import java.time.LocalDateTime;
 
