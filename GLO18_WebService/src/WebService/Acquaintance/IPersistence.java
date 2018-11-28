@@ -38,5 +38,7 @@ public interface IPersistence {
     void openAccount(String ID);
 
     void closeAccount(String ID);
+    
+    void updatePassword(String ID, String password);
 
 }
