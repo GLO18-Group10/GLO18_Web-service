@@ -15,12 +15,13 @@ import WebService.Acquaintance.IPersistence;
  */
 public class LogicFacade implements ILogic {
 
-    private MessageParser messageparser = new MessageParser(persistence);
+    private MessageParser messageparser;
     private static IPersistence persistence;
 
     @Override
     public void injectPersistance(IPersistence PersistanceLayer) {
         persistence = PersistanceLayer;
+        messageparser = new MessageParser(persistence);
     }
     
     @Override
