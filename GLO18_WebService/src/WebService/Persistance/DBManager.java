@@ -268,7 +268,7 @@ public class DBManager {
         else if (id.startsWith("c")) {
             ResultSet result = null;
             try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
-                PreparedStatement PStatement = db.prepareStatement("SELECT password FROM customer WHERE id = (?)");
+                PreparedStatement PStatement = db.prepareStatement("SELECT password FROM customer WHERE id = (?) AND isActive = true");
                 PStatement.setString(1, ID);
                 result = PStatement.executeQuery();
                 StringBuilder sb = new StringBuilder();
@@ -277,9 +277,11 @@ public class DBManager {
                 }
                 loginResult = sb.toString();
                 String[] hashAndSalt = loginResult.split(":");
+                if (hashAndSalt.length > 1){
                 String hashedDB = hashAndSalt[0];
                 String salt = hashAndSalt[1];
                 isValid = validatePassword(password, hashedDB, salt);
+                }
             } catch (SQLException ex) {
                 System.out.println("Error; login(client); SQL exception");
                 ex.printStackTrace();
