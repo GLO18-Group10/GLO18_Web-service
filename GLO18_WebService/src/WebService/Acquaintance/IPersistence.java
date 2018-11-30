@@ -40,5 +40,7 @@ public interface IPersistence {
     void closeAccount(String ID);
     
     void updatePassword(String ID, String password);
+    
+    String checkBankAccountID(String ID);
 
 }

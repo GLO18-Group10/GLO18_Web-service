@@ -62,7 +62,7 @@ public class ServerProtocol {
                 String[] accountNos = persistence.getAccountNos(data[1]);
                 for (String no : accountNos) {
                     if (no != null) {
-                        answer += no;
+                        answer += no + ";";
                     }
                 }
                 return answer;
@@ -83,7 +83,10 @@ public class ServerProtocol {
             case "11":
                 break;
             case "12":
-                break;
+                    String ID3 = data[1];
+                    return persistence.checkBankAccountID(ID3);
+                    
+                
             case "13":
                 if (persistence.login(data[1], data[2]).equals("true")) {
                     try {
