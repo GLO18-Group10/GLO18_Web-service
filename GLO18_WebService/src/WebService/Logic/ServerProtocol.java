@@ -56,8 +56,10 @@ public class ServerProtocol {
                 response05 = transfer.validate();
                 //Send back the error if the transfer could not be completed
                 if (!response05.equals("valid")) {
+                    logger.logAction(data[5], "Failed transfer");
                     return response05;
                 } else { //Otherwise complete the transfer
+                    logger.logAction(data[5], "Completed transfer");
                     return transfer.completeTransfer();
                 }
             case "06":
@@ -80,6 +82,7 @@ public class ServerProtocol {
                         answer += no;
                     }
                 }
+                logger.logAction(data[0], "Get bank accounts");
                 return answer;
             case "09":
                 try {
