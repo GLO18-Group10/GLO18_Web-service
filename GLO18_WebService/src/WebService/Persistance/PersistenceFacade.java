@@ -63,8 +63,25 @@ public class PersistenceFacade implements IPersistence {
     }
     
     @Override
-    public String getAccountNos(String customerID) {
-        return dbmanager.getAccountNos(customerID);
+    public String[] getAccountNos(String customerID) {
+        int noOfAccounts = 0;
+        String[] accountNos = new String[10];
+
+        if (noOfAccounts == 0) {
+            String[] accounts = dbmanager.getAccountNos(customerID).split(";");
+            if (!accounts[0].equals("")) {
+                noOfAccounts = accounts.length;
+                for (int i = 0; i < accounts.length; i++) {
+                    accountNos[i] = accounts[i];
+                }
+            }
+        }
+        if (noOfAccounts == 0) {
+            String[] i = {"Error; no accounts found"};
+            return i;
+        } else {
+            return accountNos;
+        }
     }
     
     @Override

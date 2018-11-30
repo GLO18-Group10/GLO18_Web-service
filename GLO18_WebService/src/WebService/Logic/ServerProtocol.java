@@ -5,7 +5,7 @@
  */
 package WebService.Logic;
 
-import WebService.Acquaintance.ILogic;
+import WebService.Acquaintance.IPersistence;
 
 /**
  *
@@ -13,10 +13,10 @@ import WebService.Acquaintance.ILogic;
  */
 public class ServerProtocol {
 
-    ILogic logic;
+    private IPersistence persistence;
 
-    public ServerProtocol(ILogic logic) {
-        this.logic = logic;
+    public ServerProtocol(IPersistence persistence) {
+        this.persistence = persistence;
     }
 
     public String serverHandler(String[] data) {
@@ -24,19 +24,19 @@ public class ServerProtocol {
             case "00":
                 String ID = data[1];
                 String password = data[2];
-                String response00 = logic.login(ID, password);
+                String response00 = persistence.login(ID, password);
                 return response00;
             case "01":
-                return logic.getCustomerInfo(data[1]);
+                return persistence.getCustomerInfo(data[1]);
             case "02":
-                return logic.getAccountBalance(data[1]);
+                return persistence.getAccountBalance(data[1]);
             case "03":
-                return logic.storeCustomerInfo(data[5], data[1], data[2], data[3], data[4]);
+                return persistence.storeCustomerInfo(data[5], data[1], data[2], data[3], data[4]);
             case "04":
                 break;
             case "05":
                 String response05;
-                Transfer transfer = new Transfer(data[1], data[2], data[3], data[4], logic, data[5]);
+                Transfer transfer = new Transfer(data[1], data[2], data[3], data[4], persistence, data[5]);
                 response05 = transfer.validate();
                 //Send back the error if the transfer could not be completed
                 if (!response05.equals("valid")) {
@@ -46,7 +46,7 @@ public class ServerProtocol {
                 }
             case "06":
                 String ID2 = data[1];
-                return logic.getTransactionHistory(ID2);
+                return persistence.getTransactionHistory(ID2);
             case "07":
                 String ID1 = data[1];
                 String name = data[2];
@@ -55,10 +55,10 @@ public class ServerProtocol {
                 String address = data[5];
                 String email = data[6];
                 String password1 = data[7];
-                return logic.createCustomer(ID1, name, birthday, phonenumber, address, email, password1);
+                return persistence.createCustomer(ID1, name, birthday, phonenumber, address, email, password1);
             case "08":
                 String answer = "";
-                String[] accountNos = logic.getAccountNos(data[1]);
+                String[] accountNos = persistence.getAccountNos(data[1]);
                 for (String no : accountNos) {
                     if (no != null) {
                         answer += no;
@@ -68,9 +68,9 @@ public class ServerProtocol {
             case "09":
                 try {
                     if (data[2].equals("1")) {
-                        logic.openAccount(data[1]);
+                        persistence.openAccount(data[1]);
                     } else if (data[2].equals("0")) {
-                        logic.closeAccount(data[1]);
+                        persistence.closeAccount(data[1]);
                     }
                     return "complete";
                 } catch (Exception e) {
@@ -78,15 +78,15 @@ public class ServerProtocol {
                 }
             case "10":
                 //removes all "C" from Customer IDS              
-                return logic.getCustomerIDs().replace("C", "");
+                return persistence.getCustomerIDs().replace("C", "");
             case "11":
                 break;
             case "12":
                 break;
             case "13":
-                if (logic.login(data[1], data[2]).equals("true")) {
+                if (persistence.login(data[1], data[2]).equals("true")) {
                     try {
-                        logic.updatePassword(data[1], data[3]);
+                        persistence.updatePassword(data[1], data[3]);
                         return "true";
                     } catch (Exception e) {
                         System.out.println("Error; serverHandler; updatePassword");
@@ -96,7 +96,7 @@ public class ServerProtocol {
                     return "Incorrect password";
                 }
             case "18":
-                return logic.logout();
+                return "true";
             case "19":
                 break;
             default:
