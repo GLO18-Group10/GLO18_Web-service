@@ -62,7 +62,7 @@ public class ServerProtocol {
                 String[] accountNos = persistence.getAccountNos(data[1]);
                 for (String no : accountNos) {
                     if (no != null) {
-                        answer += no;
+                        answer += no + ";";
                     }
                 }
                 return answer;

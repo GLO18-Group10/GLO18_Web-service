@@ -455,6 +455,7 @@ public class DBManager {
          int i1 = random.nextInt(90000) + 10000;
          int i2 = random.nextInt(90000) + 10000;
          String bankaccountID = "6969" + i1 +i2;
+         
          boolean test = true;
          
          while (test) {            
@@ -470,12 +471,14 @@ public class DBManager {
                 i1 = random.nextInt(90000) + 10000;
                 i2 = random.nextInt(90000) + 10000;
                 bankaccountID = "6969" + i1 + i2;
+                System.out.println(bankaccountID + "in while loop");
                 db.close();
                 test = true;
             }
             else {
+                
                 openBankAccount(ID, bankaccountID);
-                db.close();
+                
                 test = false;
             
             }
@@ -498,26 +501,26 @@ public class DBManager {
     
     public void openBankAccount(String ID, String bankAccountID){
         ResultSet result = null;
-        
+       
         
         try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
-            PreparedStatement PStatement = db.prepareStatement("INSERT INTO hasbankaccount VALUES (?, ?) AND INSERT INTO bankaccount VALUES (?, ?)");
-            PStatement.setString(1, ID);
-            PStatement.setString(2, bankAccountID);
-            PStatement.setString(3, bankAccountID);
-            PStatement.setString(4, "0");
-            result = PStatement.executeQuery();
+            System.out.println("test5");
+            
+            PreparedStatement PStatement = db.prepareStatement("INSERT INTO bankaccount(id, balance) VALUES (?, ?); INSERT INTO hasbankaccount(id, bankaccountid) VALUES(?, ?)");
+            PStatement.setString(1, bankAccountID);
+            PStatement.setInt(2, 0);
+            PStatement.setString(3, ID);
+            PStatement.setString(4, bankAccountID);
+            PStatement.executeUpdate();
+            
+            
+           
+            
         } catch (SQLException ex) {
             System.out.println("SQL exception");
             ex.printStackTrace();
         }
-        finally{
-             try {
-                 result.close();
-             } catch (SQLException ex) {
-                 Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
-             }
-        }
+        
     
     
     }
