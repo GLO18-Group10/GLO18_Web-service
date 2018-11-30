@@ -29,14 +29,25 @@ public class ServerProtocol {
                 String ID = data[1];
                 String password = data[2];
                 String response00 = persistence.login(ID, password);
-                logger.logAction(ID, "User " + ID + " logged in");
+                if(response00.equals("true")){
+                    logger.logAction(ID, "Logged in");
+                }else {
+                    logger.logAction(ID, "Failed to log in");
+                }
                 return response00;
             case "01":
+                logger.logAction(data[1], "Get customer info");
                 return persistence.getCustomerInfo(data[1]);
             case "02":
                 return persistence.getAccountBalance(data[1]);
             case "03":
-                return persistence.storeCustomerInfo(data[5], data[1], data[2], data[3], data[4]);
+                String response03 = persistence.storeCustomerInfo(data[5], data[1], data[2], data[3], data[4]);
+                if(response03.equals("true")){
+                    logger.logAction(data[5], "Stored customer info");
+                }else {
+                    logger.logAction(data[5], "Failed to store customer info");
+                }
+                return response03;
             case "04":
                 break;
             case "05":
@@ -113,13 +124,11 @@ public class ServerProtocol {
                 return response16;
             case "18":
                 String ID_logout = data[1];
-                if (logger.logAction(ID_logout, "User " + ID_logout + " logged out")) {
+                if (logger.logAction(ID_logout, "Logged out")) {
                     return "true";
                 } else {
                     return "false";
                 }
-            case "19":
-                break;
             default:
                 break;
         }
