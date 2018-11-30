@@ -447,7 +447,7 @@ public class DBManager {
         return false;
     }
 
-    public void logAction(String ID, LocalDateTime date, String action) {
+    public boolean logAction(String ID, LocalDateTime date, String action) {
         try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord);
                 PreparedStatement PStatement = db.prepareStatement("INSERT INTO logger (id, date, action) VALUES (?,?,?)")) {
             PStatement.setString(1, ID);
@@ -455,10 +455,12 @@ public class DBManager {
             PStatement.setTimestamp(2, timestamp);
             PStatement.setString(3, action);
             PStatement.executeUpdate();
+            return true;
 
         } catch (SQLException ex) {
             System.out.println("Error; logAction; SQL exception");
             ex.printStackTrace();
+            return false;
         }
     }
 

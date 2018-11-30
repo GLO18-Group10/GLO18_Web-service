@@ -16,6 +16,7 @@ public class ServerProtocol {
     private IPersistence persistence;
     private MailHandler mailHandler;
     private ActionLogger logger;
+
     public ServerProtocol(IPersistence persistence) {
         this.persistence = persistence;
         mailHandler = new MailHandler();
@@ -28,7 +29,7 @@ public class ServerProtocol {
                 String ID = data[1];
                 String password = data[2];
                 String response00 = persistence.login(ID, password);
-                logger.logAction(ID, "User " + ID +  " logged in");
+                logger.logAction(ID, "User " + ID + " logged in");
                 return response00;
             case "01":
                 return persistence.getCustomerInfo(data[1]);
@@ -111,7 +112,12 @@ public class ServerProtocol {
                 String response16 = persistence.login(ID, password);
                 return response16;
             case "18":
-                return "true";
+                String ID_logout = data[1];
+                if (logger.logAction(ID_logout, "User " + ID_logout + " logged out")) {
+                    return "true";
+                } else {
+                    return "false";
+                }
             case "19":
                 break;
             default:

@@ -15,8 +15,8 @@ public class ActionLogger {
         this.persistence = persistence;
     }
     
-    public void logAction(String ID, String action){
-        persistence.logAction(ID, LocalDateTime.now(), action);
+    public boolean logAction(String ID, String action){
+        return persistence.logAction(ID, LocalDateTime.now(), action);
     }
     
 }

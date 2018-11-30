@@ -41,6 +41,6 @@ public interface IPersistence {
     
     void updatePassword(String ID, String password);
     
-    public void logAction(String ID, LocalDateTime date, String action);
+    public boolean logAction(String ID, LocalDateTime date, String action);
 
 }
