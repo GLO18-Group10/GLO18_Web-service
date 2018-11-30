@@ -16,12 +16,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Locale;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.xml.bind.DatatypeConverter;
-
+import java.util.Random;
 /**
  *
  * @author Robin
@@ -451,6 +452,79 @@ public String storeCustomerInfo(String ID, String name, String phoneNo, String a
             Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
+    }
+    
+    public String checkBankAccountID(String ID) {
+         ResultSet result = null;
+         Random random = new Random();
+         int i1 = random.nextInt(90000) + 10000;
+         int i2 = random.nextInt(90000) + 10000;
+         String bankaccountID = "6969" + i1 +i2;
+         boolean test = true;
+         
+         while (test) {            
+                
+         try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
+             
+             
+            PreparedStatement PStatement = db.prepareStatement("SELECT id FROM bankaccount WHERE ? = id");
+            PStatement.setString(1, bankaccountID);
+            
+            result = PStatement.executeQuery();
+            if(result.next()){
+                i1 = random.nextInt(90000) + 10000;
+                i2 = random.nextInt(90000) + 10000;
+                bankaccountID = "6969" + i1 + i2;
+                db.close();
+                test = true;
+            }
+            else {
+                openBankAccount(ID, bankaccountID);
+                db.close();
+                test = false;
+            
+            }
+        } catch (SQLException ex) {
+            System.out.println("SQL exception");
+            ex.printStackTrace();
+        }
+        finally{
+             try {
+                 result.close();
+             } catch (SQLException ex) {
+                 Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+             }
+        }
+         }
+         return "Complete";
+        
+
+    }
+    
+    public void openBankAccount(String ID, String bankAccountID){
+        ResultSet result = null;
+        
+        
+        try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
+            PreparedStatement PStatement = db.prepareStatement("INSERT INTO hasbankaccount VALUES (?, ?) AND INSERT INTO bankaccount VALUES (?, ?)");
+            PStatement.setString(1, ID);
+            PStatement.setString(2, bankAccountID);
+            PStatement.setString(3, bankAccountID);
+            PStatement.setString(4, "0");
+            result = PStatement.executeQuery();
+        } catch (SQLException ex) {
+            System.out.println("SQL exception");
+            ex.printStackTrace();
+        }
+        finally{
+             try {
+                 result.close();
+             } catch (SQLException ex) {
+                 Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+             }
+        }
+    
+    
     }
 
 //main method for testing
