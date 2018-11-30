@@ -109,4 +109,9 @@ public class PersistenceFacade implements IPersistence {
         dbmanager.updatePassword(ID, password);
     }
     
+    @Override
+    public void logAction(String ID, LocalDateTime date, String action){
+        dbmanager.logAction(ID, date, action);
+    }
+    
 }

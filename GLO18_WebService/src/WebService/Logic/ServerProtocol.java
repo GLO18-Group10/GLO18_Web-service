@@ -15,9 +15,11 @@ public class ServerProtocol {
 
     private IPersistence persistence;
     private MailHandler mailHandler;
+    private ActionLogger logger;
     public ServerProtocol(IPersistence persistence) {
         this.persistence = persistence;
         mailHandler = new MailHandler();
+        this.logger = new ActionLogger(persistence);
     }
 
     public String serverHandler(String[] data) {
@@ -26,6 +28,7 @@ public class ServerProtocol {
                 String ID = data[1];
                 String password = data[2];
                 String response00 = persistence.login(ID, password);
+                logger.logAction(ID, "User " + ID +  " logged in");
                 return response00;
             case "01":
                 return persistence.getCustomerInfo(data[1]);
