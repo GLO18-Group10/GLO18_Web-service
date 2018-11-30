@@ -358,15 +358,17 @@ public class DBManager {
         }
     }
 
-    public String saveTransfer(String fromAccount, String toAccount, int amount, String text, LocalDateTime date) {
+    public String saveTransfer(String fromAccount, String toAccount, int amount, String senderCategory, String text, LocalDateTime date) {
         try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
-            PreparedStatement PStatement = db.prepareStatement("INSERT INTO transaction (message, amount, senderbankaccountid, receiverbankaccountid, date) VALUES (?,?,?,?,?)");
+            PreparedStatement PStatement = db.prepareStatement("INSERT INTO transaction (message, amount, senderbankaccountid, receiverbankaccountid, sendercategory, receivercategory, date) VALUES (?,?,?,?,?,?,?)");
             PStatement.setString(1, text);
             PStatement.setInt(2, amount);
             PStatement.setString(3, fromAccount);
             PStatement.setString(4, toAccount);
+            PStatement.setString(5, senderCategory);
+            PStatement.setString(6, senderCategory);
             Timestamp timestamp = Timestamp.valueOf(date);
-            PStatement.setTimestamp(5, timestamp); //Mulig fejl
+            PStatement.setTimestamp(7, timestamp);
             PStatement.executeUpdate();
             //String s = "INSERT INTO transaction (message, amount, senderbankaccountid, receiverbankaccountid, date)"
             //        + " VALUES ('" + text + "','" + amount + "','" + fromAccount + "','" + toAccount + "','" + date + "')";

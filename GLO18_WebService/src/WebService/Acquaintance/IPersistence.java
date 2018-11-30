@@ -27,7 +27,7 @@ public interface IPersistence {
 
     void updateAccountBalance(String accountID, int amount);
 
-    String saveTransfer(String fromAccount, String toAccount, int amount, String text, LocalDateTime date);
+    String saveTransfer(String fromAccount, String toAccount, int amount, String category, String text, LocalDateTime date);
 
     String[] getAccountNos(String customerID);
 

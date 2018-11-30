@@ -37,7 +37,7 @@ public class ServerProtocol {
                 break;
             case "05":
                 String response05;
-                Transfer transfer = new Transfer(data[1], data[2], data[3], data[4], persistence, data[5]);
+                Transfer transfer = new Transfer(data[1], data[2], data[3], data[4], data[5], persistence, data[6]);
                 response05 = transfer.validate();
                 //Send back the error if the transfer could not be completed
                 if (!response05.equals("valid")) {
