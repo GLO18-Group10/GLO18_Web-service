@@ -5,9 +5,8 @@
  */
 package WebService.Logic;
 
-import WebService.Acquaintance.ILogic;
+import WebService.Acquaintance.IPersistence;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 
 /**
  *
@@ -15,7 +14,7 @@ import java.util.Arrays;
  */
 public class Transfer {
 
-    ILogic logic;
+    private IPersistence persistence;
     private final String fromAccount;
     private final String toAccount;
     private final int amount;
@@ -23,12 +22,12 @@ public class Transfer {
     private final LocalDateTime date = LocalDateTime.now();
     private final String customerID;
 
-    public Transfer(String fromAccount, String amount, String toAccount, String text, ILogic logic, String customerID) {
+    public Transfer(String fromAccount, String amount, String toAccount, String text, IPersistence persistence, String customerID) {
         this.fromAccount = fromAccount;
         this.toAccount = toAccount;
         this.amount = Integer.parseInt(amount);
         this.text = text;
-        this.logic = logic;
+        this.persistence = persistence;
         this.customerID = customerID;
     }
 
@@ -43,17 +42,17 @@ public class Transfer {
         if (!isAccount(fromAccount)) {
             return "Error; user does not own account.";
         } //Check if there is enough money in account
-        else if (amount > Integer.parseInt(logic.getAccountBalance(fromAccount))) {
+        else if (amount > Integer.parseInt(persistence.getAccountBalance(fromAccount))) {
             return "Error; insufficient funds.";
         } //Check if the receiver exists
-        else if (!logic.doesAccountExist(toAccount)) {
+        else if (!persistence.doesAccountExist(toAccount)) {
             return "Error; recipient not found.";
         }
         return "valid";
     }
 
     public boolean isAccount(String accountNo) {
-        String[] accountNos = logic.getAccountNos(customerID);
+        String[] accountNos = persistence.getAccountNos(customerID);
         boolean check = false;
         for (int i = 0; i < accountNos.length; i++) {
             check = accountNo.equals(accountNos[i]);
@@ -70,8 +69,8 @@ public class Transfer {
      * @return An error or complete
      */
     public synchronized String completeTransfer() {
-        int fromBalance = Integer.parseInt(logic.getAccountBalance(fromAccount));
-        int toBalance = Integer.parseInt(logic.getAccountBalance(toAccount));
+        int fromBalance = Integer.parseInt(persistence.getAccountBalance(fromAccount));
+        int toBalance = Integer.parseInt(persistence.getAccountBalance(toAccount));
 
         //Calculate new balances
         fromBalance -= amount;
@@ -79,9 +78,11 @@ public class Transfer {
 
         //Update the balances
         try {
-            logic.updateAccountBalance(fromAccount, fromBalance);
-            logic.updateAccountBalance(toAccount, toBalance);
+            persistence.updateAccountBalance(fromAccount, fromBalance);
+            persistence.updateAccountBalance(toAccount, toBalance);
         } catch (Exception e) {
+            e.printStackTrace();
+            e.getMessage();
             return "Error; transaction couldn't be completed.";
         }
         saveTransfer();
@@ -92,7 +93,7 @@ public class Transfer {
      * Save the transaction. If it fails print out the input for review later
      */
     private void saveTransfer() {
-        if (logic.saveTransfer(fromAccount, toAccount, amount, text, date).equals("false")) {
+        if (persistence.saveTransfer(fromAccount, toAccount, amount, text, date).equals("false")) {
             System.out.println("Error; Transaction from " + fromAccount
                     + " to " + toAccount + " could not be saved. Date: "
                     + date + " amount: " + amount + " message: " + text);

@@ -5,12 +5,17 @@ import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.Arrays;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.crypto.SecretKeyFactory;
@@ -54,13 +59,22 @@ public class DBManager {
      * a test method to set something in the database testTable
      */
     public void setTest(String c1, String c2) {
+         ResultSet result = null;
         try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
-            String s = "insert into testTable values('" + c1 + "','" + c2 + "')";
-            statement.execute(s);
-
+            PreparedStatement PStatement = db.prepareStatement("INSERT INTO testTable VALUES (?, ?)");
+            PStatement.setString(1, c1);
+            PStatement.setString(2, c2);
+            result = PStatement.executeQuery();
         } catch (SQLException ex) {
             System.out.println("SQL exception");
             ex.printStackTrace();
+        }
+        finally{
+             try {
+                 result.close();
+             } catch (SQLException ex) {
+                 Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+             }
         }
 
     }
@@ -73,9 +87,11 @@ public class DBManager {
      */
     public String getCustomerInfo(String customerID) {
         String customerInfo = "";
+        ResultSet result = null;
         try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
-            ResultSet result = statement.executeQuery("SELECT name, birthday, phonenumber, address, email FROM customer WHERE id = '" + customerID + "'");
-
+            PreparedStatement PStatement = db.prepareStatement("SELECT name, birthday, phonenumber, address, email FROM customer WHERE id = (?)");
+            PStatement.setString(1, customerID);
+            result = PStatement.executeQuery();
             StringBuilder sb = new StringBuilder();
             while (result.next()) {
                 sb.append(result.getString("name") + ";");
@@ -88,6 +104,13 @@ public class DBManager {
         } catch (SQLException ex) {
             System.out.println("Error; getCustomerInfo; SQL exception");
             ex.printStackTrace();
+        }
+        finally{
+            try {
+                result.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return customerInfo;
     }
@@ -111,9 +134,11 @@ public class DBManager {
 
     public String getAccountNos(String customerID) {
         String accountNos = "";
+        ResultSet result = null;
         try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
-            ResultSet result = statement.executeQuery("SELECT bankaccountid FROM hasbankaccount WHERE id = '" + customerID + "'");
-
+            PreparedStatement PStatement = db.prepareStatement("SELECT bankaccountid FROM hasbankaccount WHERE ID =(?)");
+            PStatement.setString(1, customerID);
+            result = PStatement.executeQuery();
             StringBuilder sb = new StringBuilder();
             while (result.next()) {
                 sb.append(result.getString("bankaccountid") + ";");
@@ -123,15 +148,24 @@ public class DBManager {
             System.out.println("Error; getAccountNos; SQL exception");
             ex.printStackTrace();
         }
+        finally{
+            try {
+                result.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         accountNos = accountNos.replace(" ", "");
         return accountNos;
     }
 
     public String getAccountBalance(String accountID) {
         String Balance = "";
+        ResultSet result = null;
         try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
-            ResultSet result = statement.executeQuery("SELECT Balance FROM BankAccount WHERE ID = '" + accountID + "'");
-
+            PreparedStatement PStatement = db.prepareStatement("SELECT Balance FROM BankAccount WHERE ID =(?)");
+            PStatement.setString(1, accountID);
+            result = PStatement.executeQuery();
             StringBuilder sb = new StringBuilder();
             while (result.next()) {
                 sb.append(result.getString("Balance"));
@@ -141,25 +175,46 @@ public class DBManager {
             System.out.println("Error; getAccountBalance; SQL exception");
             ex.printStackTrace();
         }
+        finally{
+            try {
+                result.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         return Balance;
     }
 
     public boolean doesAccountExist(String accountID) {
         String count = "0";
+        ResultSet result = null;
         try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
-            ResultSet result = statement.executeQuery("SELECT count(*) FROM BankAccount WHERE ID = '" + accountID + "'");
+            PreparedStatement PStatement = db.prepareStatement("SELECT count(*) FROM BankAccount WHERE ID = (?)");
+            PStatement.setString(1, accountID);
+            result = PStatement.executeQuery();
             result.next();
             count = result.getString(1);
         } catch (SQLException ex) {
             System.out.println("Error; doesAccountExist; SQL exception");
             ex.printStackTrace();
         }
+        finally{
+            try {
+                result.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         return count.equals("1");
     }
 
     public void updateAccountBalance(String accountID, int amount) {
         try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
-            statement.execute("UPDATE BankAccount SET Balance = '" + amount + "' WHERE ID = '" + accountID + "'");
+            PreparedStatement PStatement = db.prepareStatement("UPDATE BankAccount SET Balance = (?) WHERE ID = (?)");
+            PStatement.setInt(1, amount);
+            PStatement.setString(2, accountID);
+            PStatement.executeUpdate();
+            //statement.execute("UPDATE BankAccount SET Balance = '" + amount + "' WHERE ID = '" + accountID + "'");
         } catch (SQLException ex) {
             System.out.println("Error; updateAccountBalance; SQL exception");
             ex.printStackTrace();
@@ -167,7 +222,13 @@ public class DBManager {
     }
 public String storeCustomerInfo(String ID, String name, String phoneNo, String address, String email) {
         try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
-            statement.execute("UPDATE Customer SET name = '" + name + "', " + "phonenumber = '" + phoneNo + "', address = '"+address + "', email = '" + email + "' WHERE ID = '" + ID + "'");
+            PreparedStatement PStatement = db.prepareStatement("UPDATE Customer SET name = (?), phonenumber = (?), address = (?), email = (?) WHERE ID = (?)");
+            PStatement.setString(1, name);
+            PStatement.setString(2, phoneNo);
+            PStatement.setString(3, address);
+            PStatement.setString(4, email);
+            PStatement.setString(5, ID);
+            PStatement.executeUpdate();
         } catch (SQLException ex) {
             System.out.println("Error; storeCustomerInfo; SQL exception");
             ex.printStackTrace();
@@ -182,10 +243,11 @@ public String storeCustomerInfo(String ID, String name, String phoneNo, String a
         boolean isValid = false;
         //Query for admin login
         if (id.startsWith("a")) {
-
+            ResultSet result = null;
             try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
-                ResultSet result = statement.executeQuery("SELECT password FROM admin WHERE id = '" + ID + "'");
-
+                PreparedStatement PStatement = db.prepareStatement("SELECT password FROM admin WHERE id = (?)");
+                PStatement.setString(1, ID);
+                result = PStatement.executeQuery();
                 StringBuilder sb = new StringBuilder();
                 while (result.next()) {
                     sb.append(result.getString("password"));
@@ -199,12 +261,20 @@ public String storeCustomerInfo(String ID, String name, String phoneNo, String a
                 System.out.println("Error; login(admin); SQL exception");
                 ex.printStackTrace();
             }
+            finally{
+                try {
+                    result.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
         } // Query for customer login
         else if (id.startsWith("c")) {
-
+            ResultSet result = null;
             try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
-                ResultSet result = statement.executeQuery("SELECT password FROM customer WHERE id = '" + ID + "'");
-
+                PreparedStatement PStatement = db.prepareStatement("SELECT password FROM customer WHERE id = (?)");
+                PStatement.setString(1, ID);
+                result = PStatement.executeQuery();
                 StringBuilder sb = new StringBuilder();
                 while (result.next()) {
                     sb.append(result.getString("password"));
@@ -218,6 +288,13 @@ public String storeCustomerInfo(String ID, String name, String phoneNo, String a
                 System.out.println("Error; login(client); SQL exception");
                 ex.printStackTrace();
             }
+            finally{
+                try {
+                    result.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
         }
         if (isValid) {
             return "true";
@@ -229,7 +306,10 @@ public String storeCustomerInfo(String ID, String name, String phoneNo, String a
     public void updatePassword(String ID, String password) {
         String hashedPassword = hashPassword(password);
         try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
-            statement.execute("UPDATE customer SET password = '" + hashedPassword + "' WHERE id = '" + ID + "'");
+            PreparedStatement PStatement = db.prepareStatement("UPDATE customer SET password = (?) WHERE id = (?)");
+            PStatement.setString(1, hashedPassword);
+            PStatement.setString(2, ID);
+            PStatement.executeUpdate();
         } catch (SQLException ex) {
             System.out.println("Error; updatePassword; SQL exception");
             ex.printStackTrace();
@@ -238,10 +318,17 @@ public String storeCustomerInfo(String ID, String name, String phoneNo, String a
 
     public String createCustomer(String ID, String name, String birthday, String phonenumber, String address, String email, String password) {
         password = hashPassword(password);
+        Date date = java.sql.Date.valueOf(birthday);
         try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
-            String s = "INSERT INTO customer (id, name, birthday, phonenumber, address, email, password) VALUES ('" + ID + "','" + name + "','" + birthday + "','" + phonenumber + "','" + address + "','" + email + "','" + password + "')";
-            statement.execute(s);
-
+            PreparedStatement PStatement = db.prepareStatement("INSERT INTO customer (id, name, birthday, phonenumber, address, email, password) VALUES(?,?,?,?,?,?,?)");
+            PStatement.setString(1, ID);
+            PStatement.setString(2, name);
+            PStatement.setDate(3, date);
+            PStatement.setString(4, phonenumber);
+            PStatement.setString(5, address);
+            PStatement.setString(6, email);
+            PStatement.setString(7, password);
+            PStatement.executeUpdate();
         } catch (SQLException ex) {
             System.out.println("Error; createCustomer; SQL exception");
             ex.printStackTrace();
@@ -253,8 +340,9 @@ public String storeCustomerInfo(String ID, String name, String phoneNo, String a
 
     public void openAccount(String ID) {
         try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
-            String s = "UPDATE customer SET isactive = true WHERE id = '" + ID + "'";
-            statement.execute(s);
+            PreparedStatement PStatement = db.prepareStatement("UPDATE customer SET isactive = true WHERE id = (?)");
+            PStatement.setString(1, ID);
+            PStatement.executeUpdate();
 
         } catch (SQLException ex) {
             System.out.println("Error; openAccount; SQL exception");
@@ -264,9 +352,9 @@ public String storeCustomerInfo(String ID, String name, String phoneNo, String a
 
     public void closeAccount(String ID) {
         try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
-            String s = "UPDATE customer SET isactive = false WHERE id = '" + ID + "'";
-            statement.execute(s);
-
+            PreparedStatement PStatement = db.prepareStatement("UPDATE customer SET isactive = false WHERE ID = (?)");
+            PStatement.setString(1, ID);
+            PStatement.executeUpdate();
         } catch (SQLException ex) {
             System.out.println("Error; closeAccount; SQL exception");
             ex.printStackTrace();
@@ -275,24 +363,33 @@ public String storeCustomerInfo(String ID, String name, String phoneNo, String a
 
     public String saveTransfer(String fromAccount, String toAccount, int amount, String text, LocalDateTime date) {
         try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
-            String s = "INSERT INTO transaction (message, amount, senderbankaccountid, receiverbankaccountid, date)"
-                    + " VALUES ('" + text + "','" + amount + "','" + fromAccount + "','" + toAccount + "','" + date + "')";
-            statement.execute(s);
+            PreparedStatement PStatement = db.prepareStatement("INSERT INTO transaction (message, amount, senderbankaccountid, receiverbankaccountid, date) VALUES (?,?,?,?,?)");
+            PStatement.setString(1, text);
+            PStatement.setInt(2, amount);
+            PStatement.setString(3, fromAccount);
+            PStatement.setString(4, toAccount);
+            Timestamp timestamp = Timestamp.valueOf(date);
+            PStatement.setTimestamp(5, timestamp); //Mulig fejl
+            PStatement.executeUpdate();
+            //String s = "INSERT INTO transaction (message, amount, senderbankaccountid, receiverbankaccountid, date)"
+            //        + " VALUES ('" + text + "','" + amount + "','" + fromAccount + "','" + toAccount + "','" + date + "')";
         } catch (SQLException ex) {
             System.out.println("Error; saveTransfer; SQL exception");
             ex.printStackTrace();
             return "false";
         }
         return "true";
-
     }
     
 
     public String getTransactionHistory(String accountID) {
         String testResult = "";
+        ResultSet result = null;
         try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
-            ResultSet result = statement.executeQuery("SELECT * FROM transaction WHERE senderbankaccountid = '" + accountID + "'  OR receiverbankaccountid = '" + accountID + "'" );
-
+            PreparedStatement PStatement = db.prepareStatement("SELECT * FROM transaction WHERE senderbankaccountid = (?) OR receiverbankaccountid = (?)");
+            PStatement.setString(1, accountID);
+            PStatement.setString(2, accountID);
+            result = PStatement.executeQuery();
             StringBuilder sb = new StringBuilder();
             while (result.next()) {
                 String history = String.format("%-22s%-28s%-34s%-25s%-20s;", result.getString("receiverbankaccountid"),
@@ -308,6 +405,13 @@ public String storeCustomerInfo(String ID, String name, String phoneNo, String a
         } catch (SQLException ex) {
             System.out.println("Error; getTransactionHistory; SQL exception");
             ex.printStackTrace();
+        }
+        finally{
+            try {
+                result.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return testResult;
     }
