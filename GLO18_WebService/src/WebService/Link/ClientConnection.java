@@ -149,6 +149,6 @@ class HandleConnection implements Runnable {
         }
 
         //When the client disconnects print the decremented no. of users
-        System.out.println("Thread closed/nCurrent users: " + (java.lang.Thread.activeCount() - 2));
+        System.out.println("Thread closed\nCurrent users: " + (java.lang.Thread.activeCount() - 2));
     }
 }

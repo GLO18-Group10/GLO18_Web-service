@@ -28,7 +28,8 @@ public class LogicFacade implements ILogic {
         try {
             return messageparser.fromProtocol(message); //Parse the message from the client
         } catch (Exception e) {
-            System.out.println(e.toString());
+            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return "Error; messageParser";
     }

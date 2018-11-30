@@ -60,7 +60,7 @@ public class DBManager {
      * a test method to set something in the database testTable
      */
     public void setTest(String c1, String c2) {
-         ResultSet result = null;
+        ResultSet result = null;
         try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
             PreparedStatement PStatement = db.prepareStatement("INSERT INTO testTable VALUES (?, ?)");
             PStatement.setString(1, c1);
@@ -69,13 +69,12 @@ public class DBManager {
         } catch (SQLException ex) {
             System.out.println("SQL exception");
             ex.printStackTrace();
-        }
-        finally{
-             try {
-                 result.close();
-             } catch (SQLException ex) {
-                 Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
-             }
+        } finally {
+            try {
+                result.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
     }
@@ -105,8 +104,7 @@ public class DBManager {
         } catch (SQLException ex) {
             System.out.println("Error; getCustomerInfo; SQL exception");
             ex.printStackTrace();
-        }
-        finally{
+        } finally {
             try {
                 result.close();
             } catch (SQLException ex) {
@@ -115,7 +113,7 @@ public class DBManager {
         }
         return customerInfo;
     }
-    
+
     public String getCustomerIDs() {
         String IDs = "";
         try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
@@ -148,8 +146,7 @@ public class DBManager {
         } catch (SQLException ex) {
             System.out.println("Error; getAccountNos; SQL exception");
             ex.printStackTrace();
-        }
-        finally{
+        } finally {
             try {
                 result.close();
             } catch (SQLException ex) {
@@ -175,8 +172,7 @@ public class DBManager {
         } catch (SQLException ex) {
             System.out.println("Error; getAccountBalance; SQL exception");
             ex.printStackTrace();
-        }
-        finally{
+        } finally {
             try {
                 result.close();
             } catch (SQLException ex) {
@@ -198,8 +194,7 @@ public class DBManager {
         } catch (SQLException ex) {
             System.out.println("Error; doesAccountExist; SQL exception");
             ex.printStackTrace();
-        }
-        finally{
+        } finally {
             try {
                 result.close();
             } catch (SQLException ex) {
@@ -221,7 +216,8 @@ public class DBManager {
             ex.printStackTrace();
         }
     }
-public String storeCustomerInfo(String ID, String name, String phoneNo, String address, String email) {
+
+    public String storeCustomerInfo(String ID, String name, String phoneNo, String address, String email) {
         try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
             PreparedStatement PStatement = db.prepareStatement("UPDATE Customer SET name = (?), phonenumber = (?), address = (?), email = (?) WHERE ID = (?)");
             PStatement.setString(1, name);
@@ -237,6 +233,7 @@ public String storeCustomerInfo(String ID, String name, String phoneNo, String a
         }
         return "true";
     }
+
     public String login(String ID, String password) {
 
         String id = ID.toLowerCase();
@@ -254,15 +251,14 @@ public String storeCustomerInfo(String ID, String name, String phoneNo, String a
                     sb.append(result.getString("password"));
                 }
                 loginResult = sb.toString();
-                String[]hashAndSalt = loginResult.split(":");
+                String[] hashAndSalt = loginResult.split(":");
                 String hashedDB = hashAndSalt[0];
                 String salt = hashAndSalt[1];
                 isValid = validatePassword(password, hashedDB, salt);
             } catch (SQLException ex) {
                 System.out.println("Error; login(admin); SQL exception");
                 ex.printStackTrace();
-            }
-            finally{
+            } finally {
                 try {
                     result.close();
                 } catch (SQLException ex) {
@@ -273,7 +269,7 @@ public String storeCustomerInfo(String ID, String name, String phoneNo, String a
         else if (id.startsWith("c")) {
             ResultSet result = null;
             try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
-                PreparedStatement PStatement = db.prepareStatement("SELECT password FROM customer WHERE id = (?)");
+                PreparedStatement PStatement = db.prepareStatement("SELECT password FROM customer WHERE id = (?) AND isActive = true");
                 PStatement.setString(1, ID);
                 result = PStatement.executeQuery();
                 StringBuilder sb = new StringBuilder();
@@ -281,15 +277,16 @@ public String storeCustomerInfo(String ID, String name, String phoneNo, String a
                     sb.append(result.getString("password"));
                 }
                 loginResult = sb.toString();
-                String[]hashAndSalt = loginResult.split(":");
+                String[] hashAndSalt = loginResult.split(":");
+                if (hashAndSalt.length > 1){
                 String hashedDB = hashAndSalt[0];
                 String salt = hashAndSalt[1];
                 isValid = validatePassword(password, hashedDB, salt);
+                }
             } catch (SQLException ex) {
                 System.out.println("Error; login(client); SQL exception");
                 ex.printStackTrace();
-            }
-            finally{
+            } finally {
                 try {
                     result.close();
                 } catch (SQLException ex) {
@@ -303,7 +300,7 @@ public String storeCustomerInfo(String ID, String name, String phoneNo, String a
             return "false";
         }
     }
-    
+
     public void updatePassword(String ID, String password) {
         String hashedPassword = hashPassword(password);
         try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
@@ -381,7 +378,6 @@ public String storeCustomerInfo(String ID, String name, String phoneNo, String a
         }
         return "true";
     }
-    
 
     public String getTransactionHistory(String accountID) {
         String testResult = "";
@@ -393,18 +389,17 @@ public String storeCustomerInfo(String ID, String name, String phoneNo, String a
             result = PStatement.executeQuery();
             StringBuilder sb = new StringBuilder();
             while (result.next()) {
-                sb.append(result.getString("receiverbankaccountid") + "     ");
-                sb.append(result.getString("senderbankaccountid") + "         ");
-                sb.append(result.getString("date") + "             ");
-                sb.append(result.getString("amount") + "                          ");
-                sb.append(result.getString("message") + ";");
-                }
+                String history = String.format("%-12s%-18s%-25s%8s    %s;",
+                        result.getString("receiverbankaccountid").replace(" ", ""),
+                        result.getString("senderbankaccountid").replace(" ", ""),
+                        result.getString("date").substring(0, 16), result.getString("amount"), result.getString("message"));
+                sb.append(history);
+            }
             testResult = sb.toString();
         } catch (SQLException ex) {
             System.out.println("Error; getTransactionHistory; SQL exception");
             ex.printStackTrace();
-        }
-        finally{
+        } finally {
             try {
                 result.close();
             } catch (SQLException ex) {
@@ -413,13 +408,13 @@ public String storeCustomerInfo(String ID, String name, String phoneNo, String a
         }
         return testResult;
     }
-    
-    public String hashPassword(String password){
+
+    public String hashPassword(String password) {
         SecureRandom random = new SecureRandom();
         byte[] salt = new byte[16];
         byte[] hash = null;
         random.nextBytes(salt);
-        KeySpec spec = new PBEKeySpec(password.toCharArray(),salt,65537, 128);
+        KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65537, 128);
         try {
             SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
             try {
@@ -433,16 +428,16 @@ public String storeCustomerInfo(String ID, String name, String phoneNo, String a
         return DatatypeConverter.printHexBinary(hash) + ":" + DatatypeConverter.printHexBinary(salt);
     }
 
-    public boolean validatePassword(String originalPassword, String hashedPasswordDB, String saltDB){
+    public boolean validatePassword(String originalPassword, String hashedPasswordDB, String saltDB) {
         byte[] saltDBInByte = DatatypeConverter.parseHexBinary(saltDB);
         byte[] hash = null;
-        KeySpec spec = new PBEKeySpec(originalPassword.toCharArray(),saltDBInByte,65537, 128);
+        KeySpec spec = new PBEKeySpec(originalPassword.toCharArray(), saltDBInByte, 65537, 128);
         try {
             SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
             try {
                 hash = factory.generateSecret(spec).getEncoded();
                 String hex = DatatypeConverter.printHexBinary(hash);
-                if(hex.equals(hashedPasswordDB)){
+                if (hex.equals(hashedPasswordDB)) {
                     return true;
                 }
             } catch (InvalidKeySpecException ex) {
@@ -536,9 +531,8 @@ public String storeCustomerInfo(String ID, String name, String phoneNo, String a
 //        String hashedDB = hashAndSalt[0];
 //        String salt = hashAndSalt[1];
 //        db.validatePassword("HEJsa", hashedDB, salt);
-        //System.out.println(db.getTest());
-        //db.setTest("mytest1","mytest2");
-        //System.out.println(db.getTest());
-        
+    //System.out.println(db.getTest());
+    //db.setTest("mytest1","mytest2");
+    //System.out.println(db.getTest());
 //    }
 }
