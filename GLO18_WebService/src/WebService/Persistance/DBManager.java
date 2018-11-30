@@ -382,16 +382,19 @@ public class DBManager {
         String testResult = "";
         ResultSet result = null;
         try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
-            PreparedStatement PStatement = db.prepareStatement("SELECT * FROM transaction WHERE senderbankaccountid = (?) OR receiverbankaccountid = (?)");
+            PreparedStatement PStatement = db.prepareStatement("SELECT message, amount, senderbankaccountid, receiverbankaccountid, date, CASE WHEN senderbankaccountid = (?) THEN sendercategory\n" +
+            "WHEN receiverbankaccountid = (?) THEN receivercategory END as category FROM transaction WHERE senderbankaccountid = (?) OR receiverbankaccountid = (?)");
             PStatement.setString(1, accountID);
             PStatement.setString(2, accountID);
+            PStatement.setString(3, accountID);
+            PStatement.setString(4, accountID);
             result = PStatement.executeQuery();
             StringBuilder sb = new StringBuilder();
             while (result.next()) {
-                String history = String.format("%-12s%-18s%-25s%8s    %s;",
+                String history = String.format("%-12s%-18s%-25s%8s    %-20s%s;",
                         result.getString("receiverbankaccountid").replace(" ", ""),
                         result.getString("senderbankaccountid").replace(" ", ""),
-                        result.getString("date").substring(0, 16), result.getString("amount"), result.getString("message"));
+                        result.getString("date").substring(0, 16), result.getString("amount"), result.getString("category"), result.getString("message"));
                 sb.append(history);
             }
             testResult = sb.toString();
