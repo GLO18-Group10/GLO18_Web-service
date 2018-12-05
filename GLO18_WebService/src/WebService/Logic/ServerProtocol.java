@@ -115,6 +115,7 @@ public class ServerProtocol {
                 break;
             case "12":
                     String ID3 = data[1];
+                    logger.logAction(data[2], "Opened bankaccount");
                     return persistence.checkBankAccountID(ID3);
                     
                 
