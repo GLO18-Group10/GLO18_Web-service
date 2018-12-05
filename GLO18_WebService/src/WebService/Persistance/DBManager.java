@@ -518,21 +518,21 @@ public class DBManager {
         String result = "";
         ResultSet rs = null;
         try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
-            PreparedStatement PStatement = db.prepareStatement("SELECT date FROM logger WHERE id = (?) AND action = (?) ORDER BY date");
+            PreparedStatement PStatement = db.prepareStatement("SELECT date FROM logger WHERE id = (?) AND action = (?) ORDER BY date DESC");
             PStatement.setString(1, ID);
             PStatement.setString(2, "Logged in");
             rs = PStatement.executeQuery();
             StringBuilder sb = new StringBuilder();
             while (rs.next()) {
-                sb.append(rs.getString("date"));
+                sb.append(rs.getString("date") + ";");
             }
-            result = sb.toString() + ";";
+            result = sb.toString();
         } catch (SQLException ex) {
             System.out.println("Error; lastLogin; SQL exception");
             ex.printStackTrace();
         }
         String[] r = result.split(";");
-        return r[0];
+        return r[1];
     }
 
     public boolean logAction(String ID, LocalDateTime date, String action) {
