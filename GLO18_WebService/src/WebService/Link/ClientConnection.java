@@ -51,7 +51,7 @@ public class ClientConnection {
             context.init(kmf.getKeyManagers(), null, null);
             Arrays.fill(password, '0');
             SSLServerSocketFactory factory = context.getServerSocketFactory();
-            SSLserver = (SSLServerSocket) factory.createServerSocket(PORT, 0, InetAddress.getByName("130.226.87.132"));
+            SSLserver = (SSLServerSocket) factory.createServerSocket(PORT, 0, InetAddress.getByName("130.226.87.141"));
             //Anon non authed cipher
             String[] supported = SSLserver.getSupportedCipherSuites();
             String[] anonCipherSuitesSupported = new String[supported.length];
