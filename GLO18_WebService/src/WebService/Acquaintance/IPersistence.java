@@ -33,7 +33,7 @@ public interface IPersistence {
 
     String getCustomerIDs();
 
-    public String getTransactionHistory(String accountID);
+    public String getTransactionHistory(String accountID, String category);
 
     void openAccount(String ID);
 
@@ -42,5 +42,7 @@ public interface IPersistence {
     void updatePassword(String ID, String password);
     
     String checkBankAccountID(String ID);
+
+    void changeTransactionCategory(String accountNo, String category, String date);
 
 }

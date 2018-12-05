@@ -47,7 +47,8 @@ public class ServerProtocol {
                 }
             case "06":
                 String ID2 = data[1];
-                return persistence.getTransactionHistory(ID2);
+                String category = data[2];
+                return persistence.getTransactionHistory(ID2, category);
             case "07":
                 String ID1 = data[1];
                 String name = data[2];
@@ -81,7 +82,8 @@ public class ServerProtocol {
                 //removes all "C" from Customer IDS              
                 return persistence.getCustomerIDs().replace("C", "");
             case "11":
-                break;
+                persistence.changeTransactionCategory(data[1], data[2], data[3]);
+                return "Complete";
             case "12":
                     String ID3 = data[1];
                     return persistence.checkBankAccountID(ID3);

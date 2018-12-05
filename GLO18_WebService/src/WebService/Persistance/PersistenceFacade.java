@@ -90,8 +90,13 @@ public class PersistenceFacade implements IPersistence {
     }
     
     @Override
-    public String getTransactionHistory(String accountID) {
-        return dbmanager.getTransactionHistory(accountID);
+    public String getTransactionHistory(String accountID, String category) {
+        return dbmanager.getTransactionHistory(accountID, category);
+    }
+    
+    @Override
+    public void changeTransactionCategory(String accountNo, String category, String date){
+        dbmanager.changeTransactionCategory(accountNo, category, date);
     }
     
     @Override
