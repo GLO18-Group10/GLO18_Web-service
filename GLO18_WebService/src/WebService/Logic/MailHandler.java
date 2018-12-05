@@ -49,7 +49,7 @@ public class MailHandler {
         return "Success";
     }
     
-        public String contactBankMail(String ID, String subject, String text){
+        public String contactBankMail(String ID, String subject, String text, String email){
         Properties props = new Properties();
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.auth", "true");
@@ -69,7 +69,19 @@ public class MailHandler {
             message.setRecipients(Message.RecipientType.TO,
             InternetAddress.parse("GroupTenSemesterProject@gmail.com"));
             message.setSubject(subject);
-            message.setText("From: " + ID + "\n" + text);
+            message.setText("From: " + ID + "Email: " + email + "\n" + text);
+            Transport.send(message);
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
+        
+        try {
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress("GroupTenSemesterProject@gmail.com"));
+            message.setRecipients(Message.RecipientType.TO,
+            InternetAddress.parse(email));
+            message.setSubject("Bank contact");
+            message.setText("We have recieved following information from you, we will respond as soon as possible" + "\n" + subject + "\n" + text);
             Transport.send(message);
         } catch (MessagingException e) {
             throw new RuntimeException(e);
