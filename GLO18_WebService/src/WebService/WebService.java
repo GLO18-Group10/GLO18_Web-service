@@ -30,8 +30,8 @@ public class WebService {
         System.out.printf("%-40s %s \n", "Testing get account balance: ", logic.messageParser("02;123456789;C111234552"));
         System.out.printf("%-40s %s \n", "Testing get account numbers: ", logic.messageParser("08;C111234552"));
         System.out.printf("%-40s %s \n", "Testing make transaction: ", logic.messageParser("05;123456789;1;1234;hej;C111234552"));
-        System.out.printf("%-40s %s \n", "Testing open customer account: ", logic.messageParser("09;Cd;1;A1234"));
-        System.out.printf("%-40s %s \n", "Testing close customer account: ", logic.messageParser("09;Cd;0;A1234"));
+        System.out.printf("%-40s %s \n", "Testing open customer account: ", logic.messageParser("09;C77778888;1;A1234"));
+        System.out.printf("%-40s %s \n", "Testing close customer account: ", logic.messageParser("09;C77778888;0;A1234"));
         System.out.printf("%-40s %s \n", "Testing get customer accounts: ", logic.messageParser("10;A1234"));
         // </editor-fold>
 
