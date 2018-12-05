@@ -38,6 +38,11 @@ public class PersistenceFacade implements IPersistence {
     }
     
     @Override
+    public String getIDInfo(String id) {
+        return dbmanager.getIDInfo(id);
+    }
+    
+    @Override
     public String createCustomer(String ID, String name, String birthday, String phonenumber, String address, String email, String password) {
         return dbmanager.createCustomer(ID, name, birthday, phonenumber, address, email, password);
     }
