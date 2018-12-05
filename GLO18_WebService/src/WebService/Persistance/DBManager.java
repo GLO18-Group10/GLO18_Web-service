@@ -532,6 +532,9 @@ public class DBManager {
             ex.printStackTrace();
         }
         String[] r = result.split(";");
+        if(r.length < 2){
+            return "This is your first login!";
+        }
         return r[1];
     }
 
