@@ -46,12 +46,12 @@ public class ClientConnection {
             KeyStore ks = KeyStore.getInstance("JKS");
             char[] password = "password".toCharArray();
             //Den nedenunder skal laves. Det er den ikke endnu. Vi skal finde en der ikke kræver certificate.
-            ks.load(new FileInputStream("keystore.jks"), password);
+            ks.load(new FileInputStream("/home/dist/lib/keystore.jks"), password);
             kmf.init(ks, password);
             context.init(kmf.getKeyManagers(), null, null);
             Arrays.fill(password, '0');
             SSLServerSocketFactory factory = context.getServerSocketFactory();
-            SSLserver = (SSLServerSocket) factory.createServerSocket(PORT);
+            SSLserver = (SSLServerSocket) factory.createServerSocket(PORT, 0, InetAddress.getByName("130.226.87.132"));
             //Anon non authed cipher
             String[] supported = SSLserver.getSupportedCipherSuites();
             String[] anonCipherSuitesSupported = new String[supported.length];
