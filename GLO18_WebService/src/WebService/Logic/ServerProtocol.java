@@ -34,7 +34,7 @@ public class ServerProtocol {
             case "03":
                 return persistence.storeCustomerInfo(data[5], data[1], data[2], data[3], data[4]);
             case "04":
-                break;
+                return persistence.lastLogin(data[1]);
             case "05":
                 String response05;
                 Transfer transfer = new Transfer(data[1], data[2], data[3], data[4], persistence, data[5]);

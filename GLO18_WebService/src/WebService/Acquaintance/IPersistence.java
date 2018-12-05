@@ -43,4 +43,5 @@ public interface IPersistence {
     
     String checkBankAccountID(String ID);
 
+    String lastLogin(String ID);
 }

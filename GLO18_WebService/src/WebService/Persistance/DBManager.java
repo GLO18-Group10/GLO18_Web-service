@@ -23,6 +23,7 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.xml.bind.DatatypeConverter;
 import java.util.Random;
+
 /**
  *
  * @author Robin
@@ -278,10 +279,10 @@ public class DBManager {
                 }
                 loginResult = sb.toString();
                 String[] hashAndSalt = loginResult.split(":");
-                if (hashAndSalt.length > 1){
-                String hashedDB = hashAndSalt[0];
-                String salt = hashAndSalt[1];
-                isValid = validatePassword(password, hashedDB, salt);
+                if (hashAndSalt.length > 1) {
+                    String hashedDB = hashAndSalt[0];
+                    String salt = hashAndSalt[1];
+                    isValid = validatePassword(password, hashedDB, salt);
                 }
             } catch (SQLException ex) {
                 System.out.println("Error; login(client); SQL exception");
@@ -448,83 +449,91 @@ public class DBManager {
         }
         return false;
     }
-    
+
     public String checkBankAccountID(String ID) {
-         ResultSet result = null;
-         Random random = new Random();
-         int i1 = random.nextInt(90000) + 10000;
-         int i2 = random.nextInt(90000) + 10000;
-         String bankaccountID = "6969" + i1 +i2;
-         
-         boolean test = true;
-         
-         while (test) {            
-                
-         try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
-             
-             
-            PreparedStatement PStatement = db.prepareStatement("SELECT id FROM bankaccount WHERE ? = id");
-            PStatement.setString(1, bankaccountID);
-            
-            result = PStatement.executeQuery();
-            if(result.next()){
-                i1 = random.nextInt(90000) + 10000;
-                i2 = random.nextInt(90000) + 10000;
-                bankaccountID = "6969" + i1 + i2;
-                System.out.println(bankaccountID + "in while loop");
-                db.close();
-                test = true;
+        ResultSet result = null;
+        Random random = new Random();
+        int i1 = random.nextInt(90000) + 10000;
+        int i2 = random.nextInt(90000) + 10000;
+        String bankaccountID = "6969" + i1 + i2;
+
+        boolean test = true;
+
+        while (test) {
+
+            try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
+
+                PreparedStatement PStatement = db.prepareStatement("SELECT id FROM bankaccount WHERE ? = id");
+                PStatement.setString(1, bankaccountID);
+
+                result = PStatement.executeQuery();
+                if (result.next()) {
+                    i1 = random.nextInt(90000) + 10000;
+                    i2 = random.nextInt(90000) + 10000;
+                    bankaccountID = "6969" + i1 + i2;
+                    System.out.println(bankaccountID + "in while loop");
+                    db.close();
+                    test = true;
+                } else {
+
+                    openBankAccount(ID, bankaccountID);
+
+                    test = false;
+
+                }
+            } catch (SQLException ex) {
+                System.out.println("SQL exception");
+                ex.printStackTrace();
+            } finally {
+                try {
+                    result.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
-            else {
-                
-                openBankAccount(ID, bankaccountID);
-                
-                test = false;
-            
-            }
-        } catch (SQLException ex) {
-            System.out.println("SQL exception");
-            ex.printStackTrace();
         }
-        finally{
-             try {
-                 result.close();
-             } catch (SQLException ex) {
-                 Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
-             }
-        }
-         }
-         return "Complete";
-        
+        return "Complete";
 
     }
-    
-    public void openBankAccount(String ID, String bankAccountID){
+
+    public void openBankAccount(String ID, String bankAccountID) {
         ResultSet result = null;
-       
-        
+
         try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
             System.out.println("test5");
-            
+
             PreparedStatement PStatement = db.prepareStatement("INSERT INTO bankaccount(id, balance) VALUES (?, ?); INSERT INTO hasbankaccount(id, bankaccountid) VALUES(?, ?)");
             PStatement.setString(1, bankAccountID);
             PStatement.setInt(2, 0);
             PStatement.setString(3, ID);
             PStatement.setString(4, bankAccountID);
             PStatement.executeUpdate();
-            
-            
-           
-            
         } catch (SQLException ex) {
             System.out.println("SQL exception");
             ex.printStackTrace();
         }
-        
-    
-    
     }
 
+    public String lastLogin(String ID) {
+        String result = "";
+        ResultSet rs = null;
+        try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
+            PreparedStatement PStatement = db.prepareStatement("SELECT date FROM logger WHERE id = (?) AND action = (?) ORDER BY date");
+            PStatement.setString(1, ID);
+            PStatement.setString(2, "Logged in");
+            rs = PStatement.executeQuery();
+            StringBuilder sb = new StringBuilder();
+            while (rs.next()) {
+                sb.append(rs.getString("date"));
+            }
+            result = sb.toString() + ";";
+        } catch (SQLException ex) {
+            System.out.println("Error; lastLogin; SQL exception");
+            ex.printStackTrace();
+        }
+        String[] r = result.split(";");
+        return r[0];
+    }
 //main method for testing
 //    public static void main(String[] args) {
 //        DBManager db = new DBManager();
