@@ -57,10 +57,10 @@ public class ServerProtocol {
                 response05 = transfer.validate();
                 //Send back the error if the transfer could not be completed
                 if (!response05.equals("valid")) {
-                    logger.logAction(data[5], "Failed transfer to accountnumber: " + data[3] + " from accountnumber: " + data[1] + " amount: " + data[2] + "DKK");
+                    logger.logAction(data[5], "Failed transfer to accountnumber: " + data[3] + " from accountnumber: " + data[1] + " amount: " + data[2]);
                     return response05;
                 } else { //Otherwise complete the transfer
-                    logger.logAction(data[5], "Completed transfer to accountnumber: " + data[3] + " from accountnumber: " + data[1] + " amount: " + data[2] + "DKK");
+                    logger.logAction(data[5], "Completed transfer to accountnumber: " + data[3] + " from accountnumber: " + data[1] + " amount: " + data[2]);
                     return transfer.completeTransfer();
                 }
             case "06":
