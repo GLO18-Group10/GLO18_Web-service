@@ -517,8 +517,8 @@ public class DBManager {
     public String lastLogin(String ID) {
         String result = "";
         ResultSet rs = null;
-        try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
-            PreparedStatement PStatement = db.prepareStatement("SELECT date FROM logger WHERE id = (?) AND action = (?) ORDER BY date DESC");
+        try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord);
+                PreparedStatement PStatement = db.prepareStatement("SELECT date FROM logger WHERE id = (?) AND action = (?) ORDER BY date DESC")) {
             PStatement.setString(1, ID);
             PStatement.setString(2, "Logged in");
             rs = PStatement.executeQuery();
@@ -532,7 +532,7 @@ public class DBManager {
             ex.printStackTrace();
         }
         String[] r = result.split(";");
-        if(r.length < 2){
+        if (r.length < 2) {
             return "This is your first login!";
         }
         return r[1];
