@@ -40,8 +40,11 @@ public interface IPersistence {
     void closeAccount(String ID);
     
     void updatePassword(String ID, String password);
-    
-    String checkBankAccountID(String ID);
 
     String lastLogin(String ID);
+
+    public boolean logAction(String ID, LocalDateTime date, String action);
+
+    String checkBankAccountID(String ID);
+
 }
