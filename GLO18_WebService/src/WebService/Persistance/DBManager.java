@@ -410,10 +410,19 @@ public class DBManager {
             
             StringBuilder sb = new StringBuilder();
             while (result.next()) {
-                String history = String.format("%-12s%-18s%-25s%8s    %-20s%s;",
+                StringBuilder build = new StringBuilder();
+                build.append(result.getString("amount"));
+                if(build.length() == 2){
+                    build.insert(0, "0,");
+                }else if(build.length() == 1){
+                    build.insert(0, "0,0");
+                }else{               
+                build.insert(build.length() - 2, ",");
+                }
+                String history = String.format("%-18s%-18s%-25s%8s    %-20s%s;",
                         result.getString("receiverbankaccountid").replace(" ", ""),
                         result.getString("senderbankaccountid").replace(" ", ""),
-                        result.getString("date"), result.getString("amount"), result.getString("category"), result.getString("message"));
+                        result.getString("date"), build.toString(), result.getString("category"), result.getString("message"));
                 sb.append(history);
             }
             testResult = sb.toString();
