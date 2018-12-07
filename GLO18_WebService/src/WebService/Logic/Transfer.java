@@ -18,14 +18,16 @@ public class Transfer {
     private final String fromAccount;
     private final String toAccount;
     private final int amount;
+    private final String category;
     private final String text;
     private final LocalDateTime date = LocalDateTime.now();
     private final String customerID;
 
-    public Transfer(String fromAccount, String amount, String toAccount, String text, IPersistence persistence, String customerID) {
+    public Transfer(String fromAccount, String amount, String toAccount, String text, IPersistence persistence, String customerID, String category) {
         this.fromAccount = fromAccount;
         this.toAccount = toAccount;
         this.amount = Integer.parseInt(amount);
+        this.category = category;
         this.text = text;
         this.persistence = persistence;
         this.customerID = customerID;
@@ -93,10 +95,10 @@ public class Transfer {
      * Save the transaction. If it fails print out the input for review later
      */
     private void saveTransfer() {
-        if (persistence.saveTransfer(fromAccount, toAccount, amount, text, date).equals("false")) {
+        if (persistence.saveTransfer(fromAccount, toAccount, amount, category, text, date).equals("false")) {
             System.out.println("Error; Transaction from " + fromAccount
                     + " to " + toAccount + " could not be saved. Date: "
-                    + date + " amount: " + amount + " message: " + text);
+                    + date + " amount: " + amount + " Category: " + category + " message: " + text);
         }
     }
 
