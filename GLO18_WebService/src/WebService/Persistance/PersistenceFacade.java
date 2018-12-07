@@ -113,6 +113,8 @@ public class PersistenceFacade implements IPersistence {
     public void updatePassword(String ID, String password) {
         dbmanager.updatePassword(ID, password);
     }
+    
+
 
     @Override
     public String checkBankAccountID(String ID) {

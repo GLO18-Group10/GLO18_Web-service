@@ -349,6 +349,7 @@ public class DBManager {
         }
     }
 
+
     public String createCustomer(String ID, String name, String birthday, String phonenumber, String address, String email, String password) {
         password = hashPassword(password);
         Date date = java.sql.Date.valueOf(birthday);
