@@ -43,4 +43,10 @@ public interface IPersistence {
     
     String getIDInfo(String id);
 
+    String lastLogin(String ID);
+
+    public boolean logAction(String ID, LocalDateTime date, String action);
+
+    String checkBankAccountID(String ID);
+
 }
