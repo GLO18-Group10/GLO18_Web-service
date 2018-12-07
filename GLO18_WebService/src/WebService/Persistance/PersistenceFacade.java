@@ -13,14 +13,14 @@ import WebService.Acquaintance.IPersistence;
  * @author Jeppe Enevold
  */
 public class PersistenceFacade implements IPersistence {
-    
+
     DBManager dbmanager = new DBManager();
-    
+
     @Override
     public String getAccountBalance(String accountID) {
         return dbmanager.getAccountBalance(accountID);
     }
-    
+
     @Override
     public String login(String ID, String password) {
         return dbmanager.login(ID, password);
@@ -36,32 +36,32 @@ public class PersistenceFacade implements IPersistence {
     public String getCustomerInfo(String id) {
         return dbmanager.getCustomerInfo(id);
     }
-    
+
     @Override
     public String createCustomer(String ID, String name, String birthday, String phonenumber, String address, String email, String password) {
         return dbmanager.createCustomer(ID, name, birthday, phonenumber, address, email, password);
     }
-    
+
     @Override
     public String storeCustomerInfo(String ID, String name, String phoneNo, String address, String email) {
         return dbmanager.storeCustomerInfo(ID, name, phoneNo, address, email);
     }
-    
+
     @Override
     public boolean doesAccountExist(String accountID) {
         return dbmanager.doesAccountExist(accountID);
     }
-    
+
     @Override
     public void updateAccountBalance(String accountID, int amount) {
         dbmanager.updateAccountBalance(accountID, amount);
     }
-    
+
     @Override
     public String saveTransfer(String fromAccount, String toAccount, int amount, String category, String text, LocalDateTime date) {
         return dbmanager.saveTransfer(fromAccount, toAccount, amount, category, text, date);
     }
-    
+
     @Override
     public String[] getAccountNos(String customerID) {
         int noOfAccounts = 0;
@@ -83,12 +83,12 @@ public class PersistenceFacade implements IPersistence {
             return accountNos;
         }
     }
-    
+
     @Override
     public String getCustomerIDs() {
         return dbmanager.getCustomerIDs();
     }
-    
+
     @Override
     public String getTransactionHistory(String accountID, String category) {
         return dbmanager.getTransactionHistory(accountID, category);
@@ -98,17 +98,17 @@ public class PersistenceFacade implements IPersistence {
     public void changeTransactionCategory(String accountNo, String category, String date){
         dbmanager.changeTransactionCategory(accountNo, category, date);
     }
-    
+
     @Override
     public void openAccount(String ID) {
         dbmanager.openAccount(ID);
     }
-    
+
     @Override
     public void closeAccount(String ID) {
         dbmanager.closeAccount(ID);
     }
-    
+
     @Override
     public void updatePassword(String ID, String password) {
         dbmanager.updatePassword(ID, password);
@@ -118,5 +118,14 @@ public class PersistenceFacade implements IPersistence {
     public String checkBankAccountID(String ID) {
         return dbmanager.checkBankAccountID(ID);
     }
-    
+
+    @Override
+    public String lastLogin(String ID) {
+        return dbmanager.lastLogin(ID);
+    }
+
+    @Override
+    public boolean logAction(String ID, LocalDateTime date, String action){
+        return dbmanager.logAction(ID, date, action);
+    }
 }
