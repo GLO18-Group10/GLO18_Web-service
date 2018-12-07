@@ -87,8 +87,8 @@ public class MailHandler {
             message.setRecipients(Message.RecipientType.TO,
                     InternetAddress.parse(mailTo));
             message.setSubject("Reset passwrod");
-            message.setText("Dear " + name + "Your password has been reset, if this was not your doing please contact you Bank of Elena representative " + " here is your login information. It contains your unique ID which is used for login, as well as a random generated password.\n\n"
-                    + "ID: " + ID.substring(1) + "\n" + "Password: " + customerPassword + "Please change your password at the first posible obitunity" + "\n\n Best regards from Group 10");
+            message.setText("Dear " + name +"\n\n"+ "Your password has been reset, if this was not your doing please contact your Bank of Elena representative." + " Here is your login information. It contains your unique ID which is used for login, as well as a random generated password.\n\n"
+                    + "ID: " + ID.substring(1) + "\n" + "Password: " + customerPassword +"\n" + "Please change your password at the first posible opportunity." + "\n\nBest regards from Group 10");
             Transport.send(message);
         } catch (MessagingException e) {
             throw new RuntimeException(e);
