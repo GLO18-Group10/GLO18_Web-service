@@ -40,6 +40,8 @@ public interface IPersistence {
     void closeAccount(String ID);
     
     void updatePassword(String ID, String password);
+    
+    String getIDInfo(String id);
 
     String lastLogin(String ID);
 
@@ -48,5 +50,7 @@ public interface IPersistence {
     String checkBankAccountID(String ID);
 
     void changeTransactionCategory(String accountNo, String category, String date);
+    
+    public boolean checkID(String ID);
 
 }

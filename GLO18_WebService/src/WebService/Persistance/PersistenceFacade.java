@@ -38,6 +38,11 @@ public class PersistenceFacade implements IPersistence {
     }
 
     @Override
+    public String getIDInfo(String id) {
+        return dbmanager.getIDInfo(id);
+    }
+    
+    @Override
     public String createCustomer(String ID, String name, String birthday, String phonenumber, String address, String email, String password) {
         return dbmanager.createCustomer(ID, name, birthday, phonenumber, address, email, password);
     }
@@ -113,6 +118,8 @@ public class PersistenceFacade implements IPersistence {
     public void updatePassword(String ID, String password) {
         dbmanager.updatePassword(ID, password);
     }
+    
+
 
     @Override
     public String checkBankAccountID(String ID) {
@@ -128,4 +135,9 @@ public class PersistenceFacade implements IPersistence {
     public boolean logAction(String ID, LocalDateTime date, String action){
         return dbmanager.logAction(ID, date, action);
     }
+
+    @Override
+    public boolean checkID(String ID) {
+        return dbmanager.checkID(ID);
+        }
 }

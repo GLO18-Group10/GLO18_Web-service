@@ -60,8 +60,10 @@ public class DBManager {
      */
     public void setTest(String c1, String c2) {
         ResultSet result = null;
+
         try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord);
                 PreparedStatement PStatement = db.prepareStatement("INSERT INTO testTable VALUES (?, ?)")) {
+
             PStatement.setString(1, c1);
             PStatement.setString(2, c2);
             result = PStatement.executeQuery();
@@ -105,6 +107,34 @@ public class DBManager {
             System.out.println("Error; getCustomerInfo; SQL exception");
             ex.printStackTrace();
         } finally {
+
+            try {
+                result.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return customerInfo;
+    }
+
+    public String getIDInfo(String customerID) {
+        String customerInfo = "";
+        ResultSet result = null;
+        try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
+            PreparedStatement PStatement = db.prepareStatement("SELECT name, email FROM customer WHERE id = (?)");
+            PStatement.setString(1, customerID);
+            result = PStatement.executeQuery();
+            StringBuilder sb = new StringBuilder();
+            while (result.next()) {
+                sb.append(result.getString("name") + ";");
+                sb.append(result.getString("email") + ";");
+            }
+            customerInfo = sb.toString();
+        } catch (SQLException ex) {
+            System.out.println("Error; getCustomerInfo; SQL exception");
+            ex.printStackTrace();
+        } finally {
+
             try {
                 result.close();
             } catch (SQLException ex) {
@@ -219,8 +249,10 @@ public class DBManager {
     }
 
     public String storeCustomerInfo(String ID, String name, String phoneNo, String address, String email) {
+
         try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord);
                 PreparedStatement PStatement = db.prepareStatement("UPDATE Customer SET name = (?), phonenumber = (?), address = (?), email = (?) WHERE ID = (?)")) {
+
             PStatement.setString(1, name);
             PStatement.setString(2, phoneNo);
             PStatement.setString(3, address);
@@ -279,11 +311,13 @@ public class DBManager {
                 }
                 loginResult = sb.toString();
                 String[] hashAndSalt = loginResult.split(":");
+
                 if (hashAndSalt.length > 1) {
                     String hashedDB = hashAndSalt[0];
                     String salt = hashAndSalt[1];
                     isValid = validatePassword(password, hashedDB, salt);
                 }
+
             } catch (SQLException ex) {
                 System.out.println("Error; login(client); SQL exception");
                 ex.printStackTrace();
@@ -386,20 +420,19 @@ public class DBManager {
         String testResult = "";
         ResultSet result = null;
         try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord);) {
-            
-            if(category.equals("null")){
-                PreparedStatement PStatement = db.prepareStatement("SELECT message, amount, senderbankaccountid, receiverbankaccountid, date, CASE WHEN senderbankaccountid = (?) THEN sendercategory\n" +
-                "WHEN receiverbankaccountid = (?) THEN receivercategory END as category FROM transaction WHERE senderbankaccountid = (?) OR receiverbankaccountid = (?) order by date asc");
+
+            if (category.equals("null")) {
+                PreparedStatement PStatement = db.prepareStatement("SELECT message, amount, senderbankaccountid, receiverbankaccountid, date, CASE WHEN senderbankaccountid = (?) THEN sendercategory\n"
+                        + "WHEN receiverbankaccountid = (?) THEN receivercategory END as category FROM transaction WHERE senderbankaccountid = (?) OR receiverbankaccountid = (?) order by date asc");
                 PStatement.setString(1, accountID);
                 PStatement.setString(2, accountID);
                 PStatement.setString(3, accountID);
                 PStatement.setString(4, accountID);
                 result = PStatement.executeQuery();
-            }
-            else{
-                PreparedStatement PStatement = db.prepareStatement("SELECT * FROM (SELECT message, amount, senderbankaccountid, receiverbankaccountid, date, CASE WHEN senderbankaccountid = (?) THEN sendercategory \n" +
-                "WHEN receiverbankaccountid = (?) THEN receivercategory END as category FROM transaction WHERE senderbankaccountid = (?) OR receiverbankaccountid = (?)) as tbl1\n" +
-                "WHERE category = (?) order by date asc");
+            } else {
+                PreparedStatement PStatement = db.prepareStatement("SELECT * FROM (SELECT message, amount, senderbankaccountid, receiverbankaccountid, date, CASE WHEN senderbankaccountid = (?) THEN sendercategory \n"
+                        + "WHEN receiverbankaccountid = (?) THEN receivercategory END as category FROM transaction WHERE senderbankaccountid = (?) OR receiverbankaccountid = (?)) as tbl1\n"
+                        + "WHERE category = (?) order by date asc");
                 PStatement.setString(1, accountID);
                 PStatement.setString(2, accountID);
                 PStatement.setString(3, accountID);
@@ -407,23 +440,25 @@ public class DBManager {
                 PStatement.setString(5, category);
                 result = PStatement.executeQuery();
             }
-            
+
             StringBuilder sb = new StringBuilder();
             while (result.next()) {
+
                 StringBuilder build = new StringBuilder();
                 build.append(result.getString("amount"));
-                if(build.length() == 2){
+                if (build.length() == 2) {
                     build.insert(0, "0,");
-                }else if(build.length() == 1){
+                } else if (build.length() == 1) {
                     build.insert(0, "0,0");
-                }else{               
-                build.insert(build.length() - 2, ",");
+                } else {
+                    build.insert(build.length() - 2, ",");
                 }
                 String history = String.format("%-18s%-18s%-25s%8s    %-20s%s;",
                         result.getString("receiverbankaccountid").replace(" ", ""),
                         result.getString("senderbankaccountid").replace(" ", ""),
                         result.getString("date"), build.toString(), result.getString("category"), result.getString("message"));
                 sb.append(history);
+
             }
             testResult = sb.toString();
         } catch (SQLException ex) {
@@ -439,14 +474,14 @@ public class DBManager {
         return testResult;
     }
 
-     public void changeTransactionCategory(String accountNo, String category, String date) {
+    public void changeTransactionCategory(String accountNo, String category, String date) {
         try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
-            PreparedStatement PStatement = db.prepareStatement("UPDATE transaction SET receivercategory = CASE WHEN receiverbankaccountid = (?) THEN (?)"+
-            " ELSE receivercategory END, sendercategory = CASE WHEN senderbankaccountid = (?) THEN (?) ELSE sendercategory END WHERE date = (?)\n" +
-            "AND (senderbankaccountid = (?) or receiverbankaccountid = (?))");
+            PreparedStatement PStatement = db.prepareStatement("UPDATE transaction SET receivercategory = CASE WHEN receiverbankaccountid = (?) THEN (?)"
+                    + " ELSE receivercategory END, sendercategory = CASE WHEN senderbankaccountid = (?) THEN (?) ELSE sendercategory END WHERE date = (?)\n"
+                    + "AND (senderbankaccountid = (?) or receiverbankaccountid = (?))");
             PStatement.setString(1, accountNo);
             PStatement.setString(2, category);
-            PStatement.setString(3,accountNo);
+            PStatement.setString(3, accountNo);
             PStatement.setString(4, category);
             PStatement.setTimestamp(5, Timestamp.valueOf(date));
             PStatement.setString(6, accountNo);
@@ -457,6 +492,7 @@ public class DBManager {
             ex.printStackTrace();
         }
     }
+
     public String hashPassword(String password) {
         SecureRandom random = new SecureRandom();
         byte[] salt = new byte[16];
@@ -602,6 +638,39 @@ public class DBManager {
         }
     }
 
+    public boolean checkID(String ID) {
+        ResultSet result = null;
+        String checkID = "";
+        try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
+
+            PreparedStatement PStatement = db.prepareStatement("SELECT * FROM customer WHERE ? = id");
+            PStatement.setString(1, ID);
+
+            result = PStatement.executeQuery();
+            while (result.next()) {
+                checkID = result.getString("id");
+
+            }
+            db.close();
+        } catch (SQLException ex) {
+            System.out.println("SQL exception");
+            ex.printStackTrace();
+        } finally {
+            try {
+
+                result.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            if (checkID.isEmpty()) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+    }
+
 //main method for testing
 //    public static void main(String[] args) {
 //        DBManager db = new DBManager();
@@ -611,8 +680,8 @@ public class DBManager {
 //        String hashedDB = hashAndSalt[0];
 //        String salt = hashAndSalt[1];
 //        db.validatePassword("HEJsa", hashedDB, salt);
-    //System.out.println(db.getTest());
-    //db.setTest("mytest1","mytest2");
-    //System.out.println(db.getTest());
+//System.out.println(db.getTest());
+//db.setTest("mytest1","mytest2");
+//System.out.println(db.getTest());
 //    }
 }
