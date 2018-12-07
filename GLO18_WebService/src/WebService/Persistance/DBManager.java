@@ -395,15 +395,17 @@ public class DBManager {
         }
     }
 
-    public String saveTransfer(String fromAccount, String toAccount, int amount, String text, LocalDateTime date) {
+    public String saveTransfer(String fromAccount, String toAccount, int amount, String senderCategory, String text, LocalDateTime date) {
         try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord);
-                PreparedStatement PStatement = db.prepareStatement("INSERT INTO transaction (message, amount, senderbankaccountid, receiverbankaccountid, date) VALUES (?,?,?,?,?)")) {
+                PreparedStatement PStatement = db.prepareStatement("INSERT INTO transaction (message, amount, senderbankaccountid, receiverbankaccountid, sendercategory, receivercategory, date) VALUES (?,?,?,?,?,?,?)")) {
             PStatement.setString(1, text);
             PStatement.setInt(2, amount);
             PStatement.setString(3, fromAccount);
             PStatement.setString(4, toAccount);
+            PStatement.setString(5, senderCategory);
+            PStatement.setString(6, senderCategory);
             Timestamp timestamp = Timestamp.valueOf(date);
-            PStatement.setTimestamp(5, timestamp); //Mulig fejl
+            PStatement.setTimestamp(7, timestamp);
             PStatement.executeUpdate();
             //String s = "INSERT INTO transaction (message, amount, senderbankaccountid, receiverbankaccountid, date)"
             //        + " VALUES ('" + text + "','" + amount + "','" + fromAccount + "','" + toAccount + "','" + date + "')";
@@ -415,21 +417,49 @@ public class DBManager {
         return "true";
     }
 
-    public String getTransactionHistory(String accountID) {
+    public String getTransactionHistory(String accountID, String category) {
         String testResult = "";
         ResultSet result = null;
-        try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord);
-                PreparedStatement PStatement = db.prepareStatement("SELECT * FROM transaction WHERE senderbankaccountid = (?) OR receiverbankaccountid = (?)")) {
-            PStatement.setString(1, accountID);
-            PStatement.setString(2, accountID);
-            result = PStatement.executeQuery();
+        try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord);) {
+            
+            if(category.equals("null")){
+                PreparedStatement PStatement = db.prepareStatement("SELECT message, amount, senderbankaccountid, receiverbankaccountid, date, CASE WHEN senderbankaccountid = (?) THEN sendercategory\n" +
+                "WHEN receiverbankaccountid = (?) THEN receivercategory END as category FROM transaction WHERE senderbankaccountid = (?) OR receiverbankaccountid = (?) order by date asc");
+                PStatement.setString(1, accountID);
+                PStatement.setString(2, accountID);
+                PStatement.setString(3, accountID);
+                PStatement.setString(4, accountID);
+                result = PStatement.executeQuery();
+            }
+            else{
+                PreparedStatement PStatement = db.prepareStatement("SELECT * FROM (SELECT message, amount, senderbankaccountid, receiverbankaccountid, date, CASE WHEN senderbankaccountid = (?) THEN sendercategory \n" +
+                "WHEN receiverbankaccountid = (?) THEN receivercategory END as category FROM transaction WHERE senderbankaccountid = (?) OR receiverbankaccountid = (?)) as tbl1\n" +
+                "WHERE category = (?) order by date asc");
+                PStatement.setString(1, accountID);
+                PStatement.setString(2, accountID);
+                PStatement.setString(3, accountID);
+                PStatement.setString(4, accountID);
+                PStatement.setString(5, category);
+                result = PStatement.executeQuery();
+            }
+            
             StringBuilder sb = new StringBuilder();
             while (result.next()) {
 
-                String history = String.format("%-12s%-18s%-25s%8s    %s;",
+                StringBuilder build = new StringBuilder();
+                build.append(result.getString("amount"));
+                if(build.length() == 2){
+                    build.insert(0, "0,");
+                }else if(build.length() == 1){
+                    build.insert(0, "0,0");
+                }else{               
+                build.insert(build.length() - 2, ",");
+                }
+                String history = String.format("%-18s%-18s%-25s%8s    %-20s%s;",
+
                         result.getString("receiverbankaccountid").replace(" ", ""),
                         result.getString("senderbankaccountid").replace(" ", ""),
-                        result.getString("date").substring(0, 16), result.getString("amount"), result.getString("message"));
+                        result.getString("date"), build.toString(), result.getString("category"), result.getString("message"));
                 sb.append(history);
 
             }
@@ -447,6 +477,24 @@ public class DBManager {
         return testResult;
     }
 
+     public void changeTransactionCategory(String accountNo, String category, String date) {
+        try (Connection db = DriverManager.getConnection(dbURL, dbUsername, dbPassWord); Statement statement = db.createStatement()) {
+            PreparedStatement PStatement = db.prepareStatement("UPDATE transaction SET receivercategory = CASE WHEN receiverbankaccountid = (?) THEN (?)"+
+            " ELSE receivercategory END, sendercategory = CASE WHEN senderbankaccountid = (?) THEN (?) ELSE sendercategory END WHERE date = (?)\n" +
+            "AND (senderbankaccountid = (?) or receiverbankaccountid = (?))");
+            PStatement.setString(1, accountNo);
+            PStatement.setString(2, category);
+            PStatement.setString(3,accountNo);
+            PStatement.setString(4, category);
+            PStatement.setTimestamp(5, Timestamp.valueOf(date));
+            PStatement.setString(6, accountNo);
+            PStatement.setString(7, accountNo);
+            PStatement.executeUpdate();
+        } catch (SQLException ex) {
+            System.out.println("Error; changeTransactionCategory; SQL exception");
+            ex.printStackTrace();
+        }
+    }
     public String hashPassword(String password) {
         SecureRandom random = new SecureRandom();
         byte[] salt = new byte[16];
