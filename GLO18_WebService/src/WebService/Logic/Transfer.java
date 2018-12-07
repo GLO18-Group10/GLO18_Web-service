@@ -23,7 +23,7 @@ public class Transfer {
     private final LocalDateTime date = LocalDateTime.now();
     private final String customerID;
 
-    public Transfer(String fromAccount, String amount, String toAccount, String category, String text, IPersistence persistence, String customerID) {
+    public Transfer(String fromAccount, String amount, String toAccount, String text, IPersistence persistence, String customerID, String category) {
         this.fromAccount = fromAccount;
         this.toAccount = toAccount;
         this.amount = Integer.parseInt(amount);

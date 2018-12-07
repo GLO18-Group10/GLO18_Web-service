@@ -53,7 +53,7 @@ public class ServerProtocol {
                 return persistence.lastLogin(data[1]);
             case "05":
                 String response05;
-                Transfer transfer = new Transfer(data[1], data[2], data[3], data[4], data[5], persistence, data[6]);
+                Transfer transfer = new Transfer(data[1], data[2], data[3], data[4], persistence, data[5], data[6]);
                 response05 = transfer.validate();
                 //Send back the error if the transfer could not be completed
                 if (!response05.equals("valid")) {
@@ -65,8 +65,8 @@ public class ServerProtocol {
                 }
             case "06":
                 String ID2 = data[1];
-                String category = data[2];
                 logger.logAction(data[2], "Get transaction history");
+                String category = data[3];
                 return persistence.getTransactionHistory(ID2, category);
             case "07":
                 String ID1 = data[1];
@@ -77,7 +77,6 @@ public class ServerProtocol {
                 String email = data[6];
                 String password1 = data[7];
                 String adminID = data[8];
-
                 String response07 = persistence.createCustomer(ID1, name, birthday, phonenumber, address, email, password1);
                 if (response07.equalsIgnoreCase("true")) {
                     logger.logAction(adminID, "Created customer with ID: " + ID1);
