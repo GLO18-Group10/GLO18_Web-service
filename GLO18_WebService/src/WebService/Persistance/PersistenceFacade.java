@@ -135,4 +135,9 @@ public class PersistenceFacade implements IPersistence {
     public boolean logAction(String ID, LocalDateTime date, String action){
         return dbmanager.logAction(ID, date, action);
     }
+
+    @Override
+    public boolean checkID(String ID) {
+        return dbmanager.checkID(ID);
+        }
 }

@@ -50,5 +50,7 @@ public interface IPersistence {
     String checkBankAccountID(String ID);
 
     void changeTransactionCategory(String accountNo, String category, String date);
+    
+    public boolean checkID(String ID);
 
 }
