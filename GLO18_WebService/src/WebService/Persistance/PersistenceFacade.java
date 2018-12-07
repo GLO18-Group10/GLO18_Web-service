@@ -58,8 +58,8 @@ public class PersistenceFacade implements IPersistence {
     }
 
     @Override
-    public String saveTransfer(String fromAccount, String toAccount, int amount, String category, String text, LocalDateTime date) {
-        return dbmanager.saveTransfer(fromAccount, toAccount, amount, category, text, date);
+    public String saveTransfer(String fromAccount, String toAccount, int amount, String text, String category, LocalDateTime date) {
+        return dbmanager.saveTransfer(fromAccount, toAccount, amount, text, category, date);
     }
 
     @Override
