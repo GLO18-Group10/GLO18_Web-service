@@ -43,7 +43,7 @@ public class MailHandler {
                     InternetAddress.parse(mailTo));
             message.setSubject("Account info for Elena Banking");
             message.setText("Dear " + name + " here is your login information. It contains your unique ID which is used for login, as well as a random generated password.\n\n"
-                    + "ID: " + ID.substring(1) + "\n" + "Password: " + CustomerPassword + "Please change your password at the first posible obitunity" + "\n\n Best regards from Group 10");
+                    + "ID: " + ID.substring(1) + "\n" + "Password: " + CustomerPassword + "\n\nPlease change your password at the first posible obitunity" + "\n\n Best regards from Group 10");
             Transport.send(message);
         } catch (MessagingException e) {
             throw new RuntimeException(e);
