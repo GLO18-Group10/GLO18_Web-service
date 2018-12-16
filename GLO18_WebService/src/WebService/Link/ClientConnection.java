@@ -34,25 +34,20 @@ public class ClientConnection {
     private ServerSocket server;
     private SSLServerSocket SSLserver;
     private ILogic logic;
-    //private MessageParser messageParser = new MessageParser;
-    //private Encrypt encrypt = new Encrypt;
 
     public ClientConnection(String ipAddress, ILogic logic) throws Exception {
         //Create a socket with the passed ip address
         try {
-            //Vi vælger en kontekst? Google mere om det. Konteksten fortæller hvordan det sættes op?
             SSLContext context = SSLContext.getInstance(algorithm);
             KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
             KeyStore ks = KeyStore.getInstance("JKS");
             char[] password = "password".toCharArray();
-            //Den nedenunder skal laves. Det er den ikke endnu. Vi skal finde en der ikke kræver certificate.
             ks.load(new FileInputStream("/home/dist/lib/keystore.jks"), password);
             kmf.init(ks, password);
             context.init(kmf.getKeyManagers(), null, null);
             Arrays.fill(password, '0');
             SSLServerSocketFactory factory = context.getServerSocketFactory();
             SSLserver = (SSLServerSocket) factory.createServerSocket(PORT);
-            //Anon non authed cipher
             String[] supported = SSLserver.getSupportedCipherSuites();
             String[] anonCipherSuitesSupported = new String[supported.length];
             int numAnonCipherSuitesSupported = 0;
@@ -61,7 +56,6 @@ public class ClientConnection {
                     anonCipherSuitesSupported[numAnonCipherSuitesSupported++] = supported[i];
                 }
             }
-            //Unnecessary? 
             String[] oldEnabled = SSLserver.getEnabledCipherSuites();
             String[] newEnabled = new String[oldEnabled.length + numAnonCipherSuitesSupported];
             System.arraycopy(oldEnabled, 0, newEnabled, 0, oldEnabled.length);
